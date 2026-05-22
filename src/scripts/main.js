@@ -127,7 +127,7 @@ function formatEffectReferences(text, folder = "") {
 
             const effectColor = getEffectTextColor(tooltipKey);
 
-            return `[<img class="effect-icon" src="${iconPath}" onerror="this.remove()"><u><color="${effectColor}">${effect}</color></u>]{${tooltipKey}}`;
+            return `[<img class="effect-icon" src="${iconPath}" onerror="this.remove()"><span style="color:${effectColor}; text-decoration: underline; text-decoration-color: ${effectColor}; text-decoration-thickness: from-font; text-underline-offset: 0.08em; text-decoration-skip-ink: auto;">${effect}</span>]{${tooltipKey}}`;
         }
     );
 }
@@ -2692,7 +2692,7 @@ function parseSkill(text, sourcePath = "", charFolder = "", characterName = "") 
                 const effectDisplay = effect.replace(/_/g, " ");
                 const effectName = effectEntry.noUnderline
                     ? `<color="${effectColor}">${effectDisplay}</color>`
-                    : `<u><color="${effectColor}">${effectDisplay}</color></u>`;
+                    : `<span style="color:${effectColor}; text-decoration: underline; text-decoration-color: ${effectColor}; text-decoration-thickness: from-font; text-underline-offset: 0.08em; text-decoration-skip-ink: auto;">${effectDisplay}</span>`;
 
                 return `[<img class="effect-icon" src="${path}" onerror="this.remove()">${effectName}]{${tooltipKey}}`;
             }
