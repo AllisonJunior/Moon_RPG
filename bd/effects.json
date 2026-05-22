@@ -88,8 +88,13 @@
     "type": "negative",
     "noUnderline": false
   },
+  "armor": {
+    "desc": "c(#fffb00){**[Potency ~Only~]**}\\n\\n\n\n**Por este turno:** Aumente a sua CA em +~X~.\n ",
+    "type": "positive",
+    "noUnderline": false
+  },
   "commander": {
-    "desc": "c(#fffb00){**[Efeito Exclusivo de _Axel Weber_ - Unique Charge]**}\\n\\n\n\n- ~X~ Máximo: 10.\\n\n- Conforrme ~X~ aumenta, efeitos ativam:\\n\\n\n\n**- Com 2+:** Ao acertar um alvo você pode aumentar a Potency de um efeito negativo nele em +1 (quando possível) ~X~/2 vezes por turno.\\n\n**- Com 4+:** Ao acertar um alvo você pode aumentar a Count de um efeito aplicado em você em +1 (quando possível e com a exceção desse efeito) ou o Count de um efeito negativo nele em +2 (quando possível) ~X~/2 vezes por turno.\\n\n**- Com 6+:** Sua CA aumenta em +1.\\n\n**- Com 8+:** Ganhe por todo o combate 4 Crit. Dmg. Up.\\n\n**- Com 10+:** Aumente o dano de suas Katars em +2d4.\\n\n**- Com 12:** Ao ganhar Poise Count ganhe +1. Seus ataques não consomem mais Poise Count. Poise Count é convertido em dano adicional que é aplicado em todos os seus ataques.\\n",
+    "desc": "c(#fffb00){**[Efeito Exclusivo de _Axel Weber_ - Unique Charge]**}\\n\\n\n\n- ~X~ Máximo: 10.\\n\n- ~X~ não pode ser aumentado por meios externos ao Kit de Axel Weber.\\n\n- Conforrme ~X~ aumenta, efeitos ativam:\\n\\n\n\n**- Com 2+:** Ao acertar um alvo você pode aumentar a Potency de um efeito negativo nele em +1 (quando possível) ~X~/2 vezes por turno.\\n\n**- Com 4+:** Ao acertar um alvo você pode aumentar a Count de um efeito aplicado em você em +1 (quando possível e com a exceção desse efeito) ou o Count de um efeito negativo nele em +2 (quando possível) ~X~/2 vezes por turno.\\n\n**- Com 6+:** Sua CA aumenta em +1.\\n\n**- Com 8+:** Ganhe por todo o combate 4 Crit. Dmg. Up.\\n\n**- Com 10+:** Aumente o dano de suas Katars em +2d4.\\n\n**- Com 12:** Ao ganhar Poise Count ganhe +1. Seus ataques não consomem mais Poise Count. Poise Count é convertido em dano adicional que é aplicado em todos os seus ataques.\\n",
     "type": "positive",
     "noUnderline": false
   },
@@ -156,6 +161,16 @@
   "assist_defense": {
     "desc": "c(#fffb00){**[Potency ~Only~]**}\\n\\n\n\n- ~X~ Máximo: 3.\\n\n- Quando um aliado no seu alcance é atacado, você pode como ação livre consumir 1 uso desse efeito e redirecionar esse ataque para você (desde que o ataque não proíba o redirecionamento) respondendo com o uso de uma reação de combate.\\n\n- Fim do turno reduza ~X~ em 1.",
     "type": "positive",
+    "noUnderline": false
+  },
+  "resist": {
+    "desc": "c(#fffb00){**[Potency ~Only~]**}\\n\\n\n\n**Por este turno:** O dano de ataques é reduzido em ~X~.\n ",
+    "type": "positive",
+    "noUnderline": false
+  },
+  "paralyze": {
+    "desc": "c(#fffb00){**[Potency ~Only~]**}\\n\\n\n\nRemova os próximos ~X~ bônus de rolagem.\n ",
+    "type": "negative",
     "noUnderline": false
   }
 }

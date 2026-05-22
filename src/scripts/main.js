@@ -39,8 +39,17 @@ function parseCustomTooltips(text) {
     };
 
     // <color="#hex">texto</color>
+
     text = text.replace(
         /<color\s*=\s*['\"](#[0-9a-fA-F]{3,8})['\"]\s*>([\s\S]*?)<\/color>/g,
+        (match, color, content) => {
+            return `<span style="color:${color};">${content}</span>`;
+        }
+    );
+
+    // c(#fff){texto} — inline color shorthand used in .skill files
+    text = text.replace(
+        /c\((#[0-9a-fA-F]{3,8})\)\{([\s\S]*?)\}/g,
         (match, color, content) => {
             return `<span style="color:${color};">${content}</span>`;
         }
@@ -105,7 +114,9 @@ function formatEffectReferences(text, folder = "") {
             complexEffect,
             complexFolder,
             simpleEffect,
-            simpleFolder
+            simpleFolder,
+            offset,
+            fullString
         ) => {
             const effect = (complexEffect || simpleEffect || "").trim();
             const effectFolder = String(complexFolder || simpleFolder || folder || "").trim();
@@ -125,7 +136,25 @@ function formatEffectReferences(text, folder = "") {
                 tooltipKey = `${effectFolder.toLowerCase()}_${tooltipKey}`;
             }
 
-            const effectColor = getEffectTextColor(tooltipKey);
+            // Detect if the match is already inside a color span (e.g., c(#fff){...})
+            let effectColor = getEffectTextColor(tooltipKey);
+
+            try {
+                const prevOpenSpan = fullString.lastIndexOf('<span', offset);
+                const prevCloseSpan = fullString.lastIndexOf('</span>', offset);
+
+                if (prevOpenSpan > prevCloseSpan) {
+                    const tagEnd = fullString.indexOf('>', prevOpenSpan);
+                    if (tagEnd > prevOpenSpan) {
+                        const tagContent = fullString.slice(prevOpenSpan, tagEnd + 1);
+                        if (/style\s*=\s*["'][^"']*color\s*:\s*#[0-9a-fA-F]{3,8}/.test(tagContent)) {
+                            effectColor = 'inherit';
+                        }
+                    }
+                }
+            } catch (e) {
+                // ignore parsing errors and fall back to default color
+            }
 
             return `[<img class="effect-icon" src="${iconPath}" onerror="this.remove()"><span style="color:${effectColor}; text-decoration: underline; text-decoration-color: ${effectColor}; text-decoration-thickness: from-font; text-underline-offset: 0.08em; text-decoration-skip-ink: auto;">${effect}</span>]{${tooltipKey}}`;
         }
@@ -142,11 +171,30 @@ function loadMarkdown(path, element) {
         .then(response => response.text())
         .then(text => {
 
-            const parsed = parseCustomTooltips(text);
+
+            // Apply custom parsing used by .skill files so Markdown files
+            // support the same effect and inline formatting syntaxes.
+
+            // Expand shorthand color tokens (!b{}, !g{}) before any further processing
+            let preprocessed = String(text || "");
+            preprocessed = preprocessed.replace(/!b\{([\s\S]*?)\}/g, (m, c) => `c(#ff0000){${c}}`);
+            preprocessed = preprocessed.replace(/!g\{([\s\S]*?)\}/g, (m, c) => `c(#2E2EFF){${c}}`);
+
+            // First, apply inline formatting (bold, italic, color tokens)
+            const inlineFormatted = formatSkillInlineStyles(preprocessed);
+
+            // Convert @Effect or @{Effect} into the intermediate [<img>]{key} form
+            const effectsFormatted = formatEffectReferences(inlineFormatted);
+
+            // Finally, convert any [texto]{key} occurrences into tooltip markup
+            const parsed = parseCustomTooltips(effectsFormatted);
 
             const html = marked.parse(parsed);
 
             element.innerHTML = html;
+
+            // Re-initialize tooltips for dynamically injected markdown content
+            try { initTooltips(); } catch (e) { /* ignore */ }
         })
         .catch(error => {
             console.error("Erro ao carregar Markdown:", error);
