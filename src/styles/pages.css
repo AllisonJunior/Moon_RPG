@@ -1,0 +1,2734 @@
+/* ========================= */
+/* RESET */
+/* ========================= */
+* {
+  box-sizing: border-box;
+}
+
+/* Import display font for character names */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&display=swap');
+
+/* ========================= */
+/* BODY */
+/* ========================= */
+body {
+  background-color: #330a3f;
+  margin: 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+
+  min-height: 100vh;
+
+  padding: 40px 16px;
+  overflow-x: hidden;
+}
+
+/* ========================= */
+/* FUNDO ESTRELADO */
+/* ========================= */
+.stars {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* Estrelas normais */
+.star
+{
+ position: absolute;
+
+ width: 3px;
+ height: 3px;
+
+ background: white;
+ border-radius: 50%;
+
+ opacity: 0.8;
+ will-change: transform, opacity;
+}
+
+/* Estrelas especiais */
+.star.special
+{
+ width: auto;
+ height: auto;
+
+ background: transparent;
+
+ color: white;
+
+ font-size: 18px;
+
+ filter:
+  drop-shadow(0 0 4px white)
+  drop-shadow(0 0 8px white);
+ will-change: transform, opacity;
+}
+
+/* ========================= */
+/* CONTAINER PRINCIPAL */
+/* ========================= */
+.page_container {
+  width: min(900px, 100%);
+  min-height: calc(100vh - 80px);
+
+  background-color: rgba(209, 208, 208, 0.88);
+  padding: clamp(16px, 3vw, 28px);
+
+  border-radius: 12px;
+  border: 1px solid rgba(28, 0, 65, 0.2);
+
+  box-shadow:
+    0 0 20px rgba(0, 0, 0, 0.6),
+    0 0 15px rgba(138, 43, 226, 0.3);
+
+  backdrop-filter: blur(4px);
+
+  z-index: 1;
+  margin: auto;
+
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  cursor: default;
+  text-align: justify;
+
+  overflow-wrap: break-word;
+  word-break: break-word;
+
+  position: relative;
+}
+
+body.chars-page {
+  overflow-y: scroll;
+  scrollbar-gutter: stable;
+  overflow-anchor: none;
+}
+
+/* ========================= */
+/* LAYOUT DA TELA DE PERSONAGENS */
+/* ========================= */
+.chars-shell {
+  width: min(1260px, 100%);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 24px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.chars-page {
+  --chars-showcase-w: clamp(280px, 30vw, 360px);
+  --chars-showcase-h: clamp(420px, 72vh, 760px);
+}
+
+.chars-page .page_container {
+  width: auto;
+  flex: 1 1 0;
+  min-width: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* When a character is selected, make the page container match the skills panel visual */
+.chars-page .page_container.skills-mode {
+  background: #000000;
+  color: #ffffff;
+}
+
+.sidebar-col {
+  width: 240px;
+  flex: 0 0 240px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: stretch;
+  justify-content: flex-start;
+  height: calc(100vh - 80px);
+  position: sticky;
+  top: 40px;
+  overflow: hidden;
+  z-index: 3;
+}
+
+.sidebar-back-row {
+  display: flex;
+  justify-content: center;
+  padding: 6px 0 0 0;
+  margin-top: auto;
+}
+
+.chars-page .chars-back-btn {
+  all: unset;
+  display: inline-block;
+  width: auto;
+  color: #24003f;
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 1.1;
+  cursor: pointer;
+  font-family: inherit;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.chars-page .chars-header {
+  /* don't flex-grow: keep header at natural height so landing markdown stays just below it */
+  flex: 0 0 auto;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, var(--chars-showcase-w)) minmax(0, 1fr);
+  align-items: start;
+  gap: 18px;
+  margin: 0 0 18px;
+}
+
+/* Character name styling (large, display font) */
+.chars-page .chars-character-name {
+  margin: 0;
+  padding: 0;
+  display: block; /* JS may toggle display */
+  color: #ffffff;
+  font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  font-weight: 900;
+  font-size: 32px;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  text-shadow:
+    0 2px 8px rgba(0,0,0,0.55);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.chars-page .chars-character-name::selection {
+  background: rgba(255,255,255,0.08);
+}
+
+.chars-page .chars-showcase-wrap {
+  display: none; /* ocultar por padrão quando não há personagem selecionado */
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  min-width: 0;
+  height: var(--chars-showcase-h);
+  border-radius: 0;
+  overflow: hidden;
+  background: #000;
+  align-items: center;
+  justify-content: center;
+  align-self: start;
+  justify-self: start;
+}
+
+.chars-page .chars-header.has-showcase .chars-showcase-wrap {
+  display: flex; /* mostrar quando header tiver classe has-showcase (imagem disponível) */
+}
+
+/* Quando não houver showcase, colapsar a coluna esquerda para 0 largura */
+.chars-page .chars-header:not(.has-showcase) {
+  grid-template-columns: 0 1fr;
+}
+
+.chars-page .chars-showcase-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  min-height: 0;
+  object-fit: contain;
+  object-position: center center;
+  position: relative;
+  z-index: 1;
+}
+
+.chars-page .chars-showcase-image[hidden] {
+  display: none !important;
+}
+
+.chars-page .chars-showcase-swap {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border: 1px solid rgba(212, 227, 250, 0.78);
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(34, 64, 99, 0.92), rgba(16, 34, 58, 0.96));
+  color: #e7f2ff;
+  font-size: 0;
+  line-height: 0;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.94);
+  box-shadow:
+    0 2px 10px rgba(0, 0, 0, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    transform 0.15s ease,
+    opacity 0.15s ease;
+}
+
+.chars-page .chars-showcase-swap[hidden] {
+  display: none !important;
+}
+
+.chars-page .chars-showcase-swap::before {
+  content: "";
+  width: 18px;
+  height: 18px;
+  background: center / contain no-repeat var(--chars-showcase-swap-icon);
+}
+
+.chars-page .chars-showcase-swap[data-mode="showcase"] {
+  --chars-showcase-swap-icon: url("../../res/img/combat.png");
+}
+
+.chars-page .chars-showcase-swap[data-mode="combat"] {
+  --chars-showcase-swap-icon: url("../../res/img/showcase.png");
+}
+
+.chars-page .chars-showcase-wrap:hover .chars-showcase-swap:not([hidden]) {
+  opacity: 1;
+  pointer-events: auto;
+  transform: scale(1);
+}
+
+.chars-page .chars-showcase-swap:hover {
+  background: linear-gradient(180deg, rgba(48, 88, 136, 0.96), rgba(20, 44, 76, 0.98));
+  border-color: rgba(229, 239, 255, 0.9);
+  transform: translateY(-1px);
+}
+
+.chars-page .chars-showcase-swap:focus-visible {
+  outline: 2px solid rgba(167, 212, 255, 0.86);
+  outline-offset: 1px;
+}
+
+.chars-page .chars-showcase-swap:disabled {
+  opacity: 0.45;
+  cursor: default;
+  transform: none;
+}
+
+.chars-page .chars-section-tabs {
+  display: none;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 6px;
+  padding: 8px 10px;
+  margin: 0;
+  border: 1px solid rgba(132, 174, 214, 0.4);
+  background:
+    linear-gradient(180deg, rgba(14, 26, 42, 0.92), rgba(6, 14, 24, 0.96));
+  box-shadow: inset 0 1px 0 rgba(175, 210, 255, 0.14);
+  overflow-x: visible;
+  scrollbar-width: thin;
+  flex: 1 1 auto;
+  align-self: flex-start;
+  width: 100%;
+  box-sizing: border-box;
+  flex-wrap: wrap;
+}
+
+.chars-page .chars-section-tabs.is-visible {
+  display: flex;
+}
+
+/* Posiciona o container de abas como referência para o submenu absoluto */
+.chars-page .chars-section-tabs {
+  position: relative;
+}
+
+/* Submenu de Skills (horizontal, escondido por padrão) */
+.chars-page .chars-skills-submenu {
+  display: none;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 6px;
+  padding: 4px 8px;
+  margin-top: 4px;
+  border: 1px solid rgba(132, 174, 214, 0.25);
+  background: linear-gradient(180deg, rgba(12, 20, 34, 0.92), rgba(6, 10, 18, 0.96));
+  box-shadow: inset 0 1px 0 rgba(175, 210, 255, 0.08);
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+  width: 100%;
+  max-width: 100%;
+  flex: 1 0 100%;
+  align-self: stretch;
+  box-sizing: border-box;
+  min-width: 0;
+  flex-wrap: wrap;
+}
+
+.chars-page .chars-skills-submenu.is-visible {
+  display: flex;
+}
+
+.chars-page .chars-section-tabs .chars-skill-option {
+  /* Simpler, low-contrast style for submenu buttons */
+  border: 1px solid rgba(132, 174, 214, 0.18);
+  background: transparent;
+  color: rgba(226, 240, 255, 0.9);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1;
+  padding: 4px 10px;
+  min-height: 30px;
+  white-space: nowrap;
+  cursor: pointer;
+  box-shadow: none;
+  transition: background-color 0.12s ease, color 0.12s ease, border-color 0.12s ease;
+  flex: 1;
+  text-align: center;
+}
+
+.chars-page .chars-section-tabs .chars-skill-option:hover {
+  background: rgba(255,255,255,0.02);
+  border-color: rgba(176, 212, 249, 0.28);
+  transform: none;
+}
+
+.chars-page .chars-skill-option:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(100,150,220,0.12);
+}
+
+.chars-page .chars-section-tabs .chars-skill-option.active {
+  background: linear-gradient(180deg, rgba(240, 246, 255, 0.98), rgba(191, 216, 248, 0.98));
+  border-color: rgba(197, 223, 255, 0.8);
+  color: #12233a;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.18) inset,
+    0 0 0 1px rgba(94, 138, 192, 0.18);
+}
+
+/* Disabled state for skill submenu buttons */
+.chars-page .chars-section-tabs .chars-skill-option.disabled,
+.chars-page .chars-section-tabs .chars-skill-option:disabled {
+  opacity: 0.45;
+  cursor: default;
+  color: rgba(200,200,200,0.6);
+  border-color: rgba(200,200,200,0.06);
+  background: rgba(255,255,255,0.02);
+  filter: grayscale(30%);
+  pointer-events: none;
+}
+
+/* Alinha o submenu de skills abaixo das abas (coluna direita do cabeçalho) */
+.chars-page .chars-section-tabs .chars-skills-submenu {
+  flex-wrap: nowrap;
+  gap: 6px;
+  margin-top: 0;
+  position: absolute;
+  left: 0;
+  top: calc(100% + 4px);
+  z-index: 20;
+  background: linear-gradient(180deg, rgba(12, 20, 34, 0.92), rgba(6, 10, 18, 0.96));
+  border: 1px solid rgba(132,174,214,0.12);
+  padding: 4px 8px;
+  display: none; /* controlled via .is-visible */
+  width: 100%;
+  box-sizing: border-box;
+  justify-content: flex-start;
+}
+
+.chars-page .chars-section-tabs .chars-skills-submenu {
+  /* allow the submenu container to size to its contents */
+  width: 100%;
+  max-width: 100%;
+  left: 0;
+  right: 0;
+  white-space: normal;
+}
+
+.chars-page .chars-section-tabs .chars-skill-option[data-skill-type="defense"] {
+  position: relative;
+  margin-right: 8px;
+}
+
+.chars-page .chars-section-tabs .chars-skill-option[data-skill-type="defense"]::after {
+  content: "";
+  position: absolute;
+  right: -7px;
+  top: 50%;
+  width: 1px;
+  height: 18px;
+  transform: translateY(-50%);
+  background: rgba(177, 203, 238, 0.55);
+  pointer-events: none;
+}
+
+.chars-page .chars-section-tabs .chars-skills-submenu.is-visible {
+  display: flex;
+}
+
+.chars-page .chars-overview-strip {
+  display: none;
+  width: 100%;
+  margin-top: 8px;
+  padding: 10px 12px;
+  border: 1px solid rgba(214, 190, 140, 0.35);
+  background:
+    linear-gradient(180deg, rgba(32, 18, 10, 0.92), rgba(10, 8, 8, 0.96));
+  box-shadow: inset 0 1px 0 rgba(255, 214, 156, 0.14);
+}
+
+.chars-page .chars-overview-strip.is-visible {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.chars-page .overview-group {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.chars-page .overview-group + .overview-group {
+  padding-top: 12px;
+  margin-top: 2px;
+  border-top: 1px solid rgba(214, 190, 140, 0.28);
+}
+
+.chars-page .overview-group-title {
+  margin: 0;
+  color: #ffcb7d;
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1;
+  text-transform: none;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+}
+
+.chars-page .overview-items {
+  display: flex;
+  align-items: center;
+  gap: 10px 12px;
+  flex-wrap: wrap;
+}
+
+.chars-page .overview-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 24px;
+}
+
+.chars-page .overview-icon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  object-position: center;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.45));
+}
+
+.chars-page .overview-main-value {
+  color: #f3e3c1;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 0.95;
+}
+
+.chars-page .overview-item-resistance {
+  gap: 8px;
+}
+
+.chars-page .overview-res-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  line-height: 1;
+}
+
+.chars-page .overview-res-label {
+  color: #dfd7bf;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.chars-page .overview-res-label.tone-fatal {
+  color: #ff4f4f;
+}
+
+.chars-page .overview-res-label.tone-ineff {
+  color: #aeb4bd;
+}
+
+.chars-page .overview-res-label.tone-normal {
+  color: #d6c58d;
+}
+
+.chars-page .overview-res-label.tone-immune {
+  /* cor cinza escura, mais escura que a de resistente (tone-ineff) */
+  color: #6f7377;
+}
+
+.chars-page .overview-res-label.tone-custom {
+  color: #ffffff;
+}
+
+.chars-page .overview-res-mult {
+  color: rgba(224, 219, 204, 0.92);
+  font-size: 12px;
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+/* Kit separator and name inside the overview strip (appears before skills) */
+.chars-page .chars-kit {
+  margin-top: 12px;
+  width: 100%;
+  box-sizing: border-box;
+  padding-left: 14px; /* afastar da imagem */
+}
+
+.chars-page .chars-kit[role="button"] {
+  cursor: pointer;
+  user-select: none;
+}
+
+.chars-page .chars-kit[role="button"]:focus-visible {
+  outline: 2px solid rgba(185, 120, 45, 0.95);
+  outline-offset: 4px;
+  border-radius: 8px;
+}
+
+.chars-page .chars-kit[role="button"]:hover .chars-kit-name {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+
+.chars-page .chars-kit-separator {
+  display: block;
+  width: 100%;
+  height: 2px;
+  margin: 8px 0 10px;
+  background: linear-gradient(90deg, rgba(185, 120, 45, 0), rgba(185, 120, 45, 0.95), rgba(185, 120, 45, 0));
+  box-shadow: 0 0 10px rgba(185, 120, 45, 0.24);
+  opacity: 1;
+}
+
+.chars-page .chars-kit-name {
+  color: rgba(255,255,255,0.96);
+  font-size: 26px;
+  font-weight: 900;
+  font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  letter-spacing: -0.02em;
+  padding: 0 0 6px 0;
+  line-height: 1;
+}
+
+.chars-page .chars-kit-character {
+  color: rgba(255,255,255,0.88);
+  font-size: 15px;
+  font-weight: 700;
+  font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  margin-top: 2px;
+  padding-bottom: 6px;
+  letter-spacing: 0.01em;
+}
+
+@media (max-width: 980px) {
+  .chars-page .chars-kit { padding-left: 8px; }
+  .chars-page .chars-kit-name { font-size: 22px; }
+}
+
+.chars-page .overview-description {
+  color: #efe1c4;
+  font-size: 14px;
+  line-height: 1.45;
+  margin-top: 2px;
+  white-space: pre-line;
+  letter-spacing: 0.01em;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(140, 160, 220, 0.72) rgba(255, 255, 255, 0.06);
+}
+
+.chars-page .overview-description::-webkit-scrollbar {
+  width: 10px;
+}
+
+.chars-page .overview-description::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 999px;
+}
+
+.chars-page .overview-description::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(140, 160, 220, 0.78), rgba(115, 135, 195, 0.78));
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.chars-page .overview-description::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, rgba(170, 190, 245, 0.92), rgba(130, 150, 210, 0.92));
+}
+
+.chars-page .chars-section-tab {
+  border: 1px solid rgba(132, 174, 214, 0.45);
+  background:
+    linear-gradient(180deg, rgba(28, 54, 82, 0.92), rgba(12, 31, 48, 0.96));
+  color: rgba(226, 240, 255, 0.98);
+  font: inherit;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1;
+  padding: 7px 14px;
+  min-height: 34px;
+  white-space: nowrap;
+  cursor: pointer;
+  box-shadow: inset 0 1px 0 rgba(175, 210, 255, 0.1);
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+  flex: 1;
+  text-align: center;
+}
+
+.chars-page .chars-section-tab:hover {
+  background: linear-gradient(180deg, rgba(38, 74, 110, 0.96), rgba(16, 42, 66, 0.98));
+  border-color: rgba(176, 212, 249, 0.78);
+  transform: translateY(-1px);
+}
+
+.chars-page .chars-section-tab.active {
+  background: linear-gradient(180deg, rgba(205, 229, 255, 0.98), rgba(167, 203, 241, 0.96));
+  color: rgba(9, 29, 46, 0.98);
+  border-color: rgba(215, 237, 255, 0.96);
+  cursor: default;
+  transform: none;
+}
+
+.chars-page .chars-section-tab.disabled {
+  background: linear-gradient(180deg, rgba(28, 54, 82, 0.5), rgba(12, 31, 48, 0.5));
+  color: rgba(226, 240, 255, 0.4);
+  border-color: rgba(132, 174, 214, 0.15);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.chars-page .chars-section-tab.disabled:hover {
+  background: linear-gradient(180deg, rgba(28, 54, 82, 0.5), rgba(12, 31, 48, 0.5));
+  border-color: rgba(132, 174, 214, 0.15);
+  transform: none;
+}
+
+.chars-page .navbar {
+  width: 240px;
+  flex: 0 0 240px;
+  order: -1;
+  margin-bottom: 0;
+  padding: 18px 16px 12px;
+  gap: 0;
+  border-radius: 16px;
+  border: 1px solid rgba(28, 0, 65, 0.2);
+  background-color: rgba(209, 208, 208, 0.88);
+  box-sizing: border-box;
+  box-shadow:
+    0 0 20px rgba(0, 0, 0, 0.6),
+    0 0 15px rgba(138, 43, 226, 0.3);
+  backdrop-filter: blur(4px);
+
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  flex-wrap: nowrap;
+  flex: 1 1 auto;
+  height: 100%;
+  min-height: 0;
+  min-height: 0;
+  overflow: hidden;
+
+  position: static;
+}
+
+.chars-page .nav-group {
+  display: block;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.chars-page .nav-group > summary {
+  list-style: none;
+}
+
+.chars-page .nav-group > summary::-webkit-details-marker {
+  display: none;
+}
+
+/* Hide summary disclosure markers across browsers (remove default ">" marker) */
+.chars-page .nav-group > summary::marker {
+  display: none;
+}
+
+.chars-page .nav-group > summary::-moz-list-bullet {
+  display: none;
+}
+
+.chars-page .nav-group-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  min-height: 42px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+  color: rgba(0, 0, 0, 1);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0;
+  cursor: pointer;
+  user-select: none;
+  box-shadow: rgba(0, 0, 0, 0.08) 0 2px 6px;
+  transition: all 250ms ease;
+  text-align: left;
+}
+
+.chars-page .nav-group-toggle::after {
+  content: "";
+  margin-left: auto;
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid rgba(255, 255, 255, 0.0);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.0);
+  transform: rotate(45deg);
+  opacity: 0;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.chars-page .nav-group[open] > .nav-group-toggle::after {
+  opacity: 1;
+  border-right-color: rgba(255, 255, 255, 0.95);
+  border-bottom-color: rgba(255, 255, 255, 0.95);
+  transform: rotate(45deg) translateY(-1px);
+}
+
+.chars-page .nav-group-toggle:hover {
+  border-color: rgba(122, 0, 255, 0.28);
+  background: rgba(248, 246, 252, 0.98);
+}
+
+.chars-page .nav-group[open] .nav-group-toggle {
+  background: linear-gradient(180deg, rgba(116, 190, 255, 0.96), rgba(63, 145, 232, 0.98));
+  border-color: rgba(142, 125, 176, 0.9);
+  color: #fff;
+  box-shadow: rgba(0, 0, 0, 0.08) 0 2px 6px;
+  border-radius: 10px 10px 0 0;
+}
+
+.chars-page .nav-group.active-group > .nav-group-toggle {
+  background: linear-gradient(180deg, rgba(116, 190, 255, 0.96), rgba(63, 145, 232, 0.98));
+  border-color: rgba(142, 125, 176, 0.9);
+  color: #ffffff;
+}
+
+.chars-page .nav-group.active-group > .nav-group-toggle::after {
+  opacity: 1;
+  border-right-color: rgba(255, 255, 255, 0.95);
+  border-bottom-color: rgba(255, 255, 255, 0.95);
+}
+
+.chars-page .navbar-title {
+  color: #2c1047;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: none;
+  text-align: left;
+  margin: 0;
+}
+
+.chars-page .navbar-title::after {
+  content: "";
+  display: block;
+  height: 1px;
+  margin: 8px 0 2px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(36, 0, 63, 0.18) 18%,
+    rgba(36, 0, 63, 0.4) 50%,
+    rgba(36, 0, 63, 0.18) 82%,
+    transparent 100%
+  );
+}
+
+.chars-page .nav-right,
+.chars-page .nav-group-content,
+.chars-page .nav-tree {
+  color: #2c1047;
+}
+
+.chars-page .chars-nav {
+  width: 100%;
+  max-width: 100%;
+  min-height: 0;
+  display: block;
+  box-sizing: border-box;
+  padding: 0;
+  margin-top: 0;
+  flex: 1 1 auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(122, 0, 255, 0.42) rgba(255, 255, 255, 0.12);
+}
+
+.chars-page .chars-nav::-webkit-scrollbar {
+  width: 10px;
+}
+
+.chars-page .chars-nav::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+}
+
+.chars-page .chars-nav::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(140, 92, 220, 0.8), rgba(92, 36, 178, 0.84));
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.chars-page .chars-nav::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, rgba(162, 116, 240, 0.92), rgba(112, 54, 206, 0.94));
+}
+
+/* Remover botões (setas) de cima/baixo do scrollbar — deixar apenas a barra/thumb */
+.chars-page .chars-nav::-webkit-scrollbar-button,
+.chars-page .chars-header .chars-dynamic::-webkit-scrollbar-button,
+.chars-page .chars-nav::-webkit-scrollbar-corner {
+  display: none;
+  height: 0;
+  width: 0;
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+}
+
+/* Cobrir variações específicas de botões increment/decrement (vertical/horizontal) */
+.chars-page .chars-nav::-webkit-scrollbar-button:vertical:decrement,
+.chars-page .chars-nav::-webkit-scrollbar-button:vertical:increment,
+.chars-page .chars-nav::-webkit-scrollbar-button:horizontal:decrement,
+.chars-page .chars-nav::-webkit-scrollbar-button:horizontal:increment,
+.chars-page .chars-header .chars-dynamic::-webkit-scrollbar-button:vertical:decrement,
+.chars-page .chars-header .chars-dynamic::-webkit-scrollbar-button:vertical:increment {
+  display: none !important;
+  height: 0 !important;
+  width: 0 !important;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  background: transparent !important;
+}
+
+.chars-page .nav-group-divider {
+  display: none;
+}
+
+.chars-page .navbar-separator {
+  display: none;
+}
+
+.chars-page .nav-group-content {
+  --nav-depth: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transform: translateY(-4px);
+  padding: 0;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  transition: max-height 0.32s ease, opacity 0.22s ease, transform 0.22s ease;
+}
+
+.chars-page .nav-group[open] .nav-group-content {
+  max-height: 4000px;
+  opacity: 1;
+  transform: translateY(0);
+  margin: 0 0 10px;
+  padding: 8px 0;
+  border: 1px solid hsl(
+    264 22% calc(64% - (var(--nav-depth) * 7%)) /
+    calc(0.44 + (var(--nav-depth) * 0.08))
+  );
+  border-radius: 10px;
+  background: linear-gradient(
+    180deg,
+    rgba(210, 204, 223, calc(0.16 + (var(--nav-depth) * 0.05))),
+    rgba(188, 179, 205, calc(0.18 + (var(--nav-depth) * 0.05)))
+  );
+  box-shadow: inset 0 0 0 1px hsl(
+    264 24% calc(72% - (var(--nav-depth) * 8%)) /
+    calc(0.2 + (var(--nav-depth) * 0.08))
+  );
+  position: relative;
+}
+
+.chars-page .nav-group .nav-group[open] > .nav-group-content {
+  border-radius: 0 0 10px 10px;
+}
+
+.chars-page .nav-group[open] .nav-group-content > button:first-child {
+  margin-top: 0;
+}
+
+.chars-page .nav-group[open] .nav-group-content > button + button {
+  margin-top: 6px;
+}
+
+.chars-page .nav-group[open] .nav-group-content > * > button + button {
+  margin-top: 6px;
+}
+
+.chars-page .nav-group[open] .nav-group-content > * > button:first-child {
+  margin-top: 0;
+}
+
+/* Primeiro subgrupo de um grupo aberto: topo reto */
+.chars-page .nav-group[open] > .nav-group-content > .nav-group:first-child > .nav-group-toggle {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.chars-page .nav-tree {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.chars-page .nav-group .nav-group {
+  margin-top: 2px;
+  margin-left: 0;
+}
+
+/* Subgrupos devem preservar a mesma largura útil do nível pai */
+.chars-page .nav-group .nav-group-content {
+  margin-left: 0;
+
+  padding: 8px 0 8px 0;
+
+  border-left: 0;
+
+  width: 100%;
+
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.chars-page .nav-group .nav-group-content .nav-group,
+.chars-page .nav-group .nav-group-content > button {
+  margin-left: 0;
+  margin-right: 0;
+  width: 100%;
+}
+
+/* Espaçamento vertical entre botões filhos */
+.chars-page .nav-group .nav-group-content > button {
+  margin-top: 6px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+
+/* Espaçamento entre grupos de nível superior (não afeta sub-itens) */
+.chars-page .nav-right > .nav-group {
+  margin-top: 10px;
+}
+.chars-page .nav-right > .nav-group:first-child {
+  margin-top: 0;
+}
+
+/* Espaçamento depois de um grupo para separar do próximo item */
+.chars-page .nav-right > .nav-group {
+  margin-bottom: 10px;
+}
+
+/* Garantir espaçamento quando um botão (item) segue diretamente um grupo */
+.chars-page .nav-right > .nav-group + button {
+  margin-top: 10px;
+}
+
+.chars-page .nav-right {
+  width: 100%;
+  display: block;
+  box-sizing: border-box;
+  padding-right: 0;
+}
+
+.chars-page .nav-subtree {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.chars-page .nav-right button {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 42px;
+  min-width: 0;
+  margin: 0;
+  padding: 10px 12px;
+  padding-left: 12px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(243, 240, 248, 0.98));
+  border: 1px solid rgba(150, 136, 176, 0.45);
+  color: #2a1340;
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: 0;
+  font-family: inherit;
+  border-radius: 10px;
+  transition: 0.2s;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  text-align: left;
+  position: relative;
+  padding-right: 12px;
+}
+
+/* Padronizar cor do texto de todos os itens da navbar (grupos e subitens) para preto */
+.chars-page .nav-right button,
+.chars-page .nav-right summary,
+.chars-page .nav-right .nav-group-toggle,
+.chars-page .nav-group > summary,
+.chars-page .nav-group > .nav-group-toggle,
+.chars-page .nav-group .nav-group-toggle.nav-group-leaf {
+  color: #000 !important;
+}
+
+/* Manter texto preto também em hover/active para consistência */
+.chars-page .nav-right button:hover,
+.chars-page .nav-right button.active,
+.chars-page .nav-group.active-group > .nav-group-toggle {
+  color: #000 !important;
+}
+
+.chars-page .nav-group[open] .nav-group-content > button,
+.chars-page .nav-group .nav-group-content button {
+  /* Force subgroup member buttons to match top-level buttons */
+  width: 100%;
+  display: flex;
+  align-items: center;
+  min-height: 42px;
+  padding: 10px 12px;
+  font-size: 15px;
+  border-radius: 8px;
+  box-sizing: border-box;
+  margin: 0;
+}
+
+/* Ensure nested summary/toggle keeps normal size */
+.chars-page .nav-group .nav-group-toggle,
+.chars-page .nav-group > summary {
+  min-height: 42px;
+  padding: 10px 12px;
+}
+
+.chars-page .nav-group > .nav-group-toggle,
+.chars-page .nav-group .nav-group-toggle.nav-group-leaf {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.chars-page .nav-group > summary,
+.chars-page .nav-group > .nav-group-toggle {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.chars-page .nav-right button::after {
+  content: none;
+}
+
+.chars-page .nav-right button:hover {
+  background: linear-gradient(180deg, rgba(248, 246, 252, 0.98), rgba(235, 230, 244, 0.98));
+  border-color: rgba(150, 136, 176, 0.62);
+  color: #180024;
+}
+
+.chars-page .nav-right button.active {
+  background: linear-gradient(180deg, rgba(242, 236, 252, 0.98), rgba(227, 218, 243, 0.98));
+  border-color: rgba(118, 87, 176, 0.82);
+  color: #180024;
+  cursor: default;
+  box-shadow: inset 0 0 0 1px rgba(158, 123, 219, 0.35), 0 0 0 1px rgba(86, 58, 132, 0.2);
+  text-decoration: underline;
+  text-decoration-color: rgba(85, 46, 145, 0.95);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+
+/* Smooth mount animation for dynamic skill content to reduce layout jump */
+.chars-page .chars-dynamic {
+  transition: opacity 180ms ease, transform 180ms ease;
+  transform: translateY(6px);
+}
+
+.chars-page .chars-dynamic.is-mounted {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.chars-page .skills-wrapper .skill-card-row {
+  margin: 10px 0;
+}
+
+/* Place the dynamic skill mount in the normal flow directly below the tabs/submenu */
+.chars-page .chars-header {
+  /* allow content inserted after nav to flow beneath the tabs */
+  position: static;
+}
+
+.chars-page .chars-header .chars-dynamic {
+  position: relative;
+  display: block;
+  margin-top: 8px;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(140, 160, 220, 0.72) rgba(255, 255, 255, 0.06);
+  box-sizing: border-box;
+  z-index: 2;
+}
+
+.chars-page .chars-header .chars-dynamic::-webkit-scrollbar {
+  width: 10px;
+}
+
+.chars-page .chars-header .chars-dynamic::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 999px;
+}
+
+.chars-page .chars-header .chars-dynamic::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(140, 160, 220, 0.78), rgba(115, 135, 195, 0.78));
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.chars-page .chars-header .chars-dynamic::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, rgba(170, 190, 245, 0.92), rgba(130, 150, 210, 0.92));
+}
+
+/* ensure skills wrapper inside dynamic has top spacing so it doesn't collide with submenu */
+.chars-page .chars-dynamic .skills-wrapper {
+  padding-top: 8px;
+}
+
+.chars-page .nav-right button.active::after {
+  content: none;
+}
+
+.chars-page .nav-right button.active::before {
+  content: none;
+  display: none;
+}
+
+.chars-page .nav-right button.active:disabled {
+  opacity: 1;
+  filter: none;
+}
+
+.chars-page .nav-right button.nav-group-leaf.active::after {
+  content: none;
+}
+
+/* Make standalone characters use the light-blue highlight */
+.chars-page .nav-tree > button.active {
+  background: linear-gradient(180deg, rgba(116, 190, 255, 0.96), rgba(63, 145, 232, 0.98));
+  border-color: rgba(80, 162, 245, 1);
+  color: #ffffff;
+  box-shadow: rgba(0, 0, 0, 0.08) 0 2px 6px;
+}
+
+.chars-page .nav-tree > button.active:hover {
+  background: linear-gradient(180deg, rgba(132, 200, 255, 0.98), rgba(76, 156, 239, 0.99));
+}
+
+.chars-page .nav-right button[data-default] {
+  box-shadow: inset 0 0 0 1px rgba(122, 0, 255, 0.16);
+}
+
+.chars-page .nav-right .nav-separator {
+  display: none;
+}
+
+.chars-page .navbar-title {
+  position: relative;
+  z-index: 4;
+  margin: 0 0 14px 0;
+  color: #24003f;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 1.1;
+  width: 100%;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+}
+
+.chars-page .navbar-separator {
+  border: none;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(36, 0, 63, 0.18) 18%,
+    rgba(36, 0, 63, 0.4) 50%,
+    rgba(36, 0, 63, 0.18) 82%,
+    transparent 100%
+  );
+  margin: 0 0 8px 0;
+}
+
+.chars-page .navbar-separator-back {
+  display: block;
+  margin: 6px 0 6px 0;
+}
+
+/* ========================= */
+/* BOTAO VOLTAR (ICONE) */
+/* ========================= */
+.return_btn {
+  position: fixed;
+  top: 14px;
+  left: 14px;
+
+  width: 42px;
+  height: 42px;
+  padding: 0;
+
+  border: 0;
+  border-radius: 999px;
+  background: transparent url('../../res/img/back.png') center/contain no-repeat;
+  color: transparent;
+  font-size: 0;
+
+  cursor: pointer;
+  z-index: 0;
+  filter: drop-shadow(0 0 5px rgba(20, 0, 40, 0.35));
+
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.return_btn::before {
+  content: none;
+}
+
+.return_btn:hover {
+  transform: translateX(-3px) scale(1.08);
+  filter: drop-shadow(0 0 6px rgba(20, 0, 40, 0.45));
+  animation: back-icon-wiggle 350ms ease-in-out;
+}
+
+.return_btn:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.9);
+  outline-offset: 2px;
+}
+
+@keyframes back-icon-wiggle {
+  0% {
+    transform: translateX(0) scale(1);
+  }
+  50% {
+    transform: translateX(-4px) scale(1.1);
+  }
+  100% {
+    transform: translateX(-3px) scale(1.08);
+  }
+}
+
+@media (max-width: 760px) {
+  .return_btn {
+    display: none;
+  }
+}
+
+@media (max-width: 980px) {
+  .chars-page {
+    --chars-showcase-w: clamp(220px, 34vw, 320px);
+    --chars-showcase-h: clamp(340px, 62vh, 620px);
+  }
+
+  .chars-shell {
+    width: min(900px, 100%);
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .sidebar-col {
+    height: auto;
+    position: static;
+  }
+
+  .chars-page .page_container {
+    width: 100%;
+    flex: 0 0 auto;
+  }
+
+  .chars-page .navbar {
+    width: 100%;
+    flex: 0 0 auto;
+    order: -1;
+    position: static;
+    overflow-y: visible;
+    overflow-x: visible;
+    scrollbar-gutter: auto;
+  }
+
+  .chars-page .nav-right {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .chars-page .nav-right button {
+    width: 100%;
+    flex: 0 0 auto;
+    min-width: 0;
+  }
+
+  .chars-page .chars-section-tabs {
+    gap: 6px;
+    padding: 10px;
+  }
+
+  .chars-page .chars-section-tab {
+    font-size: 19px;
+    padding: 8px 14px;
+  }
+
+  .chars-page .chars-header {
+    gap: 12px;
+    grid-template-columns: minmax(0, var(--chars-showcase-w)) minmax(0, 1fr);
+  }
+
+  .chars-page .chars-showcase-wrap {
+    min-height: var(--chars-showcase-h);
+  }
+
+  .chars-page .chars-showcase-image {
+    min-height: 0;
+  }
+}
+
+@media (max-width: 620px) {
+  .chars-page {
+    --chars-showcase-w: min(100%, 380px);
+    --chars-showcase-h: clamp(300px, 62vh, 520px);
+  }
+
+  .chars-page .chars-header {
+    flex-direction: column;
+    display: flex;
+  }
+
+  .chars-page .chars-showcase-wrap {
+    width: var(--chars-showcase-w);
+    height: var(--chars-showcase-h);
+    min-height: var(--chars-showcase-h);
+    max-width: 100%;
+    border-radius: 0;
+    background: #000;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .chars-page .chars-showcase-image {
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    max-height: none;
+  }
+
+  .chars-page .chars-showcase-swap {
+    top: 8px;
+    left: 8px;
+    min-width: 58px;
+    min-height: 30px;
+    padding: 5px 10px;
+    font-size: 13px;
+  }
+
+  .chars-page .chars-section-tabs {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .chars-page .chars-overview-strip.is-visible {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .chars-page .overview-main-value {
+    font-size: 21px;
+  }
+
+  .chars-page .overview-res-label {
+    font-size: 18px;
+  }
+}
+
+/* ========================= */
+/* NAVBAR */
+/* ========================= */
+.navbar {
+  width: 100%;
+  background: rgba(20, 0, 40, 0.8);
+  backdrop-filter: blur(10px);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 12px 16px;
+  margin-bottom: 16px;
+
+  border-bottom: 1px solid #7a00ff;
+  border-radius: 8px;
+
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* container botões */
+.nav-right {
+  display: flex;
+  gap: 10px;
+
+  justify-content: center;
+  align-items: center;
+
+  flex-wrap: wrap;
+}
+
+.nav-right .nav-separator {
+  width: 1px;
+  height: 28px;
+  background: rgba(255, 255, 255, 0.45);
+  flex: 0 0 1px;
+}
+
+/* botões navbar */
+.nav-right button {
+  padding: 8px 12px;
+
+  background: transparent;
+  border: 1px solid #aaa;
+  color: white;
+
+  cursor: pointer;
+  transition: 0.2s;
+
+  flex: 1 1 auto;
+  min-width: 120px;
+}
+
+.nav-right button:hover {
+  background: white;
+  color: black;
+}
+
+.nav-right button.active {
+  background-color: #fff;
+  color: #330a3f;
+  cursor: default;
+}
+
+/* ========================= */
+/* BOTÕES INTERNOS */
+/* ========================= */
+.page_container .btn {
+  display: block;
+  margin: 24px auto 0 auto;
+
+  font-size: 16px;
+  text-align: center;
+
+  padding: 4px 20px;
+
+  flex: 1 1 140px;
+  max-width: 180px;
+}
+
+.page_container .btn:hover {
+  text-decoration: underline;
+}
+
+/* ========================= */
+/* TEXTO */
+/* ========================= */
+.page_container h4 {
+  margin: 0;
+  padding-bottom: 0;
+}
+
+.page_container hr {
+  border: none;
+  height: 4px;
+  margin: 20px 0;
+
+  background: rgba(60, 0, 90, 0.3);
+}
+
+/* ========================= */
+/* RESPONSIVIDADE */
+/* ========================= */
+.page_container img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* icones inline dentro de texto markdown */
+.page_container [mkd-content] p img {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  max-width: none;
+  margin: 0 1px;
+  vertical-align: text-bottom;
+}
+
+.page_container [mkd-content] .tooltip-inline {
+  color: inherit;
+  font: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  text-decoration: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  display: inline;
+}
+
+.page_container [mkd-content] a.tooltip-inline {
+  cursor: pointer;
+}
+
+.page_container [mkd-content] .tooltip-inline img {
+  display: inline-block;
+  vertical-align: text-bottom;
+}
+
+/* Aplica também ao container dinâmico onde skills são injetadas */
+.page_container .page-dynamic .tooltip-inline img,
+.page_container .chars-dynamic .tooltip-inline img,
+.page_container .page-dynamic img.effect-icon,
+.page_container .chars-dynamic img.effect-icon,
+.page_container .chars-overview-strip img.effect-icon,
+.page_container [mkd-content] img.effect-icon {
+  display: inline-block;
+  vertical-align: text-bottom;
+  width: 20px;
+  height: 20px;
+  max-width: none;
+  margin: 0 1px;
+}
+
+/* <color="#hex">...</color> is parsed into <span style="color: ...">...</span>. */
+.page_container [mkd-content] u span[style*="color:"],
+.page_container .chars-overview-strip u span[style*="color:"] {
+  text-decoration-line: inherit;
+  text-decoration-color: currentColor;
+  text-decoration-thickness: from-font;
+  text-underline-offset: 0.08em;
+}
+
+/* mesma regra para conteúdo dinâmico (skills) */
+.page_container .page-dynamic u span[style*="color:"],
+.page_container .chars-dynamic u span[style*="color:"] {
+  text-decoration-line: inherit;
+  text-decoration-color: currentColor;
+  text-decoration-thickness: from-font;
+  text-underline-offset: 0.08em;
+}
+
+.page_container iframe,
+.page_container video {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ========================= */
+/* TABELA MARKDOWN */
+/* ========================= */
+.page_container table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+
+  background-color: rgba(255, 255, 255, 0.6);
+  border-radius: 8px;
+  overflow: hidden;
+
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+}
+
+.page_container th,
+.page_container td {
+  padding: 10px 14px;
+  text-align: left;
+
+  border-bottom: 1px solid rgba(60, 0, 90, 0.15);
+
+  word-break: break-word;
+}
+
+.page_container th {
+  background: rgba(20, 0, 40, 0.85);
+  color: #fff;
+  font-weight: 600;
+
+  position: sticky;
+  top: 0;
+}
+
+.page_container tr:nth-child(even) {
+  background-color: rgba(255, 255, 255, 0.35);
+}
+
+.page_container tr:nth-child(odd) {
+  background-color: rgba(255, 255, 255, 0.55);
+}
+
+
+.page_container tr:last-child td {
+  border-bottom: none;
+}
+
+/* ========================= */
+/* RÓTULOS DE RESISTÊNCIA    */
+/* ========================= */
+.page_container [mkd-content] p.res_vulnerable,
+.page_container [mkd-content] p.res_resistant,
+.page_container [mkd-content] p.res_normal,
+.page_container [mkd-content] p.res_immune {
+  margin: 0;
+  font-weight: 700;
+}
+
+.page_container [mkd-content] p.res_vulnerable {
+  color: #ff0000;
+}
+
+.page_container [mkd-content] p.res_resistant {
+  color: #444444;
+}
+
+.page_container [mkd-content] p.res_normal {
+  color: #000000;
+}
+
+.page_container [mkd-content] p.res_immune {
+  color: #2e7d32;
+}
+
+/* quando houver imagem flutuada na direita, limita a largura útil da tabela */
+.page_container [mkd-content] img[style*="float: right"] {
+  width: clamp(180px, 32%, 280px);
+  height: auto;
+  margin: 0 0 16px 16px;
+}
+
+.page_container [mkd-content]:has(img[style*="float: right"]) table {
+  max-width: calc(100% - clamp(180px, 32%, 280px) - 16px);
+  margin-right: auto;
+}
+
+/* wrapper responsivo (recomendado) */
+.page_container .table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+@media (max-width: 760px) {
+  .page_container [mkd-content] img[style*="float: right"] {
+    float: none !important;
+    display: block;
+    margin: 0 auto 16px;
+    width: min(260px, 100%);
+  }
+
+  .page_container [mkd-content]:has(img[style*="float: right"]) table {
+    max-width: 100%;
+  }
+}
+
+/* ========================= */
+/* TOOLTIP */
+/* ========================= */
+.tooltip-box {
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: justify;
+
+  position: fixed;
+  left: 0;
+  top: 0;
+
+  background-color: #1e1e2f;
+  border-radius: 5px;
+  border: 2px solid rgba(90, 90, 90, 0.2);
+
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+
+  color: #fff;
+  padding: 8px 12px;
+  font-size: 14px;
+
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+
+  z-index: 6767;
+
+  max-width: 450px;
+  max-height: 200px;
+  overflow-y: auto;
+
+  overscroll-behavior: contain;
+
+  scrollbar-width: thin;
+  scrollbar-color: rgba(140, 160, 220, 0.65) rgba(255, 255, 255, 0.06);
+
+  word-break: break-word;
+}
+
+.tooltip-box.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* scrollbar */
+.tooltip-box::-webkit-scrollbar {
+  width: 8px;
+}
+
+.tooltip-box::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 999px;
+}
+
+.tooltip-box::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    180deg,
+    rgba(140, 160, 220, 0.75),
+    rgba(115, 135, 195, 0.75)
+  );
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.tooltip-box::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(
+    180deg,
+    rgba(170, 190, 245, 0.9),
+    rgba(130, 150, 210, 0.9)
+  );
+}
+
+/* ========================= */
+/* LISTAS E BLOCKQUOTES */
+/* ========================= */
+.page_container [mkd-content] ul,
+.page_container [mkd-content] ol {
+  margin: 10px 0;
+  padding-left: 24px;
+}
+
+.page_container [mkd-content] li {
+  margin: 6px 0;
+  line-height: 1.6;
+}
+
+/* evita espacamento extra em listas markdown "soltas" */
+.page_container [mkd-content] li > p {
+  margin: 0;
+}
+
+.page_container [mkd-content] ul ul,
+.page_container [mkd-content] ol ul,
+.page_container [mkd-content] ul ol,
+.page_container [mkd-content] ol ol {
+  margin: 4px 0;
+  padding-left: 2em;
+}
+
+.page_container [mkd-content] blockquote {
+  margin: 10px 0 10px 0;
+  padding-left: 16px;
+  border-left: 4px solid rgba(138, 43, 226, 0.4);
+  color: rgba(0, 0, 0, 0.75);
+  font-style: italic;
+}
+
+.page_container [mkd-content] blockquote p {
+  margin: 6px 0;
+}
+
+/* sub-listas aninhadas */
+.page_container [mkd-content] li li {
+  font-size: 0.95em;
+  color: #000;
+  font-style: italic;
+}
+
+.page_container [mkd-content] li li li {
+  font-size: 0.9em;
+  color: #000;
+  font-style: italic;
+}
+
+
+
+
+
+
+.skill-slot {
+  position: relative;
+  display: inline-block;
+  width: 128px;
+  height: 128px;
+  overflow: visible;
+  margin-top: 8px;
+}
+
+/* Posicionamento e recorte das imagens do slot */
+.skill-slot .slot-background {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.skill-slot .slot-base {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.skill-slot .slot-center-icon {
+  position: absolute;
+  left: 50%;
+  top: 52%;
+  transform: translate(-50%, -50%);
+  width: 78%;
+  height: 78%;
+  max-width: 92px;
+  max-height: 92px;
+  object-fit: cover;
+  object-position: center;
+  z-index: 2; /* acima do background, abaixo da borda/base */
+  display: block;
+  /* heptágono levemente expandido nos eixos X para cobrir as laterais pontiagudas */
+  -webkit-clip-path: polygon(50% 100%, 96% 80%, 100% 40%, 74% 3%, 26% 3%, 0% 40%, 4% 80%);
+  clip-path: polygon(50% 100%, 96% 80%, 100% 40%, 74% 3%, 26% 3%, 0% 40%, 4% 80%);
+}
+
+.skill-slot .slot-dmgtype {
+  position: absolute;
+  right: 6px;
+  bottom: 6px;
+  z-index: 6;
+}
+
+.skills-wrapper {
+display: flex;
+flex-direction: column;
+  gap: 18px;
+padding: 16px;
+margin: 12px 0 0;
+background: #000000;
+border-radius: 10px;
+box-shadow:
+  inset 0 0 0 4px rgba(0, 0, 0, 0.95),
+  0 4px 12px rgba(0, 0, 0, 0.35);
+overflow: visible;
+}
+
+/* Aumenta espaçamento vertical entre passivas quando renderizadas dentro do Overview */
+.chars-page .chars-overview-strip .skills-wrapper {
+  display: contents;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  box-shadow: none;
+  gap: 12px;
+}
+
+/* Remove o respiro inferior do primeiro bloco Kit logo após o título "Kit" */
+.chars-page .chars-kit + .skills-wrapper {
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.chars-page .chars-overview-strip .chars-kit + .skills-wrapper,
+.chars-page .chars-dynamic .chars-kit + .skills-wrapper,
+.page_container .chars-kit + .skills-wrapper {
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.chars-page .chars-overview-strip .skills-passives-section .skill-card-row.passive-row,
+.chars-page .chars-overview-strip .skills-ego-passives-section .skill-card-row.passive-row {
+  margin: 10px 0; /* espaço vertical extra entre passivas */
+  padding: 10px 12px; /* mantém preenchimento consistente no Overview */
+}
+
+.skills-section-title {
+position: relative;
+display: flex;
+align-items: center;
+justify-content: center;
+margin: -16px -16px 2px;
+padding: 10px 16px;
+background: linear-gradient(180deg, rgba(42, 22, 9, 0.98) 0%, rgba(18, 12, 8, 0.98) 100%);
+border: 1px solid #b9782d;
+border-radius: 10px 10px 0 0;
+box-shadow:
+  inset 0 1px 0 rgba(255, 214, 140, 0.18),
+  0 2px 0 rgba(0, 0, 0, 0.35);
+text-transform: uppercase;
+font-weight: 900;
+letter-spacing: 0.08em;
+color: #f4b23f;
+overflow: hidden;
+}
+
+.skills-section-title::before,
+.skills-section-title::after {
+content: "";
+position: absolute;
+top: 50%;
+width: 34%;
+height: 1px;
+background: linear-gradient(90deg, rgba(244, 178, 63, 0), rgba(244, 178, 63, 0.9));
+transform: translateY(-50%);
+}
+
+.skills-section-title::before {
+left: 16px;
+}
+
+.skills-section-title::after {
+right: 16px;
+transform: translateY(-50%) scaleX(-1);
+}
+
+.skills-section-title span {
+position: relative;
+z-index: 1;
+padding: 0 14px;
+background: linear-gradient(180deg, rgba(42, 22, 9, 0.98) 0%, rgba(18, 12, 8, 0.98) 100%);
+}
+
+.slot-base {
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+z-index: 3;
+}
+
+.slot-background {
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+z-index: 1;
+}
+
+.slot-center-icon {
+position: absolute;
+top: 50%;
+left: 50%;
+width: 68%;
+height: auto;
+transform: translate(-50%, -50%);
+z-index: 2;
+pointer-events: none;
+object-fit: contain;
+}
+
+.slot-dmgtype {
+position: absolute;
+right: 0;
+bottom: 0;
+z-index: 4;
+}
+
+.skill-card-row {
+display: flex;
+align-items: flex-start;
+flex-wrap: wrap;
+gap: 14px;
+margin: 8px 0;
+padding: 8px 10px;
+background: #000000;
+border-radius: 10px;
+overflow: visible;
+}
+
+.skills-divider {
+height: 2px;
+margin: 24px 0;
+margin-left: 18px;
+background: linear-gradient(90deg, rgba(185, 120, 45, 0), rgba(185, 120, 45, 0.95), rgba(185, 120, 45, 0));
+opacity: 1;
+}
+
+.skill_description {
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+justify-content: flex-start;
+flex: 1 1 180px;
+margin-left: 0px;
+min-width: 0;
+overflow: visible;
+}
+
+.skill_description .skill-text {
+display: grid;
+grid-template-columns: auto 1fr;
+
+.skill-atkw {
+  color: #d7d713;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+column-gap: 8px;
+row-gap: 6px;
+align-items: center;
+}
+
+.skill-card-row.weapon-row .weapon-hit-label,
+.skill-card-row.weapon-row .weapon-dmg-label,
+.skill-card-row.ego-row .weapon-hit-label,
+.skill-card-row.ego-row .weapon-dmg-label {
+display: flex;
+align-items: center;
+gap: 8px;
+width: fit-content;
+max-width: 100%;
+margin: 6px 0 4px;
+color: #ffd79a;
+font-weight: 700;
+font-size: 13px;
+line-height: 1.1;
+letter-spacing: 0.01em;
+}
+
+.skill-card-row.weapon-row {
+  margin: 10px 0 18px;
+  padding: 10px 12px 14px;
+}
+
+.skill-card-row.weapon-row .skill-name-wrap {
+  margin-top: 2px;
+  padding-top: 22px;
+}
+
+.skill-card-row.weapon-row .weapon-hit-label {
+  margin-top: 10px;
+  margin-bottom: 2px;
+}
+
+.skill-card-row.weapon-row .weapon-dmg-label,
+.skill-card-row.ego-row .weapon-dmg-label {
+  margin-top: 6px;
+}
+
+.skill-card-row.ego-row {
+  align-items: flex-start;
+}
+
+.skill-card-row.ego-row .skill-slot-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 0 0 auto;
+  width: 128px;
+  gap: 8px;
+}
+
+.skill-card-row.ego-row .skill-ego-risk {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.skill-card-row.ego-row .skill-ego-risk img {
+  display: block;
+  width: 76px;
+  height: auto;
+  object-fit: contain;
+}
+
+.skill-card-row.ego-row .skill-ego-costs {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px 10px;
+  width: 100%;
+  max-width: 100%;
+}
+
+.skill-card-row.ego-row .skill-ego-cost-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #f0f0f0;
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.skill-card-row.ego-row .skill-ego-cost-item img {
+  display: block;
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+}
+
+.skill-card-row.passive-row {
+  margin: 8px 0; /* match .skill-card-row vertical spacing */
+  padding: 8px 10px; /* match base padding */
+  gap: 14px; /* match .skill-card-row gap */
+}
+
+.skill-card-row.defense-row {
+  margin: 12px 0; /* slightly more spacing than regular skills for visual separation */
+  padding: 8px 10px; /* match base padding */
+  gap: 14px;
+}
+
+/* keep slot at normal size, but make center icon smaller and lower */
+.skill-card-row.defense-row .skill-slot {
+  width: 128px;
+  height: 128px;
+  margin-top: 8px;
+}
+
+/* ensure center icon cannot overflow the slot border */
+.skill-card-row.defense-row .skill-slot {
+  overflow: hidden !important;
+  -webkit-clip-path: polygon(50% 100%, 96% 80%, 100% 40%, 74% 3%, 26% 3%, 0% 40%, 4% 80%);
+  clip-path: polygon(50% 100%, 96% 80%, 100% 40%, 74% 3%, 26% 3%, 0% 40%, 4% 80%);
+}
+
+.skill-card-row.defense-row .slot-base,
+.skill-card-row.defense-row .slot-background {
+  width: 100%;
+  height: 100%;
+}
+
+.skill-card-row.defense-row .slot-center-icon {
+  position: absolute;
+  left: 50%;
+  top: 52%;
+  transform: translate(-50%, -50%);
+  width: 78%;
+  height: 78%;
+  max-width: 92px;
+  max-height: 92px;
+  object-fit: cover;
+  object-position: center;
+  z-index: 2; /* acima do background, abaixo da borda/base */
+  display: block;
+  pointer-events: none;
+  /* heptágono levemente expandido nos eixos X para cobrir as laterais pontiagudas */
+  -webkit-clip-path: polygon(50% 100%, 96% 80%, 100% 40%, 74% 3%, 26% 3%, 0% 40%, 4% 80%);
+  clip-path: polygon(50% 100%, 96% 80%, 100% 40%, 74% 3%, 26% 3%, 0% 40%, 4% 80%);
+}
+
+.skill-card-row.defense-row .skill-name {
+  font-size: 1.05rem;
+  padding: 8px 56px 8px 12px;
+}
+
+.skill-card-row.defense-row .skill-cost-label {
+  font-size: 2.6rem;
+  top: -20px;
+  right: 6px;
+}
+
+.skill-card-row.defense-row .skill-coins-row {
+  top: 6px;
+  gap: 6px;
+}
+
+.skill-card-row.passive-row .skill_description .skill-text {
+margin-top: 0.15em;
+row-gap: 3px;
+}
+
+.skill-card-row.passive-row .skill-name-wrap {
+  margin-top: -8px;
+  padding-top: 18px; /* uniformizar padding-top para todas as passivas */
+}
+
+.skill-card-row.passive-row .passive-name {
+padding: 8px 72px 8px 18px;
+}
+
+.skill_description .skill-text
+{
+ margin-top: 0.5em;
+}
+
+.skill_description .skill-text p {
+margin: 0;
+}
+
+.skill_description .skill-text > p.solo-desc {
+grid-column: 1 / -1;
+}
+
+.skill_description .skill-mark 
+{
+ color: #ff0000;
+ font-weight: bold;
+}
+
+.skills-separator {
+  content: "";
+  display: block;
+  height: 2px;
+  margin-top: 24px;
+  margin-bottom: 24px;
+  margin-left: 18px;
+  background: linear-gradient(90deg, rgba(185, 120, 45, 0), rgba(185, 120, 45, 0.95), rgba(185, 120, 45, 0));
+  opacity: 1;
+}
+
+/* Aperta só o início da seção de Skills, logo após o separador de Armas */
+.chars-page .chars-overview-strip .skills-separator + .skills-section {
+  margin-top: 0;
+}
+
+/* Tighten gap immediately after a separator for main kit sections (global)
+   Keep 0 so separators provide consistent spacing both above and below. */
+.skills-separator + .skills-section,
+.skills-separator + .skills-weapons-section,
+.skills-separator + .skills-ego-section,
+.skills-separator + .skills-ego-passives-section,
+.skills-separator + .skills-defense-section,
+.skills-separator + .skills-passives-section {
+  margin-top: 0;
+}
+
+.skills-separator + .skills-section .skill-card-row:first-child,
+.skills-separator + .skills-weapons-section .skill-card-row:first-child,
+.skills-separator + .skills-ego-section .skill-card-row:first-child,
+.skills-separator + .skills-ego-passives-section .skill-card-row:first-child,
+.skills-separator + .skills-defense-section .skill-card-row:first-child,
+.skills-separator + .skills-passives-section .skill-card-row:first-child {
+  margin-top: 0;
+}
+
+/* The last weapon row should not add extra bottom space before the next separator */
+.chars-page .chars-overview-strip .skills-weapons-section .skill-card-row:last-child,
+.chars-page .chars-header .chars-dynamic .skills-weapons-section .skill-card-row:last-child,
+.page_container .chars-dynamic .skills-weapons-section .skill-card-row:last-child,
+.page_container .page-dynamic .skills-weapons-section .skill-card-row:last-child,
+.skills-weapons-section .skill-card-row:last-child {
+  margin-bottom: 0;
+}
+
+.skill-coins-row {
+display: flex;
+align-items: center;
+gap: 4px;
+flex-wrap: wrap;
+position: relative;
+top: 8px;
+}
+
+.skill-coins {
+display: block;
+}
+
+.skill-text-coin {
+display: inline-block;
+margin: 0;
+vertical-align: middle;
+}
+
+.weapon-empty-coin {
+display: inline-block;
+margin: 0;
+vertical-align: middle;
+}
+
+.skill-name-wrap {
+position: relative;
+width: 100%;
+  margin-top: -4px;
+  padding-top: 18px;
+  overflow: visible;
+}
+
+.skill-cost-label {
+position: absolute;
+right: 8px;
+  top: -20px;
+z-index: 1;
+margin: 0;
+padding: 0;
+display: inline-block;
+font-family: "Bahnschrift", "Trebuchet MS", sans-serif;
+font-size: 2.6rem;
+font-weight: 900;
+line-height: 1.36;
+letter-spacing: -0.05em;
+color: #7f7f7f;
+text-shadow: 0 1px 0 rgba(0, 0, 0, 0.95), 0 0 8px rgba(255, 255, 255, 0.05);
+background: transparent;
+border: none;
+border-radius: 0;
+opacity: 0.9;
+pointer-events: none;
+}
+
+/* For passive labels, keep vertical positioning stable regardless of surrounding spacing */
+.skills-passives-section .skill-cost-passive {
+  top: -20px; /* explicit for passiva; consistent with other cards */
+}
+
+.skill-name {
+margin: 0;
+display: inline-flex;
+align-items: center;
+position: relative;
+z-index: 2;
+padding: 10px 72px 10px 18px;
+
+font-size: 1.05rem;
+font-weight: 900;
+line-height: 1.2;
+letter-spacing: 0.02em;
+
+white-space: normal;
+overflow-wrap: break-word;
+word-break: normal;
+
+color: #ffffff;
+
+background:
+linear-gradient(
+    180deg,
+  color-mix(in srgb, var(--skill-main) 34%, #170707) 0%,
+  color-mix(in srgb, var(--skill-main) 18%, #0e0606) 58%,
+  color-mix(in srgb, var(--skill-main) 10%, #070404) 100%
+);
+
+border: 1px solid color-mix(in srgb, var(--skill-main) 22%, #120909);
+
+box-shadow:
+  inset 0 1px 0 rgba(255, 218, 164, 0.1),
+  inset 0 -1px 0 rgba(0, 0, 0, 0.35),
+  0 2px 0 rgba(0, 0, 0, 0.38);
+
+clip-path:
+polygon(
+    0 0,
+    calc(100% - 52px) 0,
+    calc(100% - 28px) 100%,
+    0% 100%
+);
+
+text-shadow:
+0 1px 0 rgba(0, 0, 0, 0.9),
+0 3px 8px rgba(0, 0, 0, 0.85);
+
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow: visible;
+}
+
+.skill-name::before {
+content: "";
+position: absolute;
+inset: 0;
+background:
+linear-gradient(90deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0) 42%),
+linear-gradient(180deg, rgba(255, 223, 190, 0.08), rgba(255, 255, 255, 0) 48%);
+pointer-events: none;
+}
+
+.skill-name::after {
+content: "";
+position: absolute;
+top: 0;
+right: 0;
+width: 62px;
+height: 100%;
+background:
+repeating-linear-gradient(
+  135deg,
+  color-mix(in srgb, var(--skill-main) 88%, #ffe1a8) 0 4px,
+  rgba(0, 0, 0, 0) 4px 8px
+);
+clip-path: polygon(34% 0, 100% 0, 100% 100%, 0 100%);
+opacity: 0.95;
+pointer-events: none;
+}
+
+/* ========================= */
+/* EFFECT TAGS / CALLOUTS    */
+/* ========================= */
+.page_container [mkd-content] .fx-line {
+display: flex;
+align-items: center;
+gap: 8px;
+flex-wrap: wrap;
+margin: 8px 0;
+}
+
+.page_container [mkd-content] .fx-tag {
+display: inline-block;
+padding: 2px 10px;
+border-radius: 999px;
+border: 1px solid #271733;
+background: #3a234f;
+color: #ffffff;
+font-size: 0.78rem;
+font-weight: 700;
+letter-spacing: 0.03em;
+text-transform: uppercase;
+line-height: 1.3;
+white-space: nowrap;
+}
+
+.page_container [mkd-content] .fx-value {
+font-weight: 700;
+color: #2a0a42;
+}
+
+.page_container [mkd-content] .fx-box {
+--fx-bg: rgba(245, 238, 255, 0.85);
+--fx-border: #6f3acb;
+--fx-tag-bg: #3a234f;
+--fx-tag-color: #ffffff;
+padding: 10px 12px;
+margin: 10px 0;
+border-radius: 10px;
+background: var(--fx-bg);
+border-left: 4px solid var(--fx-border);
+}
+
+.page_container [mkd-content] .fx-box .fx-line {
+margin: 4px 0;
+}
+
+.page_container [mkd-content] .fx-box .fx-tag {
+background: var(--fx-tag-bg);
+color: var(--fx-tag-color);
+}
+
+@media (max-width: 720px) {
+.skills-divider {
+  margin-left: 0;
+}
+}
+
+.skill-text p,
+.skill-text .solo-desc {
+    color: #fff;
+}
+
+.chars-page .chars-dynamic .skills-passives-section .skill-card-row.passive-row,
+.chars-page .page-dynamic .skills-passives-section .skill-card-row.passive-row,
+.page_container .chars-dynamic .skills-passives-section .skill-card-row.passive-row,
+.page_container .page-dynamic .skills-passives-section .skill-card-row.passive-row,
+.chars-page .chars-dynamic .skills-ego-passives-section .skill-card-row.passive-row,
+.chars-page .page-dynamic .skills-ego-passives-section .skill-card-row.passive-row,
+.page_container .chars-dynamic .skills-ego-passives-section .skill-card-row.passive-row,
+.page_container .page-dynamic .skills-ego-passives-section .skill-card-row.passive-row,
+.skills-passives-section .skill-card-row.passive-row {
+  margin: 22px 0; /* aumenta espaço vertical entre passivas */
+  padding: 8px 12px;
+}
+
+/* When passivas are rendered directly inside the dynamic mount (submenu view)
+   they may be inserted without the .skills-passives-section wrapper. Ensure
+   adequate vertical spacing in that context so the "Passiva" label doesn't
+   visually collide with adjacent cards. */
+.chars-page .chars-dynamic .skill-card-row.passive-row,
+.chars-page .chars-dynamic > .skill-card-row.passive-row,
+.page_container .chars-dynamic .skill-card-row.passive-row,
+.page_container .page-dynamic .skill-card-row.passive-row,
+.page_container .chars-dynamic > .skill-card-row.passive-row,
+.page_container .page-dynamic > .skill-card-row.passive-row {
+  margin: 36px 0; /* vertical gap between passive rows in submenu */
+  padding: 8px 12px;
+}
+
+.chars-page .chars-dynamic .skill-card-row.passive-row + .skill-card-row.passive-row,
+.page_container .chars-dynamic .skill-card-row.passive-row + .skill-card-row.passive-row,
+.page_container .page-dynamic .skill-card-row.passive-row + .skill-card-row.passive-row {
+  margin-top: 36px; /* ensure stacking gap when multiple passives present */
+}
+
+.chars-page .chars-dynamic .skills-passives-section .skill-card-row.passive-row:first-child,
+.chars-page .page-dynamic .skills-passives-section .skill-card-row.passive-row:first-child,
+.page_container .chars-dynamic .skills-passives-section .skill-card-row.passive-row:first-child,
+.page_container .page-dynamic .skills-passives-section .skill-card-row.passive-row:first-child,
+.skills-passives-section .skill-card-row.passive-row:first-child {
+  margin-top: 30px;
+}
+
+.chars-page .chars-dynamic .skills-passives-section .skill-card-row.passive-row:first-child .skill-name-wrap,
+.chars-page .page-dynamic .skills-passives-section .skill-card-row.passive-row:first-child .skill-name-wrap,
+.page_container .chars-dynamic .skills-passives-section .skill-card-row.passive-row:first-child .skill-name-wrap,
+.page_container .page-dynamic .skills-passives-section .skill-card-row.passive-row:first-child .skill-name-wrap {
+  padding-top: 18px;
+}
+
+.chars-page .chars-overview-strip .chars-kit + .skills-passives-section .skill-card-row.passive-row:first-child,
+.chars-page .chars-header .chars-dynamic .chars-kit + .skills-passives-section .skill-card-row.passive-row:first-child,
+.page_container .chars-dynamic .chars-kit + .skills-passives-section .skill-card-row.passive-row:first-child,
+.page_container .page-dynamic .chars-kit + .skills-passives-section .skill-card-row.passive-row:first-child {
+  margin-top: 42px;
+}
+
+.chars-page .chars-overview-strip .chars-kit + .skills-passives-section,
+.chars-page .chars-header .chars-dynamic .chars-kit + .skills-passives-section,
+.page_container .chars-dynamic .chars-kit + .skills-passives-section,
+.page_container .page-dynamic .chars-kit + .skills-passives-section {
+  padding-top: 14px;
+}
+
+/* Separadores visuais (mesmo estilo de .skills-divider) para Overview
+   entre Skills -> Passivas e Passivas -> Defenses. Aplica-se quando
+   as seções são renderizadas dentro do Overview ou em mounts dinâmicos. */
+.chars-page .chars-overview-strip .skills-passives-section::before,
+.chars-page .chars-overview-strip .skills-defense-section::before {
+  /* Overview uses centered separators; standardize top/bottom margins */
+  content: "";
+  display: block;
+  height: 2px;
+  margin-top: 24px;
+  margin-bottom: 24px;
+  margin-left: 18px;
+  background: linear-gradient(90deg, rgba(185, 120, 45, 0), rgba(185, 120, 45, 0.95), rgba(185, 120, 45, 0));
+  opacity: 1;
+}
+
+/* Ensure overview/kit displays a clear vertical gap above Passivas and Defense sections
+   matching the separators used before Armas/Skills/E.G.O tabs. This adds breathing room
+   inside the overview mount so these blocks aren't visually glued to the preceding content. */
+.chars-page .chars-overview-strip .skills-passives-section,
+.chars-page .chars-overview-strip .skills-defense-section {
+  padding-top: 24px;
+}
+
+.chars-page .chars-header .chars-dynamic .skills-passives-section::before,
+.chars-page .chars-header .chars-dynamic .skills-defense-section::before,
+.page_container .chars-dynamic .skills-passives-section::before,
+.page_container .chars-dynamic .skills-defense-section::before,
+.page_container .page-dynamic .skills-passives-section::before,
+.page_container .page-dynamic .skills-defense-section::before,
+.skills-passives-section::before,
+.skills-defense-section::before {
+  /* Dynamic mounts use centered separators; standardize top/bottom margins */
+  content: "";
+  display: block;
+  height: 2px;
+  margin-top: 24px;
+  margin-bottom: 24px;
+  margin-left: 18px;
+  background: linear-gradient(90deg, rgba(185, 120, 45, 0), rgba(185, 120, 45, 0.95), rgba(185, 120, 45, 0));
+  opacity: 1;
+}
+
+.chars-page .chars-overview-strip .skills-ego-passives-section::before,
+.chars-page .chars-header .chars-dynamic .skills-ego-passives-section::before,
+.page_container .chars-dynamic .skills-ego-passives-section::before,
+.page_container .page-dynamic .skills-ego-passives-section::before,
+.skills-ego-passives-section::before {
+  content: none;
+  display: none;
+  height: 0;
+  margin: 0;
+  background: none;
+  opacity: 0;
+}
+
+/* Mesma regra aplicada para defense rows */
+.chars-page .chars-dynamic .skills-defense-section .skill-card-row.defense-row,
+.chars-page .page-dynamic .skills-defense-section .skill-card-row.defense-row,
+.page_container .chars-dynamic .skills-defense-section .skill-card-row.defense-row,
+.page_container .page-dynamic .skills-defense-section .skill-card-row.defense-row,
+.skills-defense-section .skill-card-row.defense-row {
+  margin: 12px 0; /* reduce spacing to match skills rhythm */
+  padding: 8px 12px; /* match passive padding */
+  gap: 14px;
+}
+

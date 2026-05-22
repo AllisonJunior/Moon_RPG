@@ -1,0 +1,267 @@
+!overview-start
+
+name: Wuhan Xia;
+
+description 
+(
+ Um antigo integrante da força familiar de Daguanyuan, os Heishou da Filial Wu. Atualmente se encontra como um Fixer  no escritório Moon Office.
+)
+!overview-end 
+
+
+
+
+
+!weapons-start
+
+title: Guan Dao [关刀];
+flavor: Arma Única;
+sin: sinless; 
+hit: Proficiência + Força (Alcance de +5 feet);
+dmg: 2d12 + Força;
+dmg_type: slash; 
+img: guan dao;
+
+coin
+{
+}
+
+
+!weapons-end
+
+
+
+
+
+!skills-start
+
+title: Subjugação [征服];
+sin: gluttony; 
+dmg: slash; 
+mp: 1;
+
+info
+{
+ (on_use) Ganhe 1 @Strider_Wu
+}
+
+coin
+{
+ (on_hit) Aplique 1 @Rupture   
+ (on_hit) Aplique 1 @Tremor   
+ (on_hit) Aplique +4 @Rupture @Count 
+ (on_hit) Aplique +4 @Tremor @Count
+}
+
+end
+{
+ (turn_end) Ganhe 8 @Haste   
+ (turn_end) Ganhe 1 @Protection    
+}
+
+---
+
+title: Tremor Imparável [无法阻止的震颤];
+sin: gluttony; 
+dmg: slash; 
+mp: 1;
+c_mp: 1-2;
+
+info
+{
+ Essa Skill não reduz @Count de @Rupture
+}
+
+coin
+{
+ (on_hit) Ative o @Tremor_Burst no alvo
+}
+
+coin
+{
+ (on_hit) Ative o @Tremor_Burst no alvo
+}
+
+coin
+{
+ (on_hit) Ative o @Tremor_Burst no alvo
+}
+
+coin
+{
+ (on_hit) Ative o @Tremor_Burst no alvo
+}
+
+coin
+{
+ (on_hit) Ative o @Tremor_Burst no alvo
+}
+
+coin
+{
+ (on_hit) Ative o @Tremor_Burst no alvo
+}
+
+end
+{
+ (skill_end) Se o alvo entrar em Stagger, use a Skill ~Golpe da Lâmina Crescente [新月刃击]~   
+ (turn_end) Ganhe 1 @Power_Down 
+}
+
+---
+
+title: Golpe da Lâmina Crescente [新月刃击];
+sin: envy; 
+dmg: slash; 
+mp: 2;
+
+coin
+{
+ (on_hit) Aplique 5 @Rupture   
+ (on_hit) Aplique 5 @Tremor     
+ (on_hit) Aplique 1 @Concussion     
+}
+
+coin
+{
+ (on_hit) Aplique 5 @Rupture   
+ (on_hit) Aplique 5 @Tremor     
+ (on_hit) Aplique 1 @Concussion     
+}
+
+coin
+{
+ (on_hit) Aplique 1 @Concussion   
+ (on_hit) Aplique +1 @Rupture @Count
+ (on_hit) Aplique +1 @Tremor @Count     
+ (on_hit) Ative @Tremor_Burst no alvo, então reduza o @Count do @Tremor em 1
+}
+
+---
+
+title: Disparada da Vanguarda de Um Lorde [领主先锋冲刺];
+sin: gluttony; 
+dmg: slash; 
+mp: 3;
+
+info
+{
+ @Atk_Weight atkw(3) c(#d7d713){(~10 feet~)}
+ Se @Berserker estiver ativo, converta essa Skill para ~Vanguarda da Morte [死亡先锋]~ (1x por turno)
+}
+
+coin
+{
+ (on_hit) Aplique 1 @Tremor   
+ (on_hit) Aplique 1 @Rupture  
+ (on_hit) Ative @Tremor_Burst no alvo, então reduza o @Count do @Tremor em 1 
+}
+
+coin
+{
+ (on_hit) Aplique 1 @Tremor   
+ (on_hit) Aplique 1 @Rupture   
+ (on_hit) Ative @Tremor_Burst no alvo, então reduza o @Count do @Tremor em 1
+}
+
+coin
+{
+ (on_hit) Ative @Tremor_Burst 3x, e reduza a Count do @Tremor em 1
+ (on_hit) Cause 20 de dano adicional para cada 2 @Haste
+ (on_hit) Cause 30 de dano adicional para cada 2 @Bind no alvo
+ (on_hit) Cause 40 de dano adicional para cada 4 @Strider_Wu
+}
+
+---
+
+title: Vanguarda da Morte [死亡先锋];
+sin: gluttony; 
+dmg: slash; 
+mp: 3;
+c_mp: 3-1;
+
+info
+{
+ @Atk_Weight atkw(6) c(#d7d713){(~10 feet~)}
+ Essa Skill não reduz @Count de @Rupture
+ Aumente o dano final de cada moeda em +10 para cada @Atk_Weight não utilizado
+}
+
+coin
+{
+ (on_hit) Ative @Tremor_Burst no alvo 1x para cada 2 @Strider_Wu
+ (on_hit) Ative a @Rupture no alvo 1x para cada 2 @Strider_Wu
+}
+
+coin
+{
+ (on_hit) Ative @Tremor_Burst no alvo 1x para cada 2 @Strider_Wu
+ (on_hit) Ative a @Rupture no alvo 1x para cada 2 @Strider_Wu
+}
+
+coin
+{
+ (on_hit) Ative @Tremor_Burst no alvo 1x para cada 2 @Strider_Wu
+ (on_hit) Ative a @Rupture no alvo 1x para cada 2 @Strider_Wu
+ (on_hit) Cause 40 de dano adicional para cada 2 @Haste
+ (on_hit) Cause 40 de dano adicional para cada 2 @Bind no alvo
+ (on_hit) Cause 40 de dano adicional para cada 2 @Strider_Wu
+}
+
+!skills-end
+
+
+
+
+
+!passives-start
+
+passive(Autoridade [权威])
+{
+  Durante o combate toda @Rupture aplicada por você só pode ser ativada por seus ataques. 
+}
+
+passive(Guarda Inabalável [坚定不移的守卫])
+{
+ Quando um combate começa ganhe 1 @Protection, 1 @Assist_Defense e 2 @Haste. No início do seu turno você ganha 1 @Assist_Defense e se você não tiver @Shield ganhe @Shield igual a seu @Strider_Wu.
+}
+
+passive(Imparável [势不可挡])
+{
+ A primeira vez que sofrer Stagger em um combate, não fique e a recupere completamente (1x por combate). Ao ganhar @Strider_Wu excedente, ganhe no lugar 2 @Haste no fim do turno.
+}
+
+passive(Monstro [怪物])
+{
+ Se você tiver @Berserker, uma vez por turno após utilizar a Skill ~Subjugação [征服]~ utilize logo em seguida a Skill ~ Tremor [震颤]~ (no mesmo alvo).
+}
+
+!passives-end
+
+
+
+
+
+!defense-start
+
+title: Confrontar [面对];
+sin: gluttony; 
+type: clash; 
+
+info
+{
+ (on_use) Ganhe 1 @Strider_Wu (2x por turno)   
+}
+
+coin
+{
+ (on_clash_win) Aplique 1 @Concussion   
+}
+
+end
+{
+ (turn_end) Ganhe 1 @Power_Up
+ (turn_end) Ganhe 1 @Haste
+}
+
+!defense-end

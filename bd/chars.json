@@ -1,0 +1,25 @@
+[
+  {
+    "type": "group",
+    "label": "Moon Office",
+    "folder": "Moon Office",
+    "children": [
+      {
+        "label": "Axel Weber",
+        "target": "axel weber.skill"
+      },
+      {
+        "label": "Wuhan Xia",
+        "target": "wuhan xia.skill"
+      },
+      {
+        "label": "Viktor Valenhardt",
+        "target": "viktor valenhardt.skill"
+      },
+      {
+        "label": "Leonard Boss",
+        "target": "leonard boss.skill"
+      }
+    ]
+  }
+]

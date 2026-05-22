@@ -1,0 +1,272 @@
+!overview-start
+
+name: Axel Weber;
+
+description 
+(
+ Um Fixer de grau 8 atualmente membro do Moon Office, conhecido como "A Mariposa Fantasma" nas Backstreets do Distrito 12 (Antiga L. Corp.).
+)
+!overview-end 
+
+
+
+
+
+!weapons-start
+
+title: Katars;
+flavor: Arma Única;
+sin: sinless; 
+hit: Proficiência + Destreza ou Inteligência;
+dmg: 4d4 + Destreza ou Inteligência;
+dmg_type: pierce; 
+img: katars;
+
+coin
+{
+}
+
+---
+
+title: E.G.O::Solemn Lament;
+flavor: Arma Especial - Mp 2;
+sin: gloom; 
+hit: Proficiência + Inteligência + 1;
+dmg: 1d12 + Inteligência;
+dmg_type: pierce; 
+img: solemn_lament;
+
+info
+{
+ Essa arma possui 30 feet de alcance
+ Essa arma começa com 12 @The_Living_&_The_Departed, no início de um combate. 
+ A ação de @Reload custa uma ação bônus
+}
+
+coin
+{ 
+ Consuma 1 @The_Living_&_The_Departed
+ (on_hit) Aplique 1 @Butterfly
+ (on_hit) Reuse essa moeda para cada efeito negativo no alvo (5x por turno)
+}
+
+!weapons-end
+
+
+
+
+
+!skills-start
+
+title: Sequência de Ataques;
+sin: gloom; 
+dmg: pierce; 
+mp: 1;
+
+info
+{
+ @Unfocused_Volley
+ (on_use) Se tiver 8+ @Commander, converta essa Skill para ~Honras Fúnebres~ (1x por turno)
+}
+
+coin
+{ 
+ (on_hit) Aplique 1 @Bristle 
+ (on_crit) Aplique 3 @Bristle
+}
+
+coin
+{ 
+ (on_hit) Aplique 1 @Sinking
+ (on_crit) Aplique 3 @Sinking
+}
+
+coin
+{
+ (on_hit) Aplique 1 @Bristle
+ (on_hit) Aplique 1 @Sinking   
+ (on_crit) Reuse essa moeda (2x por turno)
+}
+
+end
+{
+ (turn_end) Ganhe 2 @Poise   
+}
+
+---
+
+title: Honras Fúnebres;
+sin: gloom; 
+dmg: pierce; 
+mp: 1;
+c_mp: 1-2;
+
+info
+{
+ @Unfocused_Volley
+}
+
+coin
+{ 
+ (on_hit) Aplique 5 @Bristle 
+ (on_crit) Aplique 5 @Bristle
+}
+
+coin
+{ 
+ (on_hit) Aplique 5 @Sinking
+ (on_crit) Aplique 5 @Sinking
+}
+
+coin
+{ 
+ (on_hit) Aplique 10 @Bristle
+ (on_hit) Aplique 10 @Sinking
+ (on_crit) Aplique 10 @Bristle
+ (on_crit) Aplique 10 @Sinking
+ (on_crit) Reuse essa moeda (2x por turno)
+ (on_crit10) Reuse essa moeda 
+}
+
+---
+
+title: Decisão Estratégica;
+sin: gluttony; 
+dmg: slash; 
+mp: 2;
+
+info
+{
+ (on_use) Ganhe +8 @Poise @Count
+}
+
+coin
+{ 
+ (on_hit) Aplique 1 @Bristle 
+ (on_hit) Aplique 1 @Sinking 
+ (on_crit) Aplique 3 @Bristle
+ (on_crit) Aplique 3 @Sinking
+}
+
+end
+{
+ (skill_end) Ganhe 1 @Commander   
+ (skill_end) Ganhe 1 @Sin de cada uma das afinidades que você possui
+ (turn_end) Ganhe +2 @Poise @Count
+ (turn_end) Ganhe 4 @Crit_Dmg_Up
+}
+
+---
+
+title: Isso é Uma Ordem!;
+sin: pride; 
+dmg: pierce; 
+mp: 3;
+
+info
+{
+ (on_use) Se tiver 12+ @Commander, converta essa Skill para ~Ordem de Execução...~ (1x por turno)
+}
+
+coin
+{ 
+ (on_hit) Cause 10 de dano adicional para cada efeito negativo no alvo
+ (on_hit) Cause 20 de dano adicional para cada 2 @Commander
+ (on_crit) Aplique 1 @Power_Down, no próximo turno (1x por turno)
+ (on_crit) Aplique 2 @Fragile, no próximo turno (1x por turno)
+ (on_crit) Reuse essa moeda (1x por turno)
+}
+
+end
+{
+ (skill_end) Um aliado em até 10 feet realiza um ataque com sua ~Skill 1~ (~esse ataque não consome Mp~) contra o alvo, desde que possua alcance.   
+}
+
+---
+
+title: Ordem de Execução;
+sin: pride; 
+dmg: pierce; 
+mp: 3;
+c_mp: 3-1;
+
+coin
+{
+}
+
+coin
+{
+}
+
+coin
+{
+}
+
+coin
+{ 
+ (on_hit) Cause 20 de dano adicional para cada efeito negativo no alvo
+ (on_hit) Cause 50 de dano adicional para cada 2 @Commander
+ (on_crit) Aplique 2 @Power_Down, no próximo turno (1x por turno)
+ (on_crit) Aplique 5 @Fragile, no próximo turno (1x por turno)
+ (on_crit) Ative o @Bristle no alvo 1x para cada 2 @Commander
+ (on_crit) Ative o @Sinking no alvo 1x para cada 2 @Commander
+}
+
+end
+{
+ (skill_end) Um aliado em até 40 feet realiza um ataque com sua ~Skill 3~ (~esse ataque não consome Mp~) contra o alvo, desde que possua alcance.   
+}
+
+!skills-end
+
+
+
+
+
+!passives-start
+
+passive(Remanescente...)
+{
+ Quando um combate começa, ganhe +4 @Poise @Count e 1 @Commander. Ao critar em uma rolagem, ganhe 1 @Commander (2x por turno). Se estiver com 12 @Commander, ao critar passe a ganhar +1 @Poise @Count.
+}
+
+passive(Necessidade Anormal de Resistir)
+{
+ Ao sofrer um ataque, você pode escolher reduzir dano desse ataque pela metade ((@Commander / 4) + 1 vezes por turno).
+}
+
+passive(Estrategista? Não... Um Oportunista Formidável)
+{
+ Quando um aliado acertar um ataque contra um alvo, você pode o atacar desde que tenha alcance ((@Commander / 4) + 1 vezes por turno). Esse ataque não ativa reações (Defense Skills).
+}
+
+passive(Conversão Necessária)
+{
+ Todo @Poise e @Butterfly excedente é convertido em @Poise @Count.
+}
+
+!passives-end
+
+
+
+
+
+!defense-start
+
+title: Evasão Simbólica;
+sin: gloom; 
+type: evade; 
+
+coin
+{
+ (on_evade) Ganhe +1 @Poise @Count   
+}
+
+end
+{
+ (turn_end) Ganhe 1 @Crit_Dmg_Up
+ (turn_end) Ganhe +2 @Poise @Count
+}
+
+!defense-end
+

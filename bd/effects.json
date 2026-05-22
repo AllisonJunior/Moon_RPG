@@ -1,0 +1,161 @@
+{
+  "0": {
+    "type": "group",
+    "label": "Moon Office",
+    "folder": "Moon Office",
+    "children": [
+      {
+        "label": "Axel Weber",
+        "target": "axel weber.skill"
+      },
+      {
+        "label": "Wuhan Xia",
+        "target": "wuhan xia.skill"
+      },
+      {
+        "label": "Viktor Valenhardt",
+        "target": "viktor valenhardt.skill",
+        "default": true
+      },
+      {
+        "label": "Leonard Boss",
+        "target": "leonard boss.skill"
+      }
+    ]
+  },
+  "sinking": {
+    "desc": "c(#fffb00){**[Potency ~Only~]**}\\n\\n\n\nAo ser acertado sofra ~X~ de dano.\\n\\n\n\n**Fim do turno: ** Se ~X~ estiver em 35+ ganhe Panic Type [Sinked].\\n\\n\n\n**Panic Type [Sinked]:** Ataques que aplicam esse efeito aplicam +1. No fim do turno, aumente ~X~ em 2d6.\n",
+    "type": "negative",
+    "noUnderline": false
+  },
+  "the_living_&_the_departed": {
+    "desc": "c(#fffb00){**[Efeito Exclusivo de _E.G.O::Solemn Lament_ - Ammo]**}\\n\nc(#fffb00){**[Potency ~Only~]**}\\n\\n\n\n\n- ~X~ Máximo: 12.\\n\n- ~X~ é consumido para ativar efeitos do E.G.O::Solemn Lament.\\n\n- Ataques cancelam se ~X~ acabar.",
+    "type": "condition",
+    "noUnderline": false
+  },
+  "reload": {
+    "desc": "Ganhe 12 The Living & The Departed (1x por turno).",
+    "type": "condition",
+    "noUnderline": false
+  },
+  "butterfly": {
+    "desc": "c(#fffb00){**[Efeito Exclusivo de _E.G.O::Solemn Lament_ - Unique Sinking]**}\\n\\n\n\n- ~X~ Máximo: 8.\\n\n- Se ~X~ estiver no máximo, ao ser acertado por um ataque que aplique esse efeito, sofra dano adicional equivalente a (~X~ * (Tipos de Sinking no alvo (incluindo esse) + Tipos de Panic Types (incluindo esse))).\\n\\n\n\n**Fim do turno**\\n\n- Ative todos os tipos de Sinking no alvo (~X~/2) vezes.\\n\n- Se ~X~ estiver no máximo por três turnos ganhe Panic Type [Departed].\\n\\n\n\n**Panic Type [Departed]:** Ao acertar esse alvo recupere 1 de Vida e 1 de Stagger (~X~ vezes por turno).",
+    "type": "negative",
+    "noUnderline": false
+  },
+  "bristle": {
+    "desc": "c(#fffb00){**[Efeito Exclusivo de _Axel Weber_ - Unique Sinking]**}\\n\\n\n\nAo ser acertado sofra ~X~ de dano.\\n\\n\n\n**Fim do turno**: Se ~X~ estiver em 35+ ganhe Panic Type [Bristles].\\n\\n\n\n**Panic Type [Bristles]:** Por todo esse combate ganhe 1 Power Down. A primeira vez que for acertado por um ataque que aplique esse efeito, o aumente em 2d8. ",
+    "type": "negative",
+    "noUnderline": false
+  },
+  "unfocused_volley": {
+    "desc": "As moedas dessa Skill podem atacar alvos distintos.",
+    "type": "condition",
+    "noUnderline": false
+  },
+  "poise": {
+    "desc": "c(#fffb00){**[Potency ~&~ Count]**}\\n\\n\n\nO(s) próximo(s) ~Y~ ataque(s), tem seu crítico reduzido em ~X~ (Máx. 10).\\n\n\n",
+    "type": "positive",
+    "noUnderline": false
+  },
+  "count": {
+    "desc": "A duração de um efeito (~Y~).",
+    "type": "neutral",
+    "noUnderline": true
+  },
+  "potency": {
+    "desc": "A quantidade de um efeito (~X~).",
+    "type": "neutral",
+    "noUnderline": false
+  },
+  "sin": {
+    "desc": "A afinidade com os 7 pecados: ~Wrath (Ira)~,  ~Lust (Desejo)~, ~Sloth (Preguiça)~, ~Gluttony (Gula)~, ~Gloom (Tristeza)~, ~Pride (Orgulho)~ e ~Envy (Inveja)~.",
+    "type": "condition",
+    "noUnderline": false
+  },
+  "crit_dmg_up": {
+    "desc": "c(#fffb00){**[Potency ~Only~]**}\\n\\n\n\n**Por este turno:** O dano do seu ataque crítico é aplicado +~X~ vez(es).\n ",
+    "type": "positive",
+    "noUnderline": false
+  },
+  "power_down": {
+    "desc": "c(#fffb00){**[Potency ~Only~]**}\\n\\n\n\n**Por este turno:** Todas as suas rolagens são reduzidas em ~X~.\n ",
+    "type": "negative",
+    "noUnderline": false
+  },
+  "fragile": {
+    "desc": "c(#fffb00){**[Potency ~Only~]**}\\n\\n\n\n**Por este turno:** Sofra mais (~X~*10)% de dano de ataques (Máx. 100%). ",
+    "type": "negative",
+    "noUnderline": false
+  },
+  "commander": {
+    "desc": "c(#fffb00){**[Efeito Exclusivo de _Axel Weber_ - Unique Charge]**}\\n\\n\n\n- ~X~ Máximo: 10.\\n\n- Conforrme ~X~ aumenta, efeitos ativam:\\n\\n\n\n**- Com 2+:** Ao acertar um alvo você pode aumentar a Potency de um efeito negativo nele em +1 (quando possível) ~X~/2 vezes por turno.\\n\n**- Com 4+:** Ao acertar um alvo você pode aumentar a Count de um efeito aplicado em você em +1 (quando possível e com a exceção desse efeito) ou o Count de um efeito negativo nele em +2 (quando possível) ~X~/2 vezes por turno.\\n\n**- Com 6+:** Sua CA aumenta em +1.\\n\n**- Com 8+:** Ganhe por todo o combate 4 Crit. Dmg. Up.\\n\n**- Com 10+:** Aumente o dano de suas Katars em +2d4.\\n\n**- Com 12:** Ao ganhar Poise Count ganhe +1. Seus ataques não consomem mais Poise Count. Poise Count é convertido em dano adicional que é aplicado em todos os seus ataques.\\n",
+    "type": "positive",
+    "noUnderline": false
+  },
+  "protection": {
+    "desc": "c(#fffb00){**[Potency ~Only~]**}\\n\\n\n\n**Por este turno:** Sofra menos (~X~*10)% de dano de ataques (Máx. 100%). \n ",
+    "type": "positive",
+    "noUnderline": false
+  },
+  "tremor_burst": {
+    "desc": "Cause dano de Stagger equivalente a Potency de Tremor.",
+    "type": "negative",
+    "noUnderline": false
+  },
+  "rupture": {
+    "desc": "c(#fffb00){**[Potency ~&~ Count]**}\\n\\n\n\nA(s) próxima(s) ~Y~ veze(s) que sofrer um ataque sofra ~X~ de dano.\n",
+    "type": "negative",
+    "noUnderline": false
+  },
+  "tremor": {
+    "desc": "c(#fffb00){**[Potency ~&~ Count]**}\\n\\n\n\nAo sofrer um ataque que ative Tremor Burst receba ~X~ de dano de Stagger.\n",
+    "type": "negative",
+    "noUnderline": false
+  },
+  "haste": {
+    "desc": "c(#fffb00){**[Potency ~Only~]**}\\n\\n\n\n**Por este turno:** Aumente sua Speed em mais ~X~.\n ",
+    "type": "positive",
+    "noUnderline": false
+  },
+  "concussion": {
+    "desc": "c(#fffb00){**[Efeito Exclusivo de _Wuhan Xia_]**}\\n\nc(#fffb00){**[Potency ~Only~]**}\\n\\n\n\nAo sofrer um ataque de Wuhan Xia, sofra dano adicional equivalente a Tremor + Rupture + ~X~ no alvo.\\n\\n\n\n**Fim do turno**: Aumente a Potency de Rupture e Tremor em mais ~X~.",
+    "type": "negative",
+    "noUnderline": false
+  },
+  "bind": {
+    "desc": "c(#fffb00){**[Potency ~Only~]**}\\n\\n\n\n**Por este turno:** Reduza sua Speed em mais ~X~.\n ",
+    "type": "negative",
+    "noUnderline": false
+  },
+  "power_up": {
+    "desc": "c(#fffb00){**[Potency ~Only~]**}\\n\\n\n\n**Por este turno:** Todas as suas rolagens são aumentadas em ~X~.\n ",
+    "type": "positive",
+    "noUnderline": false
+  },
+  "shield": {
+    "desc": "Vida temporária.",
+    "type": "neutral",
+    "noUnderline": true
+  },
+  "atk_weight": {
+    "desc": "Define a quantidade de alvos que serão acertados.",
+    "type": "alert",
+    "noUnderline": true
+  },
+  "strider_wu": {
+    "desc": "c(#fffb00){**[Efeito Exclusivo de _Wuhan Xia_]**}\\n\nc(#fffb00){**[Potency ~Only~]**}\\n\\n\n\n- ~X~ Máximo: 8.\\n\n- Ao ativar Tremor Burst, aumente a Potency de Rupture e Tremor do alvo em ~X~.\\n\\n\n\n**Início do turno**: Se ~X~ estiver no valor máximo, ganhe Berserker por todo o combate.\\n\\n\n**Fim do turno**: Ganhe (~X~/2) + 2 Haste.",
+    "type": "positive",
+    "noUnderline": false
+  },
+  "berserker": {
+    "desc": "c(#fffb00){**[Efeito Exclusivo de _Wuhan Xia_]**}\\n\\n\n\nSe transforme, ganhando os seguintes efeitos:\\n\\n\n\n- Aumente o seu movimento máximo em +15 feet.\\n\n- Ganhe 1 Protection, 1 Power Up e 2 Haste por todo o combate.\\n\n- A sua última moeda de Skills e E.G.O ativa Tremor Burst e aumenta a Count de Rupture e Tremor em +1.",
+    "type": "positive",
+    "noUnderline": false
+  },
+  "assist_defense": {
+    "desc": "c(#fffb00){**[Potency ~Only~]**}\\n\\n\n\n- ~X~ Máximo: 3.\\n\n- Quando um aliado no seu alcance é atacado, você pode como ação livre consumir 1 uso desse efeito e redirecionar esse ataque para você (desde que o ataque não proíba o redirecionamento) respondendo com o uso de uma reação de combate.\\n\n- Fim do turno reduza ~X~ em 1.",
+    "type": "positive",
+    "noUnderline": false
+  }
+}

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+
+
+
+<head>
+       <title>Personagens | Moon</title>
+
+       <link rel="stylesheet" href="../styles/pages.css">
+       <link rel="icon" href="../res/favicons/main.ico">
+</head>
+
+
+
+
+<body class="chars-page">
+
+        <div class="chars-shell">
+
+                 <div class="sidebar-col">
+                        <nav class="navbar">
+                               <button type="button" class="navbar-title" onclick="nav('./chars.html')">Personagens</button>
+                               <hr class="navbar-separator" />
+                                     <div class="chars-nav" data-chars-tree></div>
+                               <hr class="navbar-separator navbar-separator-back" />
+                               <div class="sidebar-back-row">
+                                      <button class="btn chars-back-btn" type="button" onclick="nav('../../index.html')">Voltar</button>
+                               </div>
+                        </nav>
+                 </div>
+
+               <div class="page_container">
+
+                      <div class="chars-header">
+                             <div class="chars-showcase-wrap">
+                                    <button type="button" class="chars-showcase-swap" aria-label="Trocar para combate" aria-pressed="false"></button>
+                                    <img class="chars-showcase-image" alt="" hidden>
+                             </div>
+
+                      <nav class="chars-section-tabs" aria-label="Seções do personagem">
+                             <button type="button" class="chars-section-tab active">Overview</button>
+                             <button type="button" class="chars-section-tab">Armas</button>
+                             <button type="button" class="chars-section-tab">Skills</button>
+
+                             <div class="chars-skills-submenu" aria-label="Submenu de Skills" role="toolbar">
+                                    <button type="button" class="chars-skill-option" data-skill-type="skill" data-skill-index="0">Skill 1</button>
+                                    <button type="button" class="chars-skill-option" data-skill-type="skill" data-skill-index="1">Skill 2</button>
+                                    <button type="button" class="chars-skill-option" data-skill-type="skill" data-skill-index="2">Skill 3</button>
+                                    <button type="button" class="chars-skill-option" data-skill-type="defense">Defesa</button>
+                                    <button type="button" class="chars-skill-option" data-skill-type="passives">Passivas</button>
+                             </div>
+
+                             <button type="button" class="chars-section-tab">E.G.O</button>
+                      </nav>
+                      </div>
+
+                      <div mkd-content="../../bd/chars.md" class="chars-landing"></div>
+                      <div class="chars-dynamic"></div>
+               </div>
+
+        </div>
+
+
+       <div class="stars"></div>
+
+
+       <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+       <script src="../scripts/main.js"></script>
+       <script src="../scripts/stars.js"></script>
+</body>
+
+
+
+
+</html>

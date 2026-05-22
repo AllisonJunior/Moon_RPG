@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+
+
+
+<head>
+       <title>Sistema | Moon</title>
+
+       <link rel="stylesheet" href="../styles/pages.css">
+       <link rel="icon" href="../res/favicons/main.ico">
+</head>
+
+
+
+
+<body>
+       <button class="return_btn" onclick="nav('../../index.html')"></button>
+
+       <div class="page_container">
+
+           <nav class="navbar">
+               <div class="nav-right">
+                   <button showcase data-md="../../bd/system/intro.md">Introdução</button>                   
+                   <button data-md="../../bd/system/attributes.md">Atributos</button>                   
+                   <button data-md="../../bd/system/pfr.md">Proficiência</button>      
+                   <button data-md="../../bd/system/level.md">Nível</button>                            
+                   <button data-md="../../bd/system/fixes.md">Ajustes</button>                                            
+                   <button data-md="../../bd/system/combat.md">Combate</button>                                 
+                   <!--<button data-md="../../bd/system/effects.md">Efeitos</button>-->                                 
+               </div>
+           </nav>
+
+           <div mkd-content></div>
+                      
+           <button class="btn" onclick="nav('../../index.html')">Voltar</button>
+       
+       </div>
+
+
+       <div class="stars"></div>
+
+
+       <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+       <script src="../scripts/main.js"></script>
+       <script src="../scripts/stars.js"></script>
+</body>
+
+
+
+
+</html>
