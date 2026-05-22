@@ -505,6 +505,23 @@ function resolveCharacterImagePath(folder, fileName) {
         : `../../bd/chars/${normalizedFileName}`;
 }
 
+function resolveCharacterFolderName(label, targetFileName = "") {
+
+    const normalizedLabel = String(label || "").trim();
+    const normalizedTarget = String(targetFileName || "")
+        .trim()
+        .replace(/\.skill$/i, "");
+
+    if (
+        normalizedLabel.toLowerCase() === "wuhan xia" ||
+        normalizedTarget.toLowerCase() === "wuhan xia"
+    ) {
+        return "Wuhan XIa";
+    }
+
+    return normalizedLabel || normalizedTarget;
+}
+
 async function resolveCharacterImageSrc(
     folder,
     characterName,
@@ -574,7 +591,7 @@ async function resolveCharacterImageSrc(
     return "";
 }
 
-function resolveCharacterSkillPath(folder, fileName) {
+function resolveCharacterSkillPath(folder, fileName, characterFolder = "") {
 
     const normalizedFileName =
         String(fileName || "").trim();
@@ -601,9 +618,18 @@ function resolveCharacterSkillPath(folder, fileName) {
         const cleanName =
             normalizedFileName.replace(/\.skill$/i, "");
 
-        if (normalizedFolder.length) {
+        const normalizedCharacterFolder = String(characterFolder || "").trim();
 
+        if (normalizedFolder.length && normalizedCharacterFolder.length) {
+            return `../../bd/chars/${normalizedFolder}/${normalizedCharacterFolder}/${normalizedFileName}`;
+        }
+
+        if (normalizedFolder.length) {
             return `../../bd/chars/${normalizedFolder}/${cleanName}/${normalizedFileName}`;
+        }
+
+        if (normalizedCharacterFolder.length) {
+            return `../../bd/chars/${normalizedCharacterFolder}/${normalizedFileName}`;
         }
 
         return `../../bd/chars/${cleanName}/${normalizedFileName}`;
@@ -712,6 +738,10 @@ function buildCharsNode(node, inheritedFolder = "", depth = 0) {
     .trim();
 
     const isGroup = node.type === "group";
+    const rawTarget = String(node.target || node.content || node.path || "").trim();
+    const characterFolder = isGroup
+        ? ""
+        : resolveCharacterFolderName(node.label || node.title || node.name || "", rawTarget);
 
     if (isGroup && Array.isArray(node.children) && node.children.length) {
         const isOpen = Boolean(node.open);
@@ -736,31 +766,31 @@ function buildCharsNode(node, inheritedFolder = "", depth = 0) {
 
     if (isGroup) {
         const visiblePath = escapeHtml(node.path || "");
-        const rawTarget = String(node.target || node.content || visiblePath || "").trim();
-        const targetPath = escapeHtml(resolveCharacterSkillPath(nodeFolder, rawTarget) || rawTarget);
+        const targetPath = escapeHtml(resolveCharacterSkillPath(nodeFolder, rawTarget, characterFolder) || rawTarget);
         const kind = (node.kind || resolveContentMode(targetPath)).toString().toLowerCase();
         const defaultAttr = node.default ? " data-default" : "";
         const folderAttr = nodeFolder ? ` data-folder="${escapeHtml(nodeFolder)}"` : "";
+        const characterFolderAttr = characterFolder ? ` data-character-folder="${escapeHtml(characterFolder)}"` : "";
 
         return `
         <button class="nav-group-toggle nav-group-leaf"
             data-md="${visiblePath}"
             data-target="${targetPath}"
-            data-kind="${kind}" data-depth="${depth}"${folderAttr}${defaultAttr}>${label}</button>
+            data-kind="${kind}" data-depth="${depth}"${folderAttr}${characterFolderAttr}${defaultAttr}>${label}</button>
         `;
     }
 
     const visiblePath = escapeHtml(node.path || "");
-    const rawTarget = String(node.target || node.content || visiblePath || "").trim();
-    const targetPath = escapeHtml(resolveCharacterSkillPath(nodeFolder, rawTarget) || rawTarget);
+    const targetPath = escapeHtml(resolveCharacterSkillPath(nodeFolder, rawTarget, characterFolder) || rawTarget);
     const kind = (node.kind || resolveContentMode(targetPath)).toString().toLowerCase();
     const defaultAttr = node.default ? " data-default" : "";
     const folderAttr = nodeFolder ? ` data-folder="${escapeHtml(nodeFolder)}"` : "";
+    const characterFolderAttr = characterFolder ? ` data-character-folder="${escapeHtml(characterFolder)}"` : "";
 
     return `
     <button
         data-target="${targetPath}" data-depth="${depth}"
-        data-kind="${kind}"${folderAttr}${defaultAttr}>${label}</button>
+        data-kind="${kind}"${folderAttr}${characterFolderAttr}${defaultAttr}>${label}</button>
     `;
 }
 
@@ -841,6 +871,7 @@ function updateSelectedCharacterAssets(button) {
     if (!pageContainer || !button) return;
 
     pageContainer.dataset.charFolder = button.getAttribute("data-folder") || "";
+    pageContainer.dataset.characterFolder = button.getAttribute("data-character-folder") || button.textContent?.trim() || "";
     pageContainer.dataset.characterName = button.textContent?.trim() || "";
     pageContainer.dataset.showcaseImg = button.getAttribute("data-showcase-img") || "";
     pageContainer.dataset.combatImg = button.getAttribute("data-combat-img") || "";
@@ -904,7 +935,7 @@ function updateSelectedCharacterAssets(button) {
     (async () => {
         try {
             const folder = pageContainer.dataset.charFolder || "";
-            const character = pageContainer.dataset.characterName || "";
+            const character = pageContainer.dataset.characterFolder || pageContainer.dataset.characterName || "";
 
             // Resolve showcase
             const resolvedShowcase = await resolveCharacterImageSrc(folder, character, pageContainer.dataset.showcaseImg || showcaseSrc, "showcase");
