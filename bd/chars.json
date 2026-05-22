@@ -14,7 +14,8 @@
       },
       {
         "label": "Viktor Valenhardt",
-        "target": "viktor valenhardt.skill"
+        "target": "viktor valenhardt.skill",
+        "default": true
       },
       {
         "label": "Leonard Boss",

@@ -1539,10 +1539,6 @@ function initMarkdownButtons() {
         if (path) {
             setActiveButton(defaultButton, { openAncestors: true });
             changeContent(path, kind);
-
-            if (hasDirectMarkdown && landingElement) {
-                landingElement.style.display = "";
-            }
         }
 
         return;
@@ -1556,10 +1552,6 @@ function initMarkdownButtons() {
         if (path) {
             setActiveButton(showcaseButton, { openAncestors: true });
             changeContent(path, kind);
-
-            if (hasDirectMarkdown && landingElement) {
-                landingElement.style.display = "";
-            }
         }
 
         return;
