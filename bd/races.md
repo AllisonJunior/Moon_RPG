@@ -48,7 +48,7 @@ _Aqueles que possuem os temidos olhos carmesim..._
 <p style="margin-top: 10px; "><i>45 feet</i></p>
 
 #### Traço Único: *Sede de Sangue*
-<p style="margin-top: 10px;"><i>Ao acertar um alvo que sangra, você recupera 3 de <u>Vida</u> e 1 de <u>Stagger</u>.</i></p>  
+<p style="margin-top: 10px;"><i>Ao acertar um alvo que sangra, você recupera 3 de <u>Vida</u> e 1 de <u>Stagger</u> (2x por turno).</i></p>  
 
 ---
 
