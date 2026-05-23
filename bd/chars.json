@@ -19,6 +19,14 @@
       {
         "label": "Leonard Boss",
         "target": "leonard boss.skill"
+      },
+      {
+        "label": "Saya",
+        "target": "saya.skill"
+      },
+      {
+        "label": "Hana",
+        "target": "hana.skill"
       }
     ]
   }
