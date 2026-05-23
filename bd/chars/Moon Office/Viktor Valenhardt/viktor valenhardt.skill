@@ -84,17 +84,7 @@ info
 
 coin
 { 
- (on_hit) Aplique 10 @Bleed 
-}
-
-coin
-{ 
- (on_hit) Aplique 10 @Bleed 
-}
-
-coin
-{ 
- (on_hit) Aplique 10 @Bleed 
+ (on_hit) Aplique 30 @Bleed
 }
 
 end
@@ -191,7 +181,7 @@ dmg: pierce;
 mp: 3;
 c_mp: 3-2;
 
-coin(u)
+coin
 { 
  (on_hit) Ative o @Bleed no alvo 2x
  (on_hit) Cause 40 de dano adicional para cada 1 @Hardblood
@@ -218,25 +208,27 @@ passive(Bloodfiend - 3ª Kindred)
  - Ao acertar um inimigo você pode escolher aplicar @Prey nele.
 }
 
-passive(Fumaça de Sangue)
+passive(Suposto 6º Sentido)
 {
- Um total de 
+ - Uma vez por turno ao sofrer um ataque unilateral você pode responder a esse ataque com a sua reação de combate, Counter.
+ - Uma vez por turno ao sofrer um ataque unilateral você pode responder a esse ataque com a sua reação de combate, Defender.
 }
 
-passive(Arroz)
+passive(Desestabilizar)
 {
- Reutilização de bleed para algo? 
+ Uma vez por turno ao ativar manualmente o @Bleed do alvo você pode fazer com que esse dano também seja aplicado a Stagger do alvo. 
 }
 
-passive(sobreviver)
+passive(Resistência Lendária)
 {
- Coisas que o façam ser autosustentável
+ Uma vez por combate ao ter seus pontos de Vida reduzidos a 0, você ignora esse dano e fica com 1 de Vida.
 }
 
 passive(Fragmentos...)
 {
  Quando um combate começa ganhe @Returning_Bloodlust.
 }
+
 
 !passives-end
 

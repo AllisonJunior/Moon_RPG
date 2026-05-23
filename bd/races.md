@@ -1,7 +1,7 @@
 <img src="../../res/img/simple_human.png" style="float: right;">
 
 # Humano
-_Aqueles que reinam e devem reinar..._
+~Aqueles que reinam e devem reinar...~
 
 ---
 
@@ -40,7 +40,7 @@ _Aqueles que reinam e devem reinar..._
 <img src="../../res/img/simple_bloodfiend.png" style="float: left;">
 
 # Bloodfiend
-_Aqueles que possuem os temidos olhos carmesim..._
+~Aqueles que possuem os temidos olhos carmesim...~
 
 ---
 
@@ -48,7 +48,7 @@ _Aqueles que possuem os temidos olhos carmesim..._
 <p style="margin-top: 10px; "><i>45 feet</i></p>
 
 #### Traço Único: *Sede de Sangue*
-<p style="margin-top: 10px;"><i>Ao acertar um alvo que sangra, você recupera 3 de <u>Vida</u> e 1 de <u>Stagger</u> (2x por turno).</i></p>  
+<p style="margin-top: 10px;"><i>Uma vez por turno ao acertar um alvo que sangra, você recupera 3 de <u>Vida</u> e 1 de <u>Stagger</u>.</i></p>  
 
 ---
 
