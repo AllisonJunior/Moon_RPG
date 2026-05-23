@@ -6,4 +6,277 @@ description
 (
  ???
 )
+
 !overview-end 
+
+
+
+
+
+!weapons-start 
+
+title: Lança de Sangue;
+flavor: Arma Única;
+sin: sinless; 
+hit: Proficiência + Destreza;
+dmg: 2d8 + Destreza;
+dmg_type: pierce; 
+img: blood_spear;
+
+coin
+{
+}
+
+!weapons-end
+
+
+
+
+
+!skills-start
+
+title: Desapareça...;
+sin: gluttony; 
+dmg: pierce; 
+mp: 1;
+
+info
+{
+ (on_use) Consuma até 50 @Bloodfeast e ganhe 1 @Hardblood para cada 10 @Bloodfeast consumido
+ - Se falhar em consumir @Bloodfeast, ganhe 5 @Bleed   
+ Se @Hardblood estiver em 10 converta essa Skill para ~█████████ Variant Blood Arts 42: Disparaître Le Ver~ (1x por turno)
+}
+
+coin
+{ 
+ (on_hit) Aplique 5 @Bleed 
+}
+
+coin
+{ 
+ (on_hit) Aplique 5 @Bleed 
+}
+
+coin
+{ 
+ (on_hit) Aplique 5 @Bleed 
+}
+
+end
+{
+ (skill_end) Aplique @Bloodied   
+ (skill_end) Se o alvo tiver @Bleed recupere 3 pontos de vida
+}
+
+---
+
+title: █████████ Variant Blood Arts 42: Disparaître Le Ver;
+sin: gluttony; 
+dmg: pierce; 
+mp: 1;
+c_mp: 1-2;
+
+info
+{
+ @Atk_Weight atkw(4) c(#d7d713){(~10 feet~)} 
+ Ative @Bleed uma vez para cada @Atk_Weight não utilizado  
+}
+
+coin
+{ 
+ (on_hit) Aplique 10 @Bleed 
+}
+
+coin
+{ 
+ (on_hit) Aplique 10 @Bleed 
+}
+
+coin
+{ 
+ (on_hit) Aplique 10 @Bleed 
+}
+
+end
+{
+ (skill_end) Aplique @Bloodied
+ (skill_end) Consuma 5 @Hardblood
+}
+
+---
+
+title: Desejo Sincero;
+sin: wrath; 
+dmg: pierce; 
+mp: 2;
+
+info
+{
+ (on_use) Consuma até 50 @Bloodfeast e ganhe 1 @Hardblood para cada 10 @Bloodfeast consumido
+ - Se falhar em consumir @Bloodfeast, ganhe 5 @Bleed   
+ Se @Hardblood estiver em 10 converta essa Skill para ~█████████ Variant Blood Arts 33: Désir sincère Et Éphémère~ (1x por turno)
+}
+
+coin
+{ 
+ (on_hit) Aplique +2 @Bleed @Count
+}
+
+coin
+{ 
+ (on_hit) Aplique +2 @Bleed @Count
+}
+
+end
+{
+ (skill_end) Se o alvo tiver @Bleed recupere 7 pontos de Vida
+ (skill_end) Se o alvo tiver @Bleed recupere 3 pontos de Stagger
+}
+
+---
+
+title: █████████ Variant Blood Arts 33: Désir sincère Et Éphémère;
+sin: wrath; 
+dmg: pierce; 
+mp: 2;
+c_mp: 2-2;
+
+coin
+{ 
+ (on_hit) Aplique +15 @Bleed @Count
+}
+
+end
+{
+ (skill_end) Consuma 5 @Hardblood
+}
+
+---
+
+title: A Lança Capaz de Perfurar os Céus;
+sin: lust; 
+dmg: pierce; 
+mp: 3;
+
+info
+{
+ (on_use) Consuma até 50 @Bloodfeast e ganhe 1 @Hardblood para cada 10 @Bloodfeast consumido
+ - Se falhar em consumir @Bloodfeast, ganhe 10 @Bleed   
+ Se @Hardblood estiver em 10 converta essa Skill para ~█████████ Variant Blood Arts 17: Pièces Séparées~ (1x por turno)
+}
+
+coin
+{ 
+ (on_hit) Ative o @Bleed no alvo, então reduza o @Count do @Bleed em 1
+ (on_hit) Cause 20 de dano adicional para cada 1 @Hardblood
+}
+
+coin
+{ 
+ (on_hit) Ative o @Bleed no alvo, então reduza o @Count do @Bleed em 1
+ (on_hit) Cause 20 de dano adicional para cada 1 @Hardblood
+}
+
+coin
+{ 
+ (on_hit) Ative o @Bleed no alvo, então reduza o @Count do @Bleed em 1
+ (on_hit) Cause 20 de dano adicional para cada 1 @Hardblood
+}
+
+---
+
+title: █████████ Variant Blood Arts 17: Pièces Séparées;
+sin: lust; 
+dmg: pierce; 
+mp: 3;
+c_mp: 3-2;
+
+coin(u)
+{ 
+ (on_hit) Ative o @Bleed no alvo 2x
+ (on_hit) Cause 40 de dano adicional para cada 1 @Hardblood
+ (on_hit) Ative @Bleed_Deluge no alvo 
+}
+
+end
+{
+ (skill_end) Consuma 10 @Hardblood   
+}
+
+!skills-end
+
+
+
+
+
+!passives-start
+
+passive(Bloodfiend - 3ª Kindred)
+{
+ - No início do seu turno se você não tiver @Hardblood_Armor ganhe 5 @Hardblood_Armor. 
+ - No início de um combate ganhe 5 @Vigor por todo o combate. 
+ - Ao acertar um inimigo você pode escolher aplicar @Prey nele.
+}
+
+passive(Fumaça de Sangue)
+{
+ Um total de 
+}
+
+passive(Arroz)
+{
+ Reutilização de bleed para algo? 
+}
+
+passive(sobreviver)
+{
+ Coisas que o façam ser autosustentável
+}
+
+passive(Fragmentos...)
+{
+ Quando um combate começa ganhe @Returning_Bloodlust.
+}
+
+!passives-end
+
+
+
+
+
+!defense-start 
+
+title: Perdição;
+sin: lust; 
+type: counter; 
+
+info
+{
+ (on_use) Consuma até 50 @Bloodfeast e ganhe 1 @Hardblood para cada 10 @Bloodfeast consumido
+ - Se falhar em consumir @Bloodfeast, ganhe 5 @Bleed   
+ Se @Hardblood estiver em 10+ converta essa Skill para ~█████████ Variant Blood Arts 1: Perdition Simple Et Amère~ (1x por turno)
+}
+
+coin
+{
+ (on_clash_win) Aplique 1 @Bleed   
+ (on_clash_win) Aplique +1 @Bleed @Count
+}
+
+---
+
+title: █████████ Variant Blood Arts 1: Perdition Simple Et Amère;
+sin: lust; 
+type: counter; 
+
+coin
+{
+ (on_clash_win) Aplique 5 @Bleed   
+}
+
+coin
+{
+ (on_clash_win) Aplique 5 @Bleed   
+}
+
+!defense-end

@@ -227,7 +227,9 @@ end
 
 passive(Remanescente...)
 {
- Quando um combate começa, ganhe +4 @Poise @Count e 1 @Commander. Ao critar em uma rolagem, ganhe 1 @Commander (2x por turno). Se estiver com 12 @Commander, ao critar passe a ganhar +1 @Poise @Count.
+ - Quando um combate começa, ganhe +4 @Poise @Count e 1 @Commander. 
+ - Ao critar em uma rolagem, ganhe 1 @Commander (2x por turno). 
+ - Se estiver com 12 @Commander, ao critar passe a ganhar +1 @Poise @Count.
 }
 
 passive(Necessidade Anormal de Resistir)

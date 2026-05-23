@@ -223,12 +223,14 @@ passive(Autoridade [权威])
 
 passive(Guarda Inabalável [坚定不移的守卫])
 {
- Quando um combate começa ganhe 1 @Protection, 1 @Assist_Defense e 2 @Haste. No início do seu turno você ganha 1 @Assist_Defense e se você não tiver @Shield ganhe @Shield igual a seu @Strider_Wu.
+ - Quando um combate começa ganhe 1 @Protection, 1 @Assist_Defense e 2 @Haste. 
+ - No início do seu turno você ganha 1 @Assist_Defense e se você não tiver @Shield ganhe @Shield igual a seu @Strider_Wu.
 }
 
 passive(Imparável [势不可挡])
 {
- A primeira vez que sofrer Stagger em um combate, não fique e a recupere completamente (1x por combate). Ao ganhar @Strider_Wu excedente, ganhe no lugar 2 @Haste no fim do turno.
+ - A primeira vez que sofrer Stagger em um combate, não fique e a recupere completamente (1x por combate). 
+ - Ao ganhar @Strider_Wu excedente, ganhe no lugar 2 @Haste no fim do turno.
 }
 
 passive(Monstro [怪物])

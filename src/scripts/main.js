@@ -2680,8 +2680,8 @@ function parseSkill(text, sourcePath = "", charFolder = "", characterName = "") 
 
     const sinColorMap =
     {
-        wrath: "#ff0000",
-        lust: "#c96ad6",
+        wrath: "#ff3e3e",
+        lust: "#FFA500",
         sloth: "#d4b15f",
         gloom: "#94a2f2",
         pride: "#10003f",
