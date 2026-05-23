@@ -2682,7 +2682,7 @@ function parseSkill(text, sourcePath = "", charFolder = "", characterName = "") 
     {
         wrath: "#ff3e3e",
         lust: "#FFA500",
-        sloth: "#d4b15f",
+        sloth: "#FFFF00",
         gloom: "#94a2f2",
         pride: "#10003f",
         envy: "#3dbb78",
@@ -3085,6 +3085,7 @@ function parseSkill(text, sourcePath = "", charFolder = "", characterName = "") 
 
         const pMp = (passive.mp || passive.c_mp || "");
         const labelText = passive._target === 'ego' ? 'E.G.O. Passive' : 'Passive';
+        const renderPassiveLine = (line) => String(line || "").replace(/\\n/g, "<br>");
 
         return `
         <div class="skill-card-row passive-row" data-mp="${escapeHtml(pMp)}">
@@ -3097,7 +3098,7 @@ function parseSkill(text, sourcePath = "", charFolder = "", characterName = "") 
                 </div>
 
                 <div class="skill-text">
-                    ${passive.text.map(line => `<p class="solo-desc">${line}</p>`).join("")}
+                    ${passive.text.map(line => `<p class="solo-desc">${renderPassiveLine(line)}</p>`).join("")}
                 </div>
 
             </div>

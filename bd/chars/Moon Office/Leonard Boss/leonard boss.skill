@@ -27,3 +27,164 @@ coin
 }
 
 !weapons-end
+
+
+
+
+
+!skills-start
+
+title: Fica Quieto!!!!;
+sin: lust; 
+dmg: blunt; 
+mp: 1;
+
+coin
+{
+ (on_hit) Aplique 1 @Karma   
+ (on_crit10) Aplique 3 @Karma   
+}
+
+coin
+{
+ (on_hit) Aplique 1 @Karma   
+ (on_crit10) Aplique 3 @Karma   
+}
+
+coin
+{
+ (on_hit) Aplique 1 @Karma 
+ (on_crit10) Aplique 3 @Karma     
+}
+
+coin
+{
+ (on_hit) Aplique 1 @Karma  
+ (on_crit10) Aplique 3 @Karma    
+}
+
+coin
+{
+ (on_hit) Aplique 1 @Karma 
+ (on_crit10) Aplique 3 @Karma     
+}
+
+coin
+{
+ (on_hit) Aplique 1 @Karma 
+ (on_crit10) Aplique 3 @Karma     
+}
+
+---
+
+title: A Ajuda Tá Vindo Calma...;
+sin: sloth; 
+dmg: slash; 
+mp: 2;
+
+info
+{
+ (on_use) Aumente a @Potency de um efeito positivo em um aliado em +1
+ (on_use) Aumente a @Count de um efeito positivo em um aliado em +1
+ (on_use) Recupere 5 Pontos de Vida de um aliado
+ (on_use) Recupere 5 Pontos de Stagger de um aliado
+}
+
+coin
+{
+ (on_hit) Aplique 1 @Karma 
+}
+
+coin
+{
+ (on_hit) Aplique 1 @Karma 
+}
+
+end 
+{
+ (turn_end) Um aliado de sua escolha ganha 1 @Sin de uma afinidade a sua escolha
+ (turn_end) Aplique 2 dos seguintes beneficios, em dois aliados distintos ou só em um aliado:
+ - 1 @Protection
+ - 1 @Power_Up     
+ - 1 @Crit_Dmg_Up
+ - 1 @Assist_Defense
+ - 2 @Haste 
+ - 2 @Vigor
+ (turn_end) Ganhe 5 @Resist (1x por turno)
+}
+
+---
+
+title: Crueldade...;
+sin: pride; 
+dmg: slash; 
+mp: 3;
+
+info
+{
+ Essa Skill não ativa reações (Defense Skills)
+}
+
+coin
+{
+ (on_hit) Ative @Consequence no alvo
+}
+
+!skills-end
+
+
+
+
+
+!passives-start
+
+passive(Pibble Vai Ser Legal Com Seus Amiguinhos ( ˶ˆᗜˆ˵ ))
+{
+ Quando um combate começa Pibble concede os seguintes buffs para seus aliados:\n\n
+
+ **- Axel Weber:** Ganha 1 @Commander e ao atingir 8+ @Commander ganha 1 @Crit_Dmg_Up adicional.
+ **- Wuhan Xia:** Ganha 2 @Haste por todo o combate e ao aplicar @Concussion pela primeira vez no turno aplique uma vez adicional.
+ **- Viktor Valenhardt:** Ganha 2 @Vigor por todo o combate e 2 @Hardblood.
+ **- Saya:**
+ **- Hana:** 
+}
+
+passive(Agora É A Sua Vez (っ◕‿◕)っ)
+{
+ No início do combate ganhe @Important_To_Me.
+}
+
+passive(Incoerência)
+{
+ Uma vez por turno ao acertar um alvo aplique 10 @Potency de um dos seguintes efeitos: @Bleed, @Sinking, @Tremor ou @Rupture (o efeito aplicado é definido com base na rolagem de um d4). @Rupture aplicada por esse efeito conta como @Rupture aplicada por **Wuhan Xia**.
+}
+
+passive(Não Fica Triste Não! É Só Não Vacilar De Novo)
+{
+ - Quando um inimigo entrar em Stagger no seu alcance use a Skill ~Crueldade...~ no inimigo como uma ação livre. 
+ - Uma vez por turno ao ser protegido por um aliado, use a Skill ~Fica Quieto!!!!~ no inimigo como uma ação livre.
+}
+
+passive(Copycat)
+{
+ No início de um combate, uma vez por aliado e por turno você pode replicar o @Potency e @Count de um efeito positivo em um aliado, em você (quando possível).
+}
+
+!passives-end
+
+
+
+
+
+!defense-start
+
+title: Hehehehehe...;
+sin: gluttony; 
+type: evade; 
+
+coin
+{
+ (on_evade) Se o alvo tiver 30+ @Karma use a Skill ~Crueldade...~ no alvo (1x por turno)
+}
+
+!defense-end

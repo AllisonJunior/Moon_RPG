@@ -23,6 +23,16 @@
       }
     ]
   },
+  "consequence": {
+    "desc": "c(#fffb00){**[Efeito Exclusivo de _Leonard Boss_]**}\\n\\n\n\nCause dano adicional equivalente a soma da Potency de todos os efeitos negativos presentes no alvo.",
+    "type": "negative",
+    "noUnderline": false
+  },
+  "karma": {
+    "desc": "c(#fffb00){**[Efeito Exclusivo de _Leonard Boss_]**}\\n\nc(#fffb00){**[Potency ~Only~]**}\\n\\n\n\n- Quando um efeito negativo for ativado sofra ~X~ de dano.\\n\n- Ao ser acertado por Leonard Boss aumente o Count de um efeito negativo em +1, uma vez por Skill (quando possível).\\n\\n\n\n**Fim do turno:** Aumente a Potency de um efeito negativo em ~X~/2 (quando possível).\\n",
+    "type": "negative",
+    "noUnderline": false
+  },
   "bloodied": {
     "desc": "**Por este turno e o Próximo:** Não perca Bleed Count. \n ",
     "type": "negative",
@@ -68,6 +78,11 @@
     "type": "condition",
     "noUnderline": false
   },
+  "important_to_me": {
+    "desc": "c(#fffb00){**[Efeito Exclusivo de _Leonard Boss_]**}\\n\\n\n\n\n- Ganhe 1 Armor por todo o combate.\\n\n- Você ganha 15 Shield.\\n\n- 4x neste combate, ao sofrer um efeito negativo o ignore.\\n\n- 2x neste combate, ao falhar em um teste de evasão, o re faça.\\n",
+    "type": "positive",
+    "noUnderline": false
+  },
   "vigor": {
     "desc": "c(#fffb00){**[Potency ~Only~]**}\\n\\n\n\n**Por este turno:** Aumente o seu movimento máximo em +(~X~ * 5) feet.\n",
     "type": "positive",
@@ -84,7 +99,7 @@
     "noUnderline": false
   },
   "commander": {
-    "desc": "c(#fffb00){**[Efeito Exclusivo de _Axel Weber_ - Unique Charge]**}\\n\\n\n\n- ~X~ Máximo: 10.\\n\n- ~X~ não pode ser aumentado por meios externos ao Kit de Axel Weber.\\n\n- Conforrme ~X~ aumenta, efeitos ativam:\\n\\n\n\n**- Com 2+:** Ao acertar um alvo você pode aumentar a Potency de um efeito negativo nele em +1 (quando possível) ~X~/2 vezes por turno.\\n\n**- Com 4+:** Ao acertar um alvo você pode aumentar a Count de um efeito aplicado em você em +1 (quando possível e com a exceção desse efeito) ou o Count de um efeito negativo nele em +2 (quando possível) ~X~/2 vezes por turno.\\n\n**- Com 6+:** Sua CA aumenta em +1.\\n\n**- Com 8+:** Ganhe por todo o combate 4 Crit. Dmg. Up.\\n\n**- Com 10+:** Aumente o dano de suas Katars em +2d4.\\n\n**- Com 12:** Ao ganhar Poise Count ganhe +1. Seus ataques não consomem mais Poise Count. Poise Count é convertido em dano adicional que é aplicado em todos os seus ataques.\\n",
+    "desc": "c(#fffb00){**[Efeito Exclusivo de _Axel Weber_ - Unique Charge]**}\\n\\n\n\n- ~X~ Máximo: 10.\\n\n- ~X~ não pode ser aumentado por meios externos ao Kit de Axel Weber (com exceção dos efeitos provindos de Pibble).\\n\n- Conforrme ~X~ aumenta, efeitos ativam:\\n\\n\n\n**- Com 2+:** Ao acertar um alvo você pode aumentar a Potency de um efeito negativo nele em +1 (quando possível) ~X~/2 vezes por turno.\\n\n**- Com 4+:** Ao acertar um alvo você pode aumentar a Count de um efeito aplicado em você em +1 (quando possível e com a exceção desse efeito) ou o Count de um efeito negativo nele em +2 (quando possível) ~X~/2 vezes por turno.\\n\n**- Com 6+:** Ganhe 1 Armor por todo o combate.\\n\n**- Com 8+:** Ganhe por todo o combate 4 Crit. Dmg. Up.\\n\n**- Com 10+:** Aumente o dano de suas Katars em +2d4.\\n\n**- Com 12:** Ao ganhar Poise Count ganhe +1. Seus ataques não consomem mais Poise Count. Poise Count é convertido em dano adicional que é aplicado em todos os seus ataques.\\n",
     "type": "positive",
     "noUnderline": false
   },
@@ -101,7 +116,7 @@
   "potency": {
     "desc": "A quantidade de um efeito (~X~).",
     "type": "neutral",
-    "noUnderline": false
+    "noUnderline": true
   },
   "sin": {
     "desc": "A afinidade com os 7 pecados: ~Wrath (Ira)~,  ~Lust (Desejo)~, ~Sloth (Preguiça)~, ~Gluttony (Gula)~, ~Gloom (Tristeza)~, ~Pride (Orgulho)~ e ~Envy (Inveja)~.",
@@ -215,6 +230,16 @@
   },
   "bleed_deluge": {
     "desc": "- Cause dano equivalente a (Bleed x Bleed Count), então reduza a Count de Bleed pela metade.\\n\n- Se o alvo não tiver ao menos 5 Bleed Count, esse efeito não ativa.",
+    "type": "negative",
+    "noUnderline": false
+  },
+  "stagger": {
+    "desc": "Estabilidade do Personagem.",
+    "type": "neutral",
+    "noUnderline": true
+  },
+  "burn": {
+    "desc": "c(#fffb00){**[Potency ~&~ Count]**}\\n\\n\n\nNo fim do(s) próximo(s) ~Y~ turno(s), sofra ~X~ de dano.\n\n",
     "type": "negative",
     "noUnderline": false
   }
