@@ -1,9 +1,29 @@
 !overview-start
 
-name: Hunk;
+name: Leonard Boss;
 
 description 
 (
- Um fixer.
+ Um jovem Fixer de Grau 9 e um sobrevivente da catástrofe do Pianista que ocorreu no Distrito 9.
 )
 !overview-end 
+
+
+
+
+
+!weapons-start 
+
+title: Grande Serra Circular;
+flavor: Arma Única;
+sin: sinless; 
+hit: Proficiência + Destreza ou Inteligência;
+dmg: 2d10 + Destreza;
+dmg_type: slash; 
+img: serra;
+
+coin
+{
+}
+
+!weapons-end
