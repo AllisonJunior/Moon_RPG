@@ -29,7 +29,7 @@
     "noUnderline": false
   },
   "prey": {
-    "desc": "c(#fffb00){**[Efeito Exclusivo de _Viktor Valenhardt_]**}\\n\nc(#fffb00){**[Potency ~Only~]**}\\n\\n\n\n- Expira se outro alvo ganhar este efeito ou se perder o Bleed.\\n\n- Ao ser acertado ative o Bleed em si, uma vez por Skill.\\n\n- Viktor Valenhardt recupera 1 de vida ao acertar esse alvo, uma vez por Skill.\\n\\n\n\n**Fim do turno: ** Ganhe +2 Bleed Count.\n\n\n",
+    "desc": "c(#fffb00){**[Efeito Exclusivo de _Viktor Valenhardt_]**}\\n\nc(#fffb00){**[Potency ~Only~]**}\\n\\n\n\n- Expira se outro alvo ganhar este efeito ou se perder o Bleed.\\n\n- Ao ser acertado por Viktor Valenhardt, o mesmo pode escolher ativar o Bleed, uma vez por Skill (2x por turno).\\n\n- Viktor Valenhardt recupera 1 de vida ao acertar esse alvo, uma vez por Skill.\\n\\n\n\n**Fim do turno: ** Ganhe +2 Bleed Count.\n\n\n",
     "type": "negative",
     "noUnderline": false
   },
