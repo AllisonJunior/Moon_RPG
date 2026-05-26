@@ -241,6 +241,7 @@ passive(Fragmentos...)
 title: Perdição;
 sin: lust; 
 type: counter; 
+dmg_type: pierce;
 
 info
 {
@@ -260,6 +261,7 @@ coin
 title: █████████ Variant Blood Arts 1: Perdition Simple Et Amère;
 sin: lust; 
 type: counter; 
+dmg_type: pierce;
 
 coin
 {

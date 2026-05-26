@@ -801,7 +801,7 @@ body.chars-page {
   width: 100%;
   min-height: 42px;
   padding: 10px 12px;
-  border-radius: 10px;
+  border-radius: 10px; /* manter cantos superiores arredondados no botão (fechado) */
   border: 1px solid rgba(0, 0, 0, 0.1);
   background-color: #ffffff;
   color: rgba(0, 0, 0, 1);
@@ -981,20 +981,10 @@ body.chars-page {
   transform: translateY(0);
   margin: 0 0 10px;
   padding: 8px 0;
-  border: 1px solid hsl(
-    264 22% calc(64% - (var(--nav-depth) * 7%)) /
-    calc(0.44 + (var(--nav-depth) * 0.08))
-  );
-  border-radius: 10px;
-  background: linear-gradient(
-    180deg,
-    rgba(210, 204, 223, calc(0.16 + (var(--nav-depth) * 0.05))),
-    rgba(188, 179, 205, calc(0.18 + (var(--nav-depth) * 0.05)))
-  );
-  box-shadow: inset 0 0 0 1px hsl(
-    264 24% calc(72% - (var(--nav-depth) * 8%)) /
-    calc(0.2 + (var(--nav-depth) * 0.08))
-  );
+  border: 1px solid rgba(142, 125, 176, 0.9); /* alinhar com botão aberto */
+  border-radius: 0 0 10px 10px;
+  background: linear-gradient(180deg, rgba(116, 190, 255, 0.96), rgba(63, 145, 232, 0.98));
+  box-shadow: inset 0 0 0 1px rgba(86, 58, 132, 0.18);
   position: relative;
 }
 
@@ -1067,6 +1057,7 @@ body.chars-page {
   margin-top: 6px;
   width: 100%;
   box-sizing: border-box;
+  border-radius: 0; /* sub-itens não têm bordas arredondadas */
 }
 
 
@@ -1137,7 +1128,6 @@ body.chars-page {
 
 /* Manter texto preto também em hover/active para consistência */
 .chars-page .nav-right button:hover,
-.chars-page .nav-right button.active,
 .chars-page .nav-group.active-group > .nav-group-toggle {
   color: #000 !important;
 }
@@ -1151,7 +1141,7 @@ body.chars-page {
   min-height: 42px;
   padding: 10px 12px;
   font-size: 15px;
-  border-radius: 8px;
+  border-radius: 0; /* remover arredondamento para subitens */
   box-sizing: border-box;
   margin: 0;
 }
@@ -1188,13 +1178,11 @@ body.chars-page {
 .chars-page .nav-right button.active {
   background: linear-gradient(180deg, rgba(242, 236, 252, 0.98), rgba(227, 218, 243, 0.98));
   border-color: rgba(118, 87, 176, 0.82);
-  color: #180024;
+  color: rgba(85, 46, 145, 0.95); /* nova cor do texto para item selecionado */
   cursor: default;
   box-shadow: inset 0 0 0 1px rgba(158, 123, 219, 0.35), 0 0 0 1px rgba(86, 58, 132, 0.2);
-  text-decoration: underline;
-  text-decoration-color: rgba(85, 46, 145, 0.95);
-  text-decoration-thickness: 2px;
-  text-underline-offset: 3px;
+  text-decoration: none; /* remover underline */
+  padding-right: 22px; /* espaço para a estrelinha */
 }
 
 /* Smooth mount animation for dynamic skill content to reduce layout jump */
@@ -1258,7 +1246,15 @@ body.chars-page {
 }
 
 .chars-page .nav-right button.active::after {
-  content: none;
+  content: "★"; /* estrelinha à direita do item ativo */
+  margin-left: 8px;
+  color: currentColor;
+  font-size: 0.95em;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
 }
 
 .chars-page .nav-right button.active::before {
@@ -1272,7 +1268,15 @@ body.chars-page {
 }
 
 .chars-page .nav-right button.nav-group-leaf.active::after {
-  content: none;
+  content: "★";
+  margin-left: 8px;
+  color: currentColor;
+  font-size: 0.95em;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
 }
 
 /* Make standalone characters use the light-blue highlight */
@@ -1684,6 +1688,12 @@ body.chars-page {
   text-underline-offset: 0.08em;
 }
 
+/* Ajustes específicos para a página de personagens: garantir cor/sem underline para item ativo */
+.chars-page .nav-right button.active {
+  color: rgba(85,46,145,0.95) !important;
+  text-decoration: none !important;
+}
+
 /* mesma regra para conteúdo dinâmico (skills) */
 .page_container .page-dynamic u span[style*="color:"],
 .page_container .chars-dynamic u span[style*="color:"] {
@@ -1984,6 +1994,43 @@ body.chars-page {
   clip-path: polygon(50% 100%, 96% 80%, 100% 40%, 74% 3%, 26% 3%, 0% 40%, 4% 80%);
 }
 
+.skill-slot .slot-center-icon.slot-sin-affinity {
+  width: 43%;
+  height: 43%;
+  max-width: 56px;
+  max-height: 56px;
+  top: 53%;
+  object-fit: contain;
+  -webkit-clip-path: none;
+  clip-path: none;
+}
+
+.skill-slot .slot-center-icon.slot-defense-icon {
+  width: 56%;
+  height: 56%;
+  max-width: 72px;
+  max-height: 72px;
+  top: 50%;
+  object-fit: contain;
+  -webkit-clip-path: none;
+  clip-path: none;
+}
+
+/* Ajustes específicos só para ícones de defense: reduzir, centralizar e colocar acima do slot-base */
+.skill-slot .slot-center-icon.slot-defense-icon {
+  width: 50% !important;
+  height: auto !important;
+  max-width: 64px !important;
+  max-height: 64px !important;
+  top: 54% !important; /* espaçamento vertical adicional */
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  z-index: 11 !important; /* acima do slot-base (z-index:3) */
+  object-fit: contain !important;
+  -webkit-clip-path: none !important;
+  clip-path: none !important;
+}
+
 .skill-slot .slot-dmgtype {
   position: absolute;
   right: 6px;
@@ -2044,14 +2091,12 @@ padding: 10px 16px;
 background: linear-gradient(180deg, rgba(42, 22, 9, 0.98) 0%, rgba(18, 12, 8, 0.98) 100%);
 border: 1px solid #b9782d;
 border-radius: 10px 10px 0 0;
-box-shadow:
-  inset 0 1px 0 rgba(255, 214, 140, 0.18),
-  0 2px 0 rgba(0, 0, 0, 0.35);
-text-transform: uppercase;
-font-weight: 900;
-letter-spacing: 0.08em;
-color: #f4b23f;
-overflow: hidden;
+  transform: translate(-50%, -50%);
+  display: block;
+  line-height: 0;
+  margin: 0;
+  padding: 0;
+  vertical-align: middle;
 }
 
 .skills-section-title::before,
@@ -2110,6 +2155,30 @@ z-index: 2;
 pointer-events: none;
 object-fit: contain;
 }
+
+.slot-center-icon.slot-sin-affinity {
+width: 43%;
+height: auto;
+max-width: 56px;
+max-height: 56px;
+  top: 50%;
+object-fit: contain;
+clip-path: none;
+ -webkit-clip-path: none;
+}
+
+.slot-center-icon.slot-defense-icon {
+width: 43%;
+height: auto;
+max-width: 56px;
+max-height: 56px;
+ top: 50%;
+object-fit: contain;
+-webkit-clip-path: none;
+clip-path: none;
+}
+
+/* slight vertical tweaks removed to preserve original centering */
 
 .slot-dmgtype {
 position: absolute;
@@ -2274,36 +2343,15 @@ letter-spacing: 0.01em;
   margin-top: 8px;
 }
 
-/* ensure center icon cannot overflow the slot border */
-.skill-card-row.defense-row .skill-slot {
-  overflow: hidden !important;
-  -webkit-clip-path: polygon(50% 100%, 96% 80%, 100% 40%, 74% 3%, 26% 3%, 0% 40%, 4% 80%);
-  clip-path: polygon(50% 100%, 96% 80%, 100% 40%, 74% 3%, 26% 3%, 0% 40%, 4% 80%);
-}
-
 .skill-card-row.defense-row .slot-base,
 .skill-card-row.defense-row .slot-background {
   width: 100%;
   height: 100%;
 }
 
-.skill-card-row.defense-row .slot-center-icon {
-  position: absolute;
-  left: 50%;
-  top: 52%;
-  transform: translate(-50%, -50%);
-  width: 78%;
-  height: 78%;
-  max-width: 92px;
-  max-height: 92px;
-  object-fit: cover;
-  object-position: center;
-  z-index: 2; /* acima do background, abaixo da borda/base */
-  display: block;
-  pointer-events: none;
-  /* heptágono levemente expandido nos eixos X para cobrir as laterais pontiagudas */
-  -webkit-clip-path: polygon(50% 100%, 96% 80%, 100% 40%, 74% 3%, 26% 3%, 0% 40%, 4% 80%);
-  clip-path: polygon(50% 100%, 96% 80%, 100% 40%, 74% 3%, 26% 3%, 0% 40%, 4% 80%);
+/* For clash/counter defenses with dmg_type, keep damage icon above the center defense icon */
+.skill-card-row.defense-row .slot-dmgtype {
+  z-index: 12;
 }
 
 .skill-card-row.defense-row .skill-name {

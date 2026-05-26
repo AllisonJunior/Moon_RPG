@@ -2840,6 +2840,41 @@ function parseSkill(text, sourcePath = "", charFolder = "", characterName = "") 
         return `../../bd/chars/${candidate}`;
     }
 
+    function resolveSkillCenterIconPath(entity, fallbackSin = "") {
+
+        const customImage = String(entity?.img || "").trim();
+
+        if (customImage) {
+            return resolveSkillIconPath(customImage);
+        }
+
+        const normalizedSin = String(fallbackSin || entity?.sin || "").trim().toLowerCase();
+
+        if (!normalizedSin || normalizedSin === "sinless") {
+            return "";
+        }
+
+        return `../../res/skills/sins/${normalizedSin}.png`;
+    }
+
+    function resolveDefenseCenterIconPath(def) {
+
+        const type = String(def?.type || def?._defenseIcon || "").trim().toLowerCase();
+
+        switch (type) {
+            case "evade":
+            case "evader":
+                return "../../res/skills/evade.png";
+            case "clash":
+            case "counter":
+                return "../../res/skills/counter.png";
+            case "defense":
+                return "../../res/skills/defense.png";
+            default:
+                return "../../res/skills/defense.png";
+        }
+    }
+
     function resolveEgoRiskIconPath(level) {
 
         const normalized = String(level || "").trim().toLowerCase();
@@ -2868,17 +2903,22 @@ function parseSkill(text, sourcePath = "", charFolder = "", characterName = "") 
         const sinBase = sinMap[skill.sin] || sinMap.gloom;
         const skillColor = sinColorMap[skill.sin] || "#b9782d";
 
-        // Generate center icon path dynamically.
-        // Skills/defense use skills icon paths; weapons use character asset paths.
         let slotIconHtml = "";
-        const imageName = (skill._isWeapon || skill._isEgo)
-            ? (skill.img || "")
-            : (skill.c_img || `skill_${skill.c_mp || skill.mp}`);
-        if (imageName) {
-            const iconPath = (skill._isWeapon || skill._isEgo)
-                ? resolveWeaponIconPath(imageName)
-                : resolveSkillIconPath(imageName);
-            if (character) {
+        if (skill._isDefense) {
+            const iconPath = resolveDefenseCenterIconPath(skill);
+
+            if (iconPath) {
+                slotIconHtml = `
+                 <img class="slot-center-icon slot-defense-icon"
+                     src="${iconPath}"
+                     onerror="this.remove()">
+                `;
+            }
+        }
+        else if (skill._isWeapon || skill._isEgo) {
+            const iconPath = resolveWeaponIconPath(skill.img || skill.c_img || "");
+
+            if (iconPath) {
                 slotIconHtml = `
                  <img class="slot-center-icon"
                      src="${iconPath}"
@@ -2886,11 +2926,14 @@ function parseSkill(text, sourcePath = "", charFolder = "", characterName = "") 
                      onerror="this.remove()">
                 `;
             }
+        }
+        else {
+            const iconPath = resolveSkillCenterIconPath(skill);
+            const usesSinAffinityIcon = !String(skill.img || "").trim();
 
-            
-            else {
+            if (iconPath) {
                 slotIconHtml = `
-                 <img class="slot-center-icon"
+                 <img class="slot-center-icon${usesSinAffinityIcon ? " slot-sin-affinity" : ""}"
                      src="${iconPath}"
                      width="88"
                      onerror="this.remove()">
@@ -2901,6 +2944,13 @@ function parseSkill(text, sourcePath = "", charFolder = "", characterName = "") 
         let coinsHtml = "";
         let coinTextHtml = "";
         let coinsTopHtml = "";
+        const normalizedDefenseType = String(skill.type || "").trim().toLowerCase();
+        const normalizedDefenseDmgType = String(skill.dmg_type || "").trim().toLowerCase();
+        const showDefenseDmgType = Boolean(
+            skill._isDefense
+            && (normalizedDefenseType === "clash" || normalizedDefenseType === "counter")
+            && dmgMap[normalizedDefenseDmgType]
+        );
 
         skill.coins.forEach((coin, index) => {
 
@@ -2984,7 +3034,7 @@ function parseSkill(text, sourcePath = "", charFolder = "", characterName = "") 
             slotBaseSrc = "../../res/skills/slots/no_sin.png";
             slotBackgroundSrc = "../../res/skills/slots/bkg_no_sin.png";
         } else {
-            slotBaseSrc = `${sinBase}_${slotLevel}.png`;
+                slotBaseSrc = `${sinBase}_${slotLevel}.png`;
             slotBackgroundSrc = `${sinBase.replace("/slots/", "/slots/bkg_")}_${slotLevel}.png`;
         }
 
@@ -3005,9 +3055,9 @@ function parseSkill(text, sourcePath = "", charFolder = "", characterName = "") 
 
                      ${slotIconHtml}
 
-                     ${skill._isDefense ? "" : `
+                     ${skill._isDefense && !showDefenseDmgType ? "" : `
                      <img class="slot-dmgtype"
-                         src="${skill._defenseIcon || dmgMap[skill._isWeapon ? skill.dmg_type : skill.dmg]}"
+                         src="${showDefenseDmgType ? dmgMap[normalizedDefenseDmgType] : (skill._defenseIcon || dmgMap[skill._isWeapon ? skill.dmg_type : skill.dmg])}"
                          width="56">
                      `}
 
@@ -3034,9 +3084,9 @@ function parseSkill(text, sourcePath = "", charFolder = "", characterName = "") 
 
                  ${slotIconHtml}
 
-                 ${skill._isDefense ? "" : `
+                 ${skill._isDefense && !showDefenseDmgType ? "" : `
                  <img class="slot-dmgtype"
-                     src="${skill._defenseIcon || dmgMap[skill._isWeapon ? skill.dmg_type : skill.dmg]}"
+                     src="${showDefenseDmgType ? dmgMap[normalizedDefenseDmgType] : dmgMap[skill._isWeapon ? skill.dmg_type : skill.dmg]}"
                      width="56">
                  `}
 
@@ -3112,9 +3162,6 @@ function parseSkill(text, sourcePath = "", charFolder = "", characterName = "") 
         const sinBase = sinMap[def.sin] || sinMap.gloom;
         const skillColor = sinColorMap[def.sin] || "#b9782d";
 
-        const iconName = def.c_img || def.type || "evade";
-        const icon = resolveSkillIconPath(iconName);
-
         const dMp = (def.mp || def.c_mp || "");
 
         // Determine slot images based on sin type
@@ -3140,9 +3187,10 @@ function parseSkill(text, sourcePath = "", charFolder = "", characterName = "") 
                      src="${slotBackgroundSrc}"
                      width="128">
 
+                
                  ${def._isDefense ? "" : `
                  <img class="slot-dmgtype"
-                     src="${icon}"
+                     src="${skillColor}"
                      width="56">
                  `}
 
@@ -3189,6 +3237,7 @@ function parseSkill(text, sourcePath = "", charFolder = "", characterName = "") 
                 mp: "",
                 c_mp: "",
                 c_img: "",
+                img: "",
                 info: [],
                 end: [],
                 coins: []
@@ -3476,9 +3525,11 @@ function parseSkill(text, sourcePath = "", charFolder = "", characterName = "") 
                 title: defTitle,
                 sin: "",
                 dmg: "",
+                dmg_type: "",
                 mp: "1",
                 c_mp: "1",
                 c_img: "",
+                img: "",
                 info: [],
                 end: [],
                 coins: [],
@@ -3564,6 +3615,7 @@ function parseSkill(text, sourcePath = "", charFolder = "", characterName = "") 
                 level: "",
                 c_mp: "",
                 c_img: "",
+                img: "",
                 cost: [],
                 info: [],
                 end: [],
@@ -3609,6 +3661,7 @@ function parseSkill(text, sourcePath = "", charFolder = "", characterName = "") 
                 title: t,
                 sin: "",
                 dmg: "",
+                dmg_type: "",
                 mp: "1",
                 c_mp: "1",
                 c_img: "",
@@ -3682,6 +3735,14 @@ function parseSkill(text, sourcePath = "", charFolder = "", characterName = "") 
                     .trim();
         }
 
+        if (line.startsWith("dmg_type:") && currentDefense) {
+            currentDefense.dmg_type =
+                line.replace("dmg_type:", "")
+                    .replace(";", "")
+                    .trim()
+                    .toLowerCase();
+        }
+
         if (line.startsWith("mp:") && currentSkill) {
             currentSkill.mp =
                 line.replace("mp:", "")
@@ -3747,6 +3808,13 @@ function parseSkill(text, sourcePath = "", charFolder = "", characterName = "") 
                     .trim();
         }
 
+        if (line.startsWith("img:") && currentSkill) {
+            currentSkill.img =
+                line.replace("img:", "")
+                    .replace(";", "")
+                    .trim();
+        }
+
         if (line.startsWith("c_img:") && currentWeapon) {
             currentWeapon.c_img =
                 line.replace("c_img:", "")
@@ -3778,6 +3846,13 @@ function parseSkill(text, sourcePath = "", charFolder = "", characterName = "") 
         if (line.startsWith("c_img:") && currentDefense) {
             currentDefense.c_img =
                 line.replace("c_img:", "")
+                    .replace(";", "")
+                    .trim();
+        }
+
+        if (line.startsWith("img:") && currentDefense) {
+            currentDefense.img =
+                line.replace("img:", "")
                     .replace(";", "")
                     .trim();
         }
@@ -3969,8 +4044,6 @@ function parseSkill(text, sourcePath = "", charFolder = "", characterName = "") 
             // mark defenses to render a default coin above the name when no explicit coins
             def._defenseDefaultCoin = true;
             def._isDefense = true;
-            // default center image fallback: try to use type name as c_img if none provided
-            def.c_img = def.c_img || def.type || "";
             html += buildSkill(def);
         });
 

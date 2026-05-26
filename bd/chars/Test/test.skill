@@ -18,7 +18,7 @@ description
 !skills-start
 
 title: Wrath Explosivon;
-sin: wrath; 
+sin: lust; 
 dmg: blunt; 
 mp: 1;
 
@@ -51,7 +51,7 @@ sin: wrath;
 dmg: blunt; 
 mp: 1;
 c_mp: 1-2;
-c_img: skill_1_2;
+img: skill_1_2;
 
 coin(u)
 { 

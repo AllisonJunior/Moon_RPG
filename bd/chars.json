@@ -29,5 +29,51 @@
         "target": "hana.skill"
       }
     ]
+  },
+  {
+    "type": "group",
+    "label": "Associações",
+    "folder": "Associações",
+    "children": [
+      {
+        "type": "group",
+        "label": "Deyvat'",
+        "folder": "Deyvat'",
+        "children": [
+          {
+            "label": "Donald",
+            "target": "donald.skill"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "type": "group",
+    "label": "Sindicatos",
+    "folder": "Sindicatos",
+    "children": [
+      {
+        "type": "group",
+        "label": "Dunkelheit",
+        "folder": "Dunkelheit",
+        "children": []
+      }
+    ]
+  },
+  {
+    "type": "group",
+    "label": "Fixers",
+    "folder": "Fixers",
+    "children": [
+      {
+        "label": "Kim Su",
+        "target": "kim su.skill"
+      },
+      {
+        "label": "Hunk",
+        "target": "hunk.skill"
+      }
+    ]
   }
 ]

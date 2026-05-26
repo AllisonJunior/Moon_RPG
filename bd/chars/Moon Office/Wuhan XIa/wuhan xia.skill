@@ -248,7 +248,8 @@ passive(Monstro [怪物])
 
 title: Confrontar [面对];
 sin: gluttony; 
-type: clash; 
+type: counter; 
+dmg_type: slash;
 
 info
 {
