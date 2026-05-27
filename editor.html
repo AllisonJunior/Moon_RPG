@@ -1,0 +1,3092 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manager</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+    margin:0;
+    background:#1b1224;
+    color:white;
+    display:block;
+    height:100vh;
+    padding-top:78px;
+    overflow:hidden;
+}
+
+.top-nav{
+    position:fixed;
+    top:0;
+    left:0;
+    right:0;
+    height:78px;
+    background:rgba(31,21,42,0.96);
+    border-bottom:2px solid #3b274d;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+    padding:14px 20px;
+    z-index:20;
+    backdrop-filter:blur(8px);
+}
+
+.nav-brand{
+    display:flex;
+    flex-direction:column;
+    gap:2px;
+}
+
+.nav-brand-title{
+    font-size:26px;
+    font-weight:bold;
+    line-height:1;
+}
+
+.nav-brand-subtitle{
+    font-size:12px;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    opacity:0.65;
+}
+
+.nav-actions{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    flex-wrap:wrap;
+}
+
+.module{
+    height:calc(100vh - 78px);
+    display:flex;
+    overflow:hidden;
+}
+
+.hidden{
+    display:none;
+}
+
+.sidebar{
+    width:360px;
+    background:#241631;
+    border-right:2px solid #3b274d;
+    overflow:auto;
+    padding:14px;
+}
+
+.content{
+    flex:1;
+    overflow:auto;
+    padding:20px;
+}
+
+.section{
+    background:#241631;
+    border-radius:18px;
+    padding:22px;
+    max-width:none;
+    width:100%;
+}
+
+.nav-btn{
+    background:#4d2e75;
+    color:#efe8ff;
+    border:1px solid rgba(255,255,255,0.08);
+}
+
+.nav-btn:hover{
+    background:#5b3690;
+}
+
+.nav-btn.active{
+    background:#8b64de;
+    border-color:rgba(255,255,255,0.22);
+    box-shadow:0 0 0 1px rgba(255,255,255,0.08) inset;
+}
+
+.module-title{
+    cursor:pointer;
+    user-select:none;
+}
+
+.module-title:hover{
+    color:#efe8ff;
+}
+
+button{
+    border:none;
+    background:#6e43a7;
+    color:white;
+    padding:10px 14px;
+    border-radius:8px;
+    cursor:pointer;
+    margin:4px 0;
+    transition:0.15s;
+}
+
+button:hover{
+    background:#8658c4;
+}
+
+.danger{
+    background:#a33;
+}
+
+.danger:hover{
+    background:#c44;
+}
+
+.topbar{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    margin-bottom:10px;
+}
+
+.button-row{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    margin:10px 0;
+}
+
+.button-row button{
+    margin:0;
+}
+
+.editor-topbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    margin-bottom:14px;
+}
+
+.gear-btn{
+    width:38px;
+    height:38px;
+    padding:0;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    font-size:18px;
+    line-height:1;
+    border-radius:10px;
+}
+
+.skill-viewer-panel{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+.skill-viewer-toolbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    flex-wrap:wrap;
+}
+
+.skill-viewer-actions{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+}
+
+.skill-viewer-meta{
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+    color:rgba(255,255,255,0.72);
+    font-size:13px;
+}
+
+.skill-viewer-textarea{
+    min-height:520px;
+    resize:vertical;
+    font-family:Consolas, "Courier New", monospace;
+    white-space:pre-wrap;
+    overflow-wrap:anywhere;
+    word-break:break-word;
+}
+
+.skill-viewer-status{
+    font-size:12px;
+    color:#cdbdf0;
+    opacity:0.9;
+}
+
+.skill-viewer-status.dirty{
+    color:#ffcf72;
+}
+
+input,
+textarea,
+select{
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:8px;
+    background:#2f1f3f;
+    color:white;
+    margin-bottom:10px;
+}
+
+input[type="checkbox"]{
+    width:auto;
+    margin:0;
+}
+
+.check-row{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-top:10px;
+    margin-bottom:10px;
+}
+
+label{
+    display:block;
+    margin-top:10px;
+    margin-bottom:6px;
+    opacity:0.8;
+}
+
+textarea{
+    min-height:220px;
+    resize:vertical;
+}
+
+hr{
+    border:none;
+    height:1px;
+    background:#53396d;
+    margin:20px 0;
+}
+
+.empty{
+    opacity:0.6;
+}
+
+.node{
+    margin-left:10px;
+    margin-top:4px;
+}
+
+.node-header{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:8px;
+    border-radius:8px;
+    cursor:pointer;
+    transition:0.15s;
+    user-select:none;
+}
+
+.node-header:hover{
+    background:#342046;
+}
+
+.selected{
+    background:#51306f !important;
+}
+
+.children{
+    margin-left:16px;
+    border-left:1px solid #53396d;
+    padding-left:8px;
+}
+
+.drop-line{
+    height:6px;
+    margin:2px 0;
+    border-radius:20px;
+    transition:0.15s;
+}
+
+.drop-line.active{
+    background:#9b6dff;
+}
+
+.dragging{
+    opacity:0.4;
+}
+
+.drag-over{
+    background:#6b43a5 !important;
+}
+
+.drag-over-zone{
+    background:rgba(120,80,180,0.2);
+    border-radius:8px;
+}
+
+.effect-item{
+    background:#2d1d3c;
+    border-radius:10px;
+    padding:10px;
+    margin-bottom:8px;
+    cursor:pointer;
+    transition:0.15s;
+}
+
+.effect-item:hover{
+    background:#3c2650;
+}
+
+.effect-item.selected{
+    background:#5b3690;
+}
+
+.effect-name{
+    font-weight:bold;
+    margin-bottom:4px;
+}
+
+.effect-type{
+    font-size:12px;
+    opacity:0.7;
+}
+
+.preview{
+    margin-top:20px;
+    padding:16px;
+    border-radius:12px;
+    background:#2b1b3a;
+}
+
+.preview-title{
+    font-weight:bold;
+    margin-bottom:8px;
+}
+
+.effect-tooltip-preview{
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: justify;
+    background-color: #1e1e2f;
+    border-radius: 5px;
+    border: 2px solid rgba(90, 90, 90, 0.2);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    color: #fff;
+    padding: 8px 12px;
+    font-size: 14px;
+    max-width: 450px;
+    word-break: break-word;
+}
+
+.effect-tooltip-preview-title{
+    color:#5da2ff;
+    font-weight:bold;
+    margin-bottom:8px;
+}
+
+.effect-tooltip-preview-body{
+    white-space:normal;
+}
+
+.badge{
+    display:inline-block;
+    padding:4px 8px;
+    border-radius:999px;
+    font-size:12px;
+    margin-bottom:12px;
+}
+
+.badge.positive{
+    background:#2f7d44;
+}
+
+.badge.negative{
+    background:#8b2f2f;
+}
+
+.badge.alert{
+    background:#d7d713;
+    color:#1b1224;
+}
+
+.badge.neutral{
+    background:#6b6b6b;
+}
+
+.badge.condition{
+    background:#2f7d44;
+}
+
+.effects-group{
+    margin-bottom:18px;
+}
+
+.effects-group-header{
+    font-weight:bold;
+    padding:8px 10px;
+    color:#dcd6e8;
+}
+
+.effects-group-list{
+    padding:8px 10px 16px 10px;
+    border-top:1px solid rgba(255,255,255,0.02);
+}
+
+.filter-bar{
+    display:flex;
+    gap:8px;
+    margin:10px 0 0 0;
+    flex-wrap:wrap;
+    align-items:center;
+}
+
+.filter-btn{
+    background:#342046;
+    color:white;
+    padding:8px 10px;
+    border-radius:8px;
+    cursor:pointer;
+    border:none;
+    flex:0 0 auto;
+    white-space:nowrap;
+}
+
+.filter-btn.active{
+    background:#6e43a7;
+}
+
+.image-preview-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));
+    gap:12px;
+    margin-top:16px;
+}
+
+.image-preview-card{
+    background:#2b1b3a;
+    border:1px solid #4f3570;
+    border-radius:12px;
+    padding:10px;
+}
+
+.image-preview-card-title{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:8px;
+    margin-bottom:8px;
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+    color:#d2c6e6;
+}
+
+.image-preview-card img{
+    width:100%;
+    height:150px;
+    object-fit:cover;
+    border-radius:10px;
+    background:#1e1328;
+    border:1px solid rgba(255,255,255,0.08);
+}
+
+.image-preview-empty{
+    height:150px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:10px;
+    background:#1e1328;
+    border:1px dashed rgba(255,255,255,0.12);
+    color:rgba(255,255,255,0.55);
+    font-size:13px;
+}
+
+.image-actions{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-top:8px;
+}
+
+.image-management-grid{
+    display:grid;
+    grid-template-columns:1fr 1px 1fr;
+    gap:14px;
+    align-items:stretch;
+    margin-top:14px;
+}
+
+.extra-images-section{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    margin-top:16px;
+}
+
+.extra-images-list{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));
+    gap:12px;
+}
+
+.extra-image-item{
+    background:#2b1b3a;
+    border:1px solid #4f3570;
+    border-radius:12px;
+    padding:10px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.extra-image-item-title{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    font-size:13px;
+    color:#e9ddff;
+    word-break:break-word;
+}
+
+.extra-image-item-preview{
+    height:150px;
+    border-radius:10px;
+    overflow:hidden;
+    background:#1e1328;
+    border:1px solid rgba(255,255,255,0.08);
+}
+
+.extra-image-item-preview img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+.extra-images-empty{
+    color:rgba(255,255,255,0.55);
+    font-size:13px;
+    padding:6px 0 2px;
+}
+
+.image-management-divider{
+    width:1px;
+    background:#53396d;
+    align-self:stretch;
+}
+
+.image-management-column{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.image-management-column .button-row{
+    margin:0;
+}
+
+.image-management-column .image-preview-card{
+    min-height:220px;
+}
+
+@media (max-width: 820px){
+    .image-management-grid{
+        grid-template-columns:1fr;
+    }
+
+    .image-management-divider{
+        display:none;
+    }
+}
+
+</style>
+</head>
+<body>
+
+<div class="top-nav">
+
+    <div class="nav-brand">
+
+        <div class="nav-brand-title module-title" onclick="clearAllModuleSelections()">
+            JSON Studio
+        </div>
+
+        <div class="nav-brand-subtitle">
+            Editor de dados local
+        </div>
+
+    </div>
+
+    <div class="nav-actions">
+
+        <button
+            id="btnEffects"
+            class="nav-btn active"
+            onclick="showModule('effects')"
+        >
+            ✨ Effects Editor
+        </button>
+
+        <button
+            id="btnChars"
+            class="nav-btn"
+            onclick="showModule('chars')"
+        >
+            👤 Characters Editor
+        </button>
+
+    </div>
+
+</div>
+
+<!-- ========================= -->
+<!-- CHARACTERS MODULE -->
+<!-- ========================= -->
+
+<div id="charsModule" class="module hidden">
+
+    <div class="sidebar">
+
+        <h1 class="module-title" onclick="clearCharacterSelection()">Characters</h1>
+
+        <div class="topbar">
+
+            <button onclick="addCharacter()">
+                + Personagem
+            </button>
+
+            <button onclick="addGroup()">
+                + Grupo
+            </button>
+
+        </div>
+
+        <div id="tree"></div>
+
+    </div>
+
+    <div class="content">
+
+        <div class="section" id="charEditorPanel">
+
+            <div class="editor-topbar">
+                <h2>Editor</h2>
+
+                <button
+                    id="characterViewToggle"
+                    class="gear-btn hidden"
+                    type="button"
+                    title="Alternar para o arquivo .skill"
+                    onclick="toggleCharacterEditorView()"
+                >
+                    ⚙
+                </button>
+            </div>
+
+            <div id="charEditor" class="empty"></div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ========================= -->
+<!-- EFFECTS MODULE -->
+<!-- ========================= -->
+
+<div id="effectsModule" class="module">
+
+    <div class="sidebar">
+
+        <h1 class="module-title" onclick="clearEffectSelection()">Effects</h1>
+
+        <div class="topbar">
+
+            <button onclick="createEffect()">
+                + Novo
+            </button>
+
+        </div>
+
+        <div class="filter-bar">
+            <button class="filter-btn active" id="filter-all" onclick="setEffectsFilter('all')">Todos</button>
+            <button class="filter-btn" id="filter-positive" onclick="setEffectsFilter('positive')">Positive</button>
+            <button class="filter-btn" id="filter-alert" onclick="setEffectsFilter('alert')">Alert</button>
+            <button class="filter-btn" id="filter-neutral" onclick="setEffectsFilter('neutral')">Neutral</button>
+            <button class="filter-btn" id="filter-condition" onclick="setEffectsFilter('condition')">Condition</button>
+            <button class="filter-btn" id="filter-negative" onclick="setEffectsFilter('negative')">Negative</button>
+        </div>
+
+        <div id="effectsList"></div>
+
+    </div>
+
+    <div class="content">
+
+        <div class="section" id="effectEditorPanel">
+
+            <h2>Editor</h2>
+
+            <div id="effectEditor" class="empty"></div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<input type="file" id="characterImageInput" accept="image/*" class="hidden">
+<input type="file" id="characterExtraImagesInput" accept="image/*" multiple class="hidden">
+
+<script>
+
+// =========================
+// MODULE NAVIGATION
+// =========================
+
+let activeModule = sessionStorage.getItem("jsonStudio.activeModule") || "effects";
+
+function showModule(module){
+
+    activeModule = module;
+
+    try {
+        sessionStorage.setItem("jsonStudio.activeModule", module);
+    } catch (err) {
+        // ignore storage failures
+    }
+
+    document
+        .getElementById("charsModule")
+        .classList.add("hidden");
+
+    document
+        .getElementById("effectsModule")
+        .classList.add("hidden");
+
+    document
+        .getElementById("btnChars")
+        .classList.remove("active");
+
+    document
+        .getElementById("btnEffects")
+        .classList.remove("active");
+
+    if(module === "chars"){
+
+        document
+            .getElementById("charsModule")
+            .classList.remove("hidden");
+
+        document
+            .getElementById("btnChars")
+            .classList.add("active");
+
+        renderCharEditor();
+
+    }else{
+
+        document
+            .getElementById("effectsModule")
+            .classList.remove("hidden");
+
+        document
+            .getElementById("btnEffects")
+            .classList.add("active");
+
+        renderEffectEditor();
+    }
+}
+
+function clearCharacterSelection(){
+
+    selectedNode = null;
+    selectedParent = null;
+    selectedIndex = null;
+    pendingNode = null;
+    pendingParent = null;
+    pendingIndex = null;
+    characterEditorView = "editor";
+
+    try {
+        sessionStorage.setItem("jsonStudio.characterEditorView", characterEditorView);
+    } catch (err) {
+        // ignore storage failures
+    }
+
+    renderTree();
+    renderCharEditor();
+}
+
+function clearEffectSelection(){
+
+    selectedEffectKey = null;
+    renderEffectsList();
+    renderEffectEditor();
+}
+
+function clearAllModuleSelections(){
+
+    clearCharacterSelection();
+    clearEffectSelection();
+}
+
+function setPanelVisibility(panelId, isVisible){
+
+    const panel = document.getElementById(panelId);
+    if(!panel) return;
+
+    if(isVisible){
+        panel.classList.remove("hidden");
+    }else{
+        panel.classList.add("hidden");
+    }
+}
+
+// =====================================================
+// CHARACTERS EDITOR
+// =====================================================
+
+let charsData = [];
+let charsSaveQueue = Promise.resolve();
+
+let selectedNode = null;
+let selectedParent = null;
+let selectedIndex = null;
+let characterImageUploadContext = null;
+let characterEditorView = sessionStorage.getItem("jsonStudio.characterEditorView") || "editor";
+let characterPreviewRenderToken = 0;
+let characterSkillRenderToken = 0;
+let characterExtraImagesRenderToken = 0;
+let characterSkillOriginalContent = "";
+let characterSkillIsDirty = false;
+
+// pending (rascunho) quando o usuário cria um novo item mas ainda não confirmou
+let pendingNode = null;
+let pendingParent = null; // array onde será inserido
+let pendingIndex = null;
+
+let draggedItem = null;
+
+const EDITOR_API_PATHS = {
+    chars: "api/data/chars",
+    effects: "api/data/effects"
+};
+
+function resolveEditorApiUrl(path) {
+    return new URL(path, window.location.href).href;
+}
+
+function verifyImageExists(src) {
+
+    return new Promise(resolve => {
+
+        if (!src) {
+            resolve(false);
+            return;
+        }
+
+        const image = new Image();
+        const separator = String(src).includes("?") ? "&" : "?";
+
+        image.onload = () => resolve(true);
+        image.onerror = () => resolve(false);
+        image.src = `${src}${separator}v=${Date.now()}-${Math.random().toString(36).slice(2)}`;
+    });
+}
+
+async function readEditorJson(path) {
+    const response = await fetch(resolveEditorApiUrl(path), {
+        cache: "no-store"
+    });
+
+    if (!response.ok) {
+        throw new Error(`Falha ao ler ${path}: ${response.status}`);
+    }
+
+    return response.json();
+}
+
+async function writeEditorJson(path, data) {
+    const response = await fetch(resolveEditorApiUrl(path), {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data, null, 2)
+    });
+
+    if (!response.ok) {
+        const message = await response.text().catch(() => "");
+        throw new Error(message || `Falha ao salvar ${path}: ${response.status}`);
+    }
+
+    return true;
+}
+
+async function loadChars(){
+
+    try{
+
+        charsData = await readEditorJson(EDITOR_API_PATHS.chars);
+
+        // if any node has `default: true`, select it on load
+        (function findAndSelectDefault(){
+            function recurse(arr, parentArr){
+                if(!Array.isArray(arr)) return false;
+                for(let i = 0; i < arr.length; i++){
+                    const item = arr[i];
+                    if(item && item.default){
+                        selectedNode = item;
+                        selectedParent = parentArr;
+                        selectedIndex = i;
+                        if(item.type !== "group"){
+                            characterEditorView = "editor";
+                            try {
+                                sessionStorage.setItem("jsonStudio.characterEditorView", characterEditorView);
+                            } catch (err) {
+                                // ignore storage failures
+                            }
+                        }
+                        return true;
+                    }
+                    if(item && item.type === 'group' && Array.isArray(item.children)){
+                        if(recurse(item.children, item.children)) return true;
+                    }
+                }
+                return false;
+            }
+
+            // try to find in top-level array
+            recurse(charsData, charsData);
+        })();
+
+        renderTree();
+
+        // if we selected a node, render its editor
+        if(selectedNode) renderCharEditor();
+
+    }catch(err){
+
+        alert("Erro ao carregar chars.json");
+
+        console.error(err);
+    }
+}
+
+function renderTree(){
+
+    const tree =
+        document.getElementById("tree");
+
+    tree.innerHTML = "";
+
+    tree.addEventListener("dragover", (e) => {
+
+        e.preventDefault();
+
+        tree.classList.add("drag-over-zone");
+    });
+
+    tree.addEventListener("dragleave", () => {
+
+        tree.classList.remove("drag-over-zone");
+    });
+
+    tree.addEventListener("drop", (e) => {
+
+        e.preventDefault();
+
+        tree.classList.remove("drag-over-zone");
+
+        if(!draggedItem) return;
+
+        const draggedNode =
+            draggedItem.node;
+
+        draggedItem.parentArray.splice(
+            draggedItem.index,
+            1
+        );
+
+        charsData.unshift(draggedNode);
+
+        draggedItem = null;
+
+        renderTree();
+        saveChars();
+    });
+
+    charsData.forEach((item, index) => {
+
+        tree.appendChild(
+            createNode(item, charsData, index)
+        );
+    });
+}
+
+function createNode(node, parentArray, index){
+
+    const wrapper =
+        document.createElement("div");
+
+    const dropBefore =
+        document.createElement("div");
+
+    dropBefore.className = "drop-line";
+
+    const dropAfter =
+        document.createElement("div");
+
+    dropAfter.className = "drop-line";
+
+    dropBefore.addEventListener("dragover", (e) => {
+
+        e.preventDefault();
+
+        dropBefore.classList.add("active");
+    });
+
+    dropBefore.addEventListener("dragleave", () => {
+
+        dropBefore.classList.remove("active");
+    });
+
+    dropBefore.addEventListener("drop", (e) => {
+
+        e.preventDefault();
+
+        dropBefore.classList.remove("active");
+
+        if(
+            draggedItem &&
+            draggedItem.node.type === "group" &&
+            isNodeInSubtree(draggedItem.node, node)
+        ) return;
+
+        moveDraggedNode(parentArray, index);
+    });
+
+    wrapper.appendChild(dropBefore);
+
+    const container =
+        document.createElement("div");
+
+    container.className = "node";
+
+    const header =
+        document.createElement("div");
+
+    header.className = "node-header";
+
+    header.draggable = true;
+
+    if(selectedNode === node){
+        header.classList.add("selected");
+    }
+
+    header.addEventListener("dragstart", () => {
+
+        draggedItem = {
+            node,
+            parentArray,
+            index
+        };
+
+        header.classList.add("dragging");
+    });
+
+    header.addEventListener("dragend", () => {
+
+        document
+            .querySelectorAll(".active")
+            .forEach(el => {
+                el.classList.remove("active");
+            });
+
+        header.classList.remove("dragging");
+    });
+
+    const icon =
+        document.createElement("span");
+
+    if(node.type === "group"){
+
+        icon.textContent =
+            node.open ? "📂" : "📁";
+
+    }else{
+
+        icon.textContent = "👤";
+    }
+
+    const label =
+        document.createElement("span");
+
+    label.textContent =
+        node.label || "Sem nome";
+
+    header.appendChild(icon);
+    header.appendChild(label);
+
+    header.onclick = () => {
+
+        selectedNode = node;
+        selectedParent = parentArray;
+        selectedIndex = index;
+
+        if(node.type !== "group"){
+            characterEditorView = "editor";
+
+            try {
+                sessionStorage.setItem("jsonStudio.characterEditorView", characterEditorView);
+            } catch (err) {
+                // ignore storage failures
+            }
+        }
+
+        if(node.type === "group"){
+            node.open = !node.open;
+        }
+
+        renderTree();
+        renderCharEditor();
+    };
+
+    header.addEventListener("dragover", (e) => {
+
+        e.preventDefault();
+
+        header.classList.add("drag-over");
+    });
+
+    header.addEventListener("dragleave", () => {
+
+        header.classList.remove("drag-over");
+    });
+
+    header.addEventListener("drop", (e) => {
+
+        e.preventDefault();
+
+        header.classList.remove("drag-over");
+
+        if(!draggedItem) return;
+
+        const draggedNode = draggedItem.node;
+
+        if(draggedNode === node) return;
+
+        if(
+            draggedNode.type === "group" &&
+            isNodeInSubtree(draggedNode, node)
+        ) return;
+
+        if(node.type === "group"){
+
+            moveDraggedNode(node.children ||= [], 0);
+
+            node.open = true;
+
+        }else{
+
+            moveDraggedNode(parentArray, index);
+        }
+    });
+
+    dropAfter.addEventListener("dragover", (e) => {
+
+        e.preventDefault();
+
+        dropAfter.classList.add("active");
+    });
+
+    dropAfter.addEventListener("dragleave", () => {
+
+        dropAfter.classList.remove("active");
+    });
+
+    dropAfter.addEventListener("drop", (e) => {
+
+        e.preventDefault();
+
+        dropAfter.classList.remove("active");
+
+        if(
+            draggedItem &&
+            draggedItem.node.type === "group" &&
+            isNodeInSubtree(draggedItem.node, node)
+        ) return;
+
+        moveDraggedNode(parentArray, index + 1);
+    });
+
+    container.appendChild(header);
+
+    if(node.type === "group" && node.open){
+
+        const children =
+            document.createElement("div");
+
+        children.className = "children";
+
+        node.children ||= [];
+
+        node.children.forEach((child, i) => {
+
+            children.appendChild(
+                createNode(child, node.children, i)
+            );
+        });
+
+        container.appendChild(children);
+    }
+
+    wrapper.appendChild(container);
+    wrapper.appendChild(dropAfter);
+
+    return wrapper;
+}
+
+function moveDraggedNode(targetArray, targetIndex){
+
+    if(!draggedItem) return;
+
+    if(!Array.isArray(targetArray)) return;
+
+    const draggedNode = draggedItem.node;
+
+    if(
+        targetArray === draggedItem.parentArray &&
+        targetIndex > draggedItem.index
+    ){
+        targetIndex -= 1;
+    }
+
+    draggedItem.parentArray.splice(
+        draggedItem.index,
+        1
+    );
+
+    targetArray.splice(
+        Math.max(0, Math.min(targetIndex, targetArray.length)),
+        0,
+        draggedNode
+    );
+
+    draggedItem = null;
+
+    renderTree();
+    saveChars();
+}
+
+function isNodeInSubtree(root, candidate){
+
+    if(root === candidate) return true;
+
+    if(
+        root &&
+        root.type === "group" &&
+        Array.isArray(root.children)
+    ){
+        return root.children.some(child =>
+            isNodeInSubtree(child, candidate)
+        );
+    }
+
+    return false;
+}
+
+function updateCharacterViewToggle(isVisible){
+
+    const button = document.getElementById("characterViewToggle");
+    if(!button) return;
+
+    if(!isVisible){
+        button.classList.add("hidden");
+        button.title = "";
+        return;
+    }
+
+    button.classList.remove("hidden");
+    button.title = characterEditorView === "skill"
+        ? "Voltar para a edição"
+        : "Alternar para o arquivo .skill";
+}
+
+function toggleCharacterEditorView(){
+
+    if(!selectedNode || selectedNode.type === "group" || selectedNode === pendingNode) return;
+
+    if(characterEditorView === "skill" && characterSkillIsDirty){
+        const leave = confirm("Você tem alterações não salvas no arquivo .skill. Deseja sair sem salvar?");
+        if(!leave) return;
+    }
+
+    characterEditorView = characterEditorView === "skill" ? "editor" : "skill";
+
+    try {
+        sessionStorage.setItem("jsonStudio.characterEditorView", characterEditorView);
+    } catch (err) {
+        // ignore storage failures
+    }
+
+    renderCharEditor();
+}
+
+function renderCharEditor(){
+    const editor = document.getElementById("charEditor");
+
+    if(!selectedNode){
+        editor.innerHTML = "";
+        setPanelVisibility("charEditorPanel", false);
+        updateCharacterViewToggle(false);
+        return;
+    }
+
+    setPanelVisibility("charEditorPanel", true);
+
+    const isPending = selectedNode === pendingNode;
+    const isConfirmedCharacter = selectedNode.type !== "group" && !isPending;
+
+    updateCharacterViewToggle(isConfirmedCharacter);
+
+    if(isConfirmedCharacter && characterEditorView === "skill"){
+        renderCharacterSkillView();
+        return;
+    }
+
+    let html = `
+        <label>Nome</label>
+
+        <input
+            id="edit-label"
+            value="${selectedNode.label || ""}"
+        >
+
+        ${isPending ? "" : `
+            <label class="check-row">
+                <input
+                    type="checkbox"
+                    id="edit-default"
+                    ${selectedNode.default ? "checked" : ""}
+                >
+                Showcase
+            </label>
+        `}
+    `;
+
+    if(!isPending){
+        html += `
+            <div class="button-row">
+                <button onclick="applyCharEdit()">Aplicar</button>
+                <button onclick="duplicateSelected()">Duplicar</button>
+                <button class="danger" onclick="deleteSelected()">
+                    ${selectedNode.type === "group" ? "Excluir grupo" : "Remover personagem selecionado"}
+                </button>
+            </div>
+        `;
+    }else{
+        html += `
+            <div class="button-row">
+                <button onclick="confirmPending()">Confirmar</button>
+                <button class="danger" onclick="cancelPending()">Cancelar</button>
+            </div>
+        `;
+    }
+
+    if(selectedNode.type === "group" && !isPending){
+        html += `
+            <div class="button-row">
+                <button onclick="addCharacterInside()">+ Personagem Dentro</button>
+                <button onclick="addGroupInside()">+ Subgrupo</button>
+            </div>
+        `;
+    }
+
+    html += `<hr>`;
+
+    if(isConfirmedCharacter){
+        html += `
+            <div class="image-management-grid">
+                <div class="image-management-column">
+                    <div class="button-row">
+                        <button onclick="triggerCharacterImagePick('showcase')">Definir Imagem de Showcase</button>
+                        <button class="danger" onclick="removeCharacterImage('showcase')">Remover Imagem de Showcase</button>
+                    </div>
+
+                    <div class="image-preview-card" data-kind="showcase">
+                        <div class="image-preview-card-title">
+                            <span>Showcase</span>
+                            <span id="preview-status-showcase">Carregando...</span>
+                        </div>
+                        <div class="image-preview-empty">Sem imagem</div>
+                    </div>
+                </div>
+
+                <div class="image-management-divider" aria-hidden="true"></div>
+
+                <div class="image-management-column">
+                    <div class="button-row">
+                        <button onclick="triggerCharacterImagePick('combat')">Definir Imagem de Combat</button>
+                        <button class="danger" onclick="removeCharacterImage('combat')">Remover Imagem de Combat</button>
+                    </div>
+
+                    <div class="image-preview-card" data-kind="combat">
+                        <div class="image-preview-card-title">
+                            <span>Combat</span>
+                            <span id="preview-status-combat">Carregando...</span>
+                        </div>
+                        <div class="image-preview-empty">Sem imagem</div>
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="extra-images-section">
+                <div class="button-row">
+                    <button onclick="triggerCharacterExtraImagesPick()">
+                        Adicionar imagens à pasta do personagem
+                    </button>
+                </div>
+
+                <div id="extraImagesList" class="extra-images-list"></div>
+            </div>
+
+        `;
+    }
+
+    editor.innerHTML = html;
+
+    if(isConfirmedCharacter){
+        renderCharacterPreview();
+        renderCharacterExtraImages();
+    }
+}
+
+function getSelectedCharacterSkillUrl(node){
+
+    const folderPath = getCharacterFolderPath(node);
+    if(!folderPath) return "";
+
+    const fileName = String(node.target || buildCharacterTarget(node.label || "")).trim();
+    if(!fileName) return "";
+
+    return encodeURI(`bd/chars/${folderPath}/${fileName}`);
+}
+
+function renderCharacterSkillView(){
+
+    const editor = document.getElementById("charEditor");
+    if(!editor || !selectedNode || selectedNode.type === "group" || selectedNode === pendingNode) return;
+
+    const skillUrl = getSelectedCharacterSkillUrl(selectedNode);
+    if(!skillUrl){
+        editor.innerHTML = `
+            <div class="skill-viewer-panel">
+                <div class="skill-viewer-meta">
+                    <strong>Arquivo .skill indisponível</strong>
+                    <span>Não foi possível resolver o arquivo do personagem selecionado.</span>
+                </div>
+            </div>
+        `;
+        return;
+    }
+
+    const renderToken = ++characterSkillRenderToken;
+
+    editor.innerHTML = `
+        <div class="skill-viewer-panel">
+            <div class="skill-viewer-toolbar">
+                <div class="skill-viewer-meta">
+                    <strong>${selectedNode.label || "Sem nome"}</strong>
+                    <span>${skillUrl}</span>
+                </div>
+
+                <div class="skill-viewer-actions">
+                    <button onclick="saveCharacterSkill()">Salvar</button>
+                    <button class="danger" onclick="cancelCharacterSkillEdit()">Cancelar alteração</button>
+                </div>
+            </div>
+
+            <div class="skill-viewer-status" id="skillDirtyIndicator">Sem alterações pendentes</div>
+
+            <textarea id="skillFileEditor" class="skill-viewer-textarea" spellcheck="false">Carregando arquivo .skill...</textarea>
+
+            <div class="skill-viewer-actions">
+                <button onclick="saveCharacterSkill()">Salvar</button>
+                <button class="danger" onclick="cancelCharacterSkillEdit()">Cancelar alteração</button>
+            </div>
+        </div>
+    `;
+
+    const textarea = document.getElementById("skillFileEditor");
+    if(textarea){
+        textarea.addEventListener("input", onCharacterSkillInput);
+    }
+
+    loadCharacterSkillContent(textarea, skillUrl, renderToken);
+}
+
+async function loadCharacterSkillContent(textarea, skillUrl, renderToken){
+
+    if(!textarea) return;
+
+    try{
+        const response = await fetch(resolveEditorApiUrl(skillUrl), {
+            cache: "no-store"
+        });
+
+        if(renderToken !== characterSkillRenderToken) return;
+
+        if(!response.ok){
+            textarea.value = "Arquivo .skill não encontrado.";
+            return;
+        }
+
+        const content = await response.text();
+
+        if(renderToken !== characterSkillRenderToken) return;
+
+        characterSkillOriginalContent = content || "";
+        characterSkillIsDirty = false;
+        textarea.value = characterSkillOriginalContent;
+        updateCharacterSkillDirtyIndicator();
+    }catch(err){
+        if(renderToken !== characterSkillRenderToken) return;
+
+        characterSkillOriginalContent = "";
+        characterSkillIsDirty = false;
+        textarea.value = "Falha ao carregar o arquivo .skill.";
+        updateCharacterSkillDirtyIndicator();
+    }
+}
+
+function onCharacterSkillInput(){
+
+    const textarea = document.getElementById("skillFileEditor");
+    if(!textarea) return;
+
+    characterSkillIsDirty = textarea.value !== characterSkillOriginalContent;
+    updateCharacterSkillDirtyIndicator();
+}
+
+async function saveCharacterSkill(){
+
+    if(!selectedNode || selectedNode.type === "group" || selectedNode === pendingNode) return;
+
+    const textarea = document.getElementById("skillFileEditor");
+    if(!textarea) return;
+
+    const skillUrl = getSelectedCharacterSkillUrl(selectedNode);
+    if(!skillUrl) return;
+
+    const params = new URLSearchParams({
+        folderPath: getCharacterFolderPath(selectedNode),
+        fileName: String(selectedNode.target || buildCharacterTarget(selectedNode.label || "")).trim()
+    });
+
+    const response = await fetch(resolveEditorApiUrl(`api/chars/skill?${params.toString()}`), {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            content: textarea.value
+        })
+    });
+
+    if(!response.ok){
+        const message = await response.text().catch(() => "");
+        throw new Error(message || "Falha ao salvar o arquivo .skill.");
+    }
+
+    characterSkillOriginalContent = textarea.value;
+    characterSkillIsDirty = false;
+    updateCharacterSkillDirtyIndicator();
+}
+
+function updateCharacterSkillDirtyIndicator(){
+
+    const indicator = document.getElementById("skillDirtyIndicator");
+    if(!indicator) return;
+
+    if(characterSkillIsDirty){
+        indicator.textContent = "Alteração pendente";
+        indicator.classList.add("dirty");
+    }else{
+        indicator.textContent = "Sem alterações pendentes";
+        indicator.classList.remove("dirty");
+    }
+}
+
+function cancelCharacterSkillEdit(){
+
+    if(!selectedNode || selectedNode.type === "group" || selectedNode === pendingNode) return;
+
+    characterEditorView = "editor";
+
+    try {
+        sessionStorage.setItem("jsonStudio.characterEditorView", characterEditorView);
+    } catch (err) {
+        // ignore storage failures
+    }
+
+    characterSkillIsDirty = false;
+    renderCharEditor();
+}
+
+function cancelPending(){
+    if(!pendingNode) return;
+
+    // se o rascunho já foi inserido visualmente (quando addCharacterInside adicionou à array), remover
+    if(pendingParent && Array.isArray(pendingParent)){
+        const idx = pendingParent.indexOf(pendingNode);
+        if(idx !== -1) pendingParent.splice(idx, 1);
+    }
+
+    pendingNode = null;
+    pendingParent = null;
+    pendingIndex = null;
+
+    selectedNode = null;
+    selectedParent = null;
+    selectedIndex = null;
+
+    renderTree();
+    renderCharEditor();
+}
+
+function confirmPending(){
+    if(!pendingNode) return;
+
+    const labelField = document.getElementById("edit-label");
+    const label = labelField ? labelField.value.trim() : "";
+
+    if(label){
+        pendingNode.label = label;
+    }
+
+    if(pendingNode.type === "group"){
+        pendingNode.folder = buildGroupFolderName(pendingNode.label);
+    }else{
+        pendingNode.target = buildCharacterTarget(pendingNode.label);
+    }
+
+    pendingNode = null;
+    pendingParent = null;
+    pendingIndex = null;
+
+    renderTree();
+    renderCharEditor();
+    saveChars();
+}
+
+function getCharacterFolderPath(node){
+
+    if(!node || node.type === "group") return "";
+
+    const parts = [];
+
+    function walk(nodes, trail){
+
+        if(!Array.isArray(nodes)) return false;
+
+        for(const item of nodes){
+            if(!item || typeof item !== "object") continue;
+
+            if(item.type === "group"){
+                const folderName = buildGroupFolderName(item.label);
+                if(walk(item.children, trail.concat(folderName))) return true;
+                continue;
+            }
+
+            if(item === node){
+                parts.push(...trail, buildCharacterFolderName(item.label));
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    walk(charsData, []);
+    return parts.join("/");
+}
+
+function renderCharacterPreview(){
+
+    const preview = document.getElementById("charEditor");
+    if(!preview || !selectedNode || selectedNode.type === "group") return;
+
+    const folderPath = getCharacterFolderPath(selectedNode);
+    if(!folderPath) return;
+
+    characterPreviewRenderToken += 1;
+    const renderToken = characterPreviewRenderToken;
+
+    loadCharacterImagePreview(preview, folderPath, "showcase", renderToken);
+    loadCharacterImagePreview(preview, folderPath, "combat", renderToken);
+}
+
+function renderCharacterExtraImages(){
+
+    const list = document.getElementById("extraImagesList");
+    if(!list || !selectedNode || selectedNode.type === "group" || selectedNode === pendingNode) return;
+
+    const folderPath = getCharacterFolderPath(selectedNode);
+    if(!folderPath){
+        list.innerHTML = "";
+        return;
+    }
+
+    const renderToken = ++characterExtraImagesRenderToken;
+
+    list.innerHTML = `
+        <div class="extra-images-empty">Carregando imagens da pasta...</div>
+    `;
+
+    loadCharacterExtraImages(folderPath, renderToken);
+}
+
+async function loadCharacterExtraImages(folderPath, renderToken){
+
+    const list = document.getElementById("extraImagesList");
+    if(!list) return;
+
+    try{
+        const response = await fetch(resolveEditorApiUrl("api/chars/image"), {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                action: "list",
+                folderPath
+            })
+        });
+
+        if(renderToken !== characterExtraImagesRenderToken) return;
+
+        if(!response.ok){
+            list.innerHTML = `<div class="extra-images-empty">Falha ao carregar as imagens extras.</div>`;
+            return;
+        }
+
+        const data = await response.json();
+
+        if(renderToken !== characterExtraImagesRenderToken) return;
+
+        const images = Array.isArray(data.images) ? data.images : [];
+
+        if(!images.length){
+            list.innerHTML = `<div class="extra-images-empty">Nenhuma imagem extra na pasta do personagem.</div>`;
+            return;
+        }
+
+        list.innerHTML = images.map(fileName => `
+            <div class="extra-image-item">
+                <div class="extra-image-item-title">
+                    <strong>${fileName}</strong>
+                    <button class="danger" type="button" onclick="removeCharacterExtraImage('${fileName.replace(/'/g, "\\'")}')">
+                        Remover
+                    </button>
+                </div>
+
+                <div class="extra-image-item-preview">
+                    <img src="${encodeURI(`bd/chars/${folderPath}/${fileName}`)}?v=${Date.now()}" alt="${fileName}">
+                </div>
+            </div>
+        `).join("");
+    }catch(err){
+        if(renderToken !== characterExtraImagesRenderToken) return;
+
+        list.innerHTML = `<div class="extra-images-empty">Falha ao carregar as imagens extras.</div>`;
+    }
+}
+
+function triggerCharacterExtraImagesPick(){
+
+    if(!selectedNode || selectedNode.type === "group" || selectedNode === pendingNode) return;
+
+    const input = document.getElementById("characterExtraImagesInput");
+    if(!input) return;
+
+    input.value = "";
+    input.click();
+}
+
+async function uploadCharacterExtraImages(files){
+
+    if(!selectedNode || selectedNode.type === "group") return;
+
+    const folderPath = getCharacterFolderPath(selectedNode);
+    if(!folderPath) return;
+
+    for(const file of files){
+        const dataUrl = await readFileAsDataUrl(file);
+        const base64 = String(dataUrl).split(",")[1] || "";
+
+        if(!base64) continue;
+
+        const response = await fetch(resolveEditorApiUrl("api/chars/image"), {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                action: "upload-file",
+                folderPath,
+                originalName: file.name || "",
+                mimeType: file.type || "",
+                data: base64
+            })
+        });
+
+        if(!response.ok){
+            const message = await response.text().catch(() => "");
+            throw new Error(message || "Falha ao adicionar imagem à pasta.");
+        }
+    }
+
+    renderCharEditor();
+}
+
+async function removeCharacterExtraImage(fileName){
+
+    if(!selectedNode || selectedNode.type === "group") return;
+
+    const folderPath = getCharacterFolderPath(selectedNode);
+    if(!folderPath) return;
+
+    const response = await fetch(resolveEditorApiUrl("api/chars/image"), {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            action: "delete-file",
+            folderPath,
+            fileName
+        })
+    });
+
+    if(!response.ok){
+        const message = await response.text().catch(() => "");
+        throw new Error(message || "Falha ao remover a imagem.");
+    }
+
+    renderCharEditor();
+}
+
+async function loadCharacterImagePreview(previewRoot, folderPath, kind, renderToken){
+
+    const card = previewRoot.querySelector(`.image-preview-card[data-kind="${kind}"]`);
+    const status = previewRoot.querySelector(`#preview-status-${kind}`);
+    if(!card || !status) return;
+
+    card.innerHTML = `
+        <div class="image-preview-card-title">
+            <span>${kind === "showcase" ? "Showcase" : "Combat"}</span>
+            <span id="preview-status-${kind}">Sem imagem</span>
+        </div>
+        <div class="image-preview-empty">Sem imagem</div>
+    `;
+
+    const candidates = ["png", "jpg", "jpeg", "webp", "gif"]
+        .map(ext => encodeURI(`bd/chars/${folderPath}/${kind}.${ext}`));
+
+    for(const src of candidates){
+        if(renderToken !== characterPreviewRenderToken) return;
+
+        const exists = await verifyImageExists(src);
+        if(renderToken !== characterPreviewRenderToken) return;
+
+        if(exists){
+            card.innerHTML = `
+                <div class="image-preview-card-title">
+                    <span>${kind === "showcase" ? "Showcase" : "Combat"}</span>
+                    <span id="preview-status-${kind}">Encontrada</span>
+                </div>
+                <img src="${src}" alt="${kind}">
+            `;
+            return;
+        }
+    }
+
+    status.textContent = "Sem imagem";
+}
+
+function buildCharacterFolderName(label){
+
+    return normalizeFsSegment(label, "Novo Personagem");
+}
+
+function findCharacterImagePath(nodes, targetNode, segments = []){
+
+    if(!Array.isArray(nodes)) return null;
+
+    for(const node of nodes){
+
+        if(!node || typeof node !== "object") continue;
+
+        if(node.type === "group"){
+
+            const groupSegment = normalizeFsSegment(node.folder || node.label, "Nova Pasta");
+
+            const found = findCharacterImagePath(
+                Array.isArray(node.children) ? node.children : [],
+                targetNode,
+                segments.concat(groupSegment)
+            );
+
+            if(found) return found;
+
+            continue;
+        }
+
+        if(node === targetNode){
+            return segments.concat(buildCharacterFolderName(node.label)).join("/");
+        }
+    }
+
+    return null;
+}
+
+function triggerCharacterImagePick(kind){
+
+    if(!selectedNode || selectedNode.type === "group" || selectedNode === pendingNode) return;
+
+    const folderPath = findCharacterImagePath(charsData, selectedNode);
+
+    if(!folderPath){
+        alert("Não foi possível localizar a pasta do personagem.");
+        return;
+    }
+
+    characterImageUploadContext = {
+        kind,
+        folderPath,
+        characterName: selectedNode.label || ""
+    };
+
+    const input = document.getElementById("characterImageInput");
+    if(input){
+        input.value = "";
+        input.click();
+    }
+}
+
+function readFileAsDataUrl(file){
+
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+
+        reader.onload = () => resolve(String(reader.result || ""));
+        reader.onerror = () => reject(reader.error || new Error("Falha ao ler o arquivo"));
+        reader.readAsDataURL(file);
+    });
+}
+
+async function uploadCharacterImage(file){
+
+    if(!characterImageUploadContext) return;
+
+    const { kind, folderPath } = characterImageUploadContext;
+
+    if(!kind || !folderPath) return;
+
+    const dataUrl = await readFileAsDataUrl(file);
+    const base64 = String(dataUrl).split(",")[1] || "";
+
+    if(!base64){
+        throw new Error("Não foi possível processar a imagem selecionada.");
+    }
+
+    const response = await fetch(resolveEditorApiUrl("api/chars/image"), {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            folderPath,
+            baseName: kind,
+            originalName: file.name || "",
+            mimeType: file.type || "",
+            data: base64
+        })
+    });
+
+    if(!response.ok){
+        const message = await response.text().catch(() => "");
+        throw new Error(message || "Falha ao enviar a imagem.");
+    }
+
+    renderCharEditor();
+
+    return response.json().catch(() => ({}));
+}
+
+async function removeCharacterImage(kind){
+
+    if(!selectedNode || selectedNode.type === "group" || selectedNode === pendingNode) return;
+
+    const folderPath = getCharacterFolderPath(selectedNode);
+    if(!folderPath) return;
+
+    const response = await fetch(resolveEditorApiUrl("api/chars/image"), {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            action: "delete",
+            folderPath,
+            baseName: kind
+        })
+    });
+
+    if(!response.ok){
+        const message = await response.text().catch(() => "");
+        throw new Error(message || "Falha ao remover a imagem.");
+    }
+
+    renderCharEditor();
+}
+
+function getNodeFolderPath(node, overrideLabel = null){
+
+    if(!node) return "";
+
+    const parts = [];
+
+    function walk(nodes, trail){
+
+        if(!Array.isArray(nodes)) return false;
+
+        for(const item of nodes){
+
+            if(!item || typeof item !== "object") continue;
+
+            if(item.type === "group"){
+
+                const groupLabel = item === node
+                    ? (overrideLabel !== null ? overrideLabel : item.label)
+                    : (item.folder || item.label);
+
+                const groupSegment = buildGroupFolderName(groupLabel);
+
+                if(item === node){
+                    parts.push(...trail, groupSegment);
+                    return true;
+                }
+
+                if(walk(Array.isArray(item.children) ? item.children : [], trail.concat(groupSegment))) return true;
+                continue;
+            }
+
+            if(item === node){
+                const characterLabel = overrideLabel !== null ? overrideLabel : item.label;
+                parts.push(...trail, buildCharacterFolderName(characterLabel));
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    walk(charsData, []);
+    return parts.join("/");
+}
+
+document.getElementById("characterImageInput").addEventListener("change", async (event) => {
+
+    const input = event.currentTarget;
+    const file = input.files && input.files[0];
+
+    if(!file || !characterImageUploadContext) return;
+
+    try{
+        await uploadCharacterImage(file);
+    }catch(err){
+        console.error(err);
+    }finally{
+        characterImageUploadContext = null;
+        input.value = "";
+    }
+});
+
+document.getElementById("characterExtraImagesInput").addEventListener("change", async (event) => {
+
+    const input = event.currentTarget;
+    const files = Array.from(input.files || []);
+
+    if(!files.length || !selectedNode || selectedNode.type === "group") return;
+
+    try{
+        await uploadCharacterExtraImages(files);
+    }catch(err){
+        console.error(err);
+    }finally{
+        input.value = "";
+    }
+});
+
+async function applyCharEdit(){
+
+    if(!selectedNode) return;
+
+    try {
+
+    const nextLabelField = document.getElementById("edit-label");
+    const nextLabel = nextLabelField ? nextLabelField.value : "";
+    const previousLabel = selectedNode.label || "";
+    const previousFolderPath = getNodeFolderPath(selectedNode, previousLabel);
+    const nextFolderPath = getNodeFolderPath(selectedNode, nextLabel);
+    const previousTarget = selectedNode.type === "group"
+        ? ""
+        : String(selectedNode.target || buildCharacterTarget(previousLabel)).trim();
+    const nextTarget = selectedNode.type === "group"
+        ? ""
+        : buildCharacterTarget(nextLabel);
+
+    if(previousFolderPath && nextFolderPath && previousFolderPath !== nextFolderPath){
+        const response = await fetch(resolveEditorApiUrl("api/chars/rename"), {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                oldFolderPath: previousFolderPath,
+                newFolderPath: nextFolderPath,
+                oldFileName: previousTarget,
+                newFileName: nextTarget,
+                type: selectedNode.type
+            })
+        });
+
+        if(!response.ok){
+            const message = await response.text().catch(() => "");
+            throw new Error(message || "Falha ao renomear a pasta do personagem.");
+        }
+    }
+
+    selectedNode.label =
+        nextLabel;
+
+    const defaultField = document.getElementById(
+        "edit-default"
+    );
+
+    if (defaultField.checked) {
+        clearDefaultFlags(charsData, selectedNode);
+        selectedNode.default = true;
+    } else {
+        delete selectedNode.default;
+    }
+
+    if(selectedNode.type === "group"){
+
+        selectedNode.folder = buildGroupFolderName(selectedNode.label);
+
+    }else{
+
+        selectedNode.target = buildCharacterTarget(selectedNode.label);
+    }
+
+    renderTree();
+    renderCharEditor();
+    saveChars();
+
+    }catch(err){
+
+        console.error(err);
+        alert(err && err.message ? err.message : "Falha ao aplicar a edição do personagem.");
+    }
+}
+
+function clearDefaultFlags(nodes, keepNode = null){
+
+    if(!Array.isArray(nodes)) return;
+
+    nodes.forEach(node => {
+
+        if(!node || node === keepNode) return;
+
+        delete node.default;
+
+        if(node.type === "group" && Array.isArray(node.children)){
+            clearDefaultFlags(node.children, keepNode);
+        }
+    });
+}
+
+function normalizeFsSegment(value, fallback = ""){
+
+    const normalized = String(value || "")
+        .trim()
+        .replace(/[\\/:*?"<>|]/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+
+    return normalized || fallback;
+}
+
+function buildGroupFolderName(label){
+
+    return normalizeFsSegment(label, "Nova Pasta");
+}
+
+function buildCharacterTarget(label){
+
+    const base = normalizeFsSegment(label, "novo personagem").toLowerCase();
+
+    return `${base}.skill`;
+}
+
+function addCharacter(){
+
+    // criar rascunho e abrir editor sem persistir
+    const label = "Novo Personagem";
+
+    const draft = { label };
+
+    pendingNode = draft;
+
+    // inserir no topo visualmente até confirmação
+    charsData.unshift(draft);
+    pendingParent = charsData;
+    pendingIndex = 0;
+
+    selectedNode = draft;
+    selectedParent = pendingParent;
+    selectedIndex = pendingIndex;
+
+    renderTree();
+    renderCharEditor();
+}
+
+function addGroup(){
+
+    // criar rascunho de grupo e abrir editor sem persistir
+    const label = "Novo Grupo";
+
+    const draft = {
+        type:"group",
+        label,
+        children:[]
+    };
+
+    pendingNode = draft;
+
+    // inserir no topo visualmente
+    charsData.unshift(draft);
+    pendingParent = charsData;
+    pendingIndex = 0;
+
+    selectedNode = draft;
+    selectedParent = pendingParent;
+    selectedIndex = pendingIndex;
+
+    renderTree();
+    renderCharEditor();
+}
+
+function addCharacterInside(){
+
+    if(
+        !selectedNode ||
+        selectedNode.type !== "group"
+    ) return;
+
+    selectedNode.children ||= [];
+
+    const label = "Novo Personagem";
+
+    // criar rascunho dentro do grupo selecionado
+    const draft = { label };
+
+    pendingNode = draft;
+    selectedNode.children.unshift(draft); // visualmente mostrar no grupo até confirmar
+
+    pendingParent = selectedNode.children;
+    pendingIndex = 0;
+
+    selectedNode = draft;
+    selectedParent = pendingParent;
+    selectedIndex = pendingIndex;
+
+    renderTree();
+    renderCharEditor();
+}
+
+function addGroupInside(){
+
+    if(
+        !selectedNode ||
+        selectedNode.type !== "group"
+    ) return;
+
+    selectedNode.children ||= [];
+
+    const label = "Novo Grupo";
+
+    const draft = {
+        type:"group",
+        label,
+        children:[]
+    };
+
+    pendingNode = draft;
+    selectedNode.children.unshift(draft);
+
+    pendingParent = selectedNode.children;
+    pendingIndex = 0;
+
+    selectedNode = draft;
+    selectedParent = pendingParent;
+    selectedIndex = pendingIndex;
+
+    renderTree();
+    renderCharEditor();
+}
+
+function deleteSelected(){
+
+    if(
+        !selectedParent ||
+        selectedIndex === null
+    ) return;
+
+    const confirmed = confirm(
+        `Excluir item?\n\n"${selectedNode.label}"`
+    );
+
+    if(!confirmed) return;
+
+    selectedParent.splice(
+        selectedIndex,
+        1
+    );
+
+    selectedNode = null;
+    selectedParent = null;
+    selectedIndex = null;
+
+    renderTree();
+
+    document.getElementById(
+        "charEditor"
+    ).innerHTML = "Item removido.";
+
+    saveChars();
+}
+
+function duplicateSelected(){
+
+    if(
+        !selectedParent ||
+        selectedIndex === null
+    ) return;
+
+    const clone =
+        JSON.parse(
+            JSON.stringify(selectedNode)
+        );
+
+    clone.label =
+        clone.label + " (Cópia)";
+
+    if(clone.type === "group"){
+        clone.folder = buildGroupFolderName(clone.label);
+    }else{
+        clone.target = buildCharacterTarget(clone.label);
+    }
+
+    selectedParent.splice(
+        selectedIndex + 1,
+        0,
+        clone
+    );
+
+    renderTree();
+    saveChars();
+}
+
+function stripOpenFlags(node){
+
+    if(!node || typeof node !== "object"){
+        return node;
+    }
+
+    if(Array.isArray(node)){
+        return node.map(stripOpenFlags);
+    }
+
+    const cleaned = {};
+
+    Object.keys(node).forEach(key => {
+
+        if(key === "open") return;
+
+        cleaned[key] = stripOpenFlags(node[key]);
+    });
+
+    return cleaned;
+}
+
+function saveChars(){
+
+    const sanitizedCharsData = stripOpenFlags(charsData);
+
+    charsSaveQueue = charsSaveQueue
+        .then(() => writeEditorJson(
+            EDITOR_API_PATHS.chars,
+            sanitizedCharsData
+        ))
+        .catch(error => {
+            console.error("Erro ao salvar chars.json:", error);
+        });
+
+    return charsSaveQueue;
+}
+
+// =====================================================
+// EFFECTS EDITOR
+// =====================================================
+
+let effectsData = {};
+let effectsSaveQueue = Promise.resolve();
+
+// Drag state for effects list
+let draggedEffectKey = null;
+// Current filter for effects list: 'all' | 'positive' | 'alert' | 'neutral' | 'condition' | 'negative'
+let effectsFilter = sessionStorage.getItem('jsonStudio.effectsFilter') || 'all';
+
+function setEffectsFilter(type){
+    effectsFilter = type || 'all';
+
+    // update button active states
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+
+    const id = `filter-${effectsFilter}`;
+    const el = document.getElementById(id);
+    if(el) el.classList.add('active');
+
+    try{ sessionStorage.setItem('jsonStudio.effectsFilter', effectsFilter); }catch(e){}
+
+    renderEffectsList();
+}
+
+// restore active filter state on init
+setEffectsFilter(effectsFilter);
+
+function reorderEffects(dragKey, dropKey) {
+    if (!dragKey || !dropKey || dragKey === dropKey) return;
+
+    // preserve original data reference
+    const original = Object.assign({}, effectsData);
+
+    const keys = Object.keys(original);
+
+    const from = keys.indexOf(dragKey);
+    const to = keys.indexOf(dropKey);
+
+    if (from === -1 || to === -1) return;
+
+    // remove dragged
+    keys.splice(from, 1);
+
+    // insert before drop target
+    keys.splice(to, 0, dragKey);
+
+    const newData = {};
+    keys.forEach(k => { newData[k] = original[k]; });
+
+    effectsData = newData;
+
+    // preserve selection if possible
+    if (!effectsData[selectedEffectKey]) {
+        selectedEffectKey = null;
+    }
+
+    renderEffectsList();
+    renderEffectEditor();
+    saveEffects();
+}
+
+let selectedEffectKey = null;
+
+async function loadEffects(){
+
+    try{
+
+        effectsData = await readEditorJson(EDITOR_API_PATHS.effects);
+
+        renderEffectsList();
+
+    }catch(err){
+
+        alert("Erro ao carregar effects.json");
+
+        console.error(err);
+    }
+}
+
+function renderEffectsList(){
+
+    const list = document.getElementById("effectsList");
+
+    list.innerHTML = "";
+
+    const keys = Object.keys(effectsData);
+
+    const allTypes = ["positive", "alert", "neutral", "condition", "negative"];
+    const typesOrder = effectsFilter === 'all' ? allTypes : [effectsFilter];
+
+    typesOrder.forEach(type => {
+
+        const groupKeys = keys.filter(k => (effectsData[k] && effectsData[k].type) === type);
+
+        if (!groupKeys.length) return;
+
+        const section = document.createElement('div');
+        section.className = 'effects-group';
+
+        const header = document.createElement('div');
+        header.className = 'effects-group-header';
+        header.textContent = `${type.charAt(0).toUpperCase() + type.slice(1)} (${groupKeys.length})`;
+
+        const container = document.createElement('div');
+        container.className = 'effects-group-list';
+
+        groupKeys.forEach(key => {
+
+            const effect = effectsData[key];
+
+            const item = document.createElement('div');
+
+            item.className = 'effect-item';
+            item.draggable = true;
+            item.dataset.key = key;
+
+            if (selectedEffectKey === key) item.classList.add('selected');
+
+            // Drag handlers
+            item.addEventListener('dragstart', (e) => {
+                draggedEffectKey = key;
+                item.classList.add('dragging');
+                try { e.dataTransfer.setData('text/plain', key); } catch (err) {}
+                e.dataTransfer.effectAllowed = 'move';
+            });
+
+            item.addEventListener('dragend', () => {
+                draggedEffectKey = null;
+                item.classList.remove('dragging');
+                document.querySelectorAll('.effect-item.drag-over').forEach(el => el.classList.remove('drag-over'));
+            });
+
+            item.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                e.dataTransfer.dropEffect = 'move';
+                item.classList.add('drag-over');
+            });
+
+            item.addEventListener('dragleave', () => {
+                item.classList.remove('drag-over');
+            });
+
+            item.addEventListener('drop', (e) => {
+                e.preventDefault();
+                item.classList.remove('drag-over');
+                const dropKey = key;
+                if (draggedEffectKey && draggedEffectKey !== dropKey) {
+                    reorderEffects(draggedEffectKey, dropKey);
+                }
+            });
+
+            item.onclick = () => {
+                selectedEffectKey = key;
+                renderEffectsList();
+                renderEffectEditor();
+            };
+
+            item.innerHTML = `
+                <div class="effect-name">${key}</div>
+                <div class="effect-type">${effect.type}</div>
+            `;
+
+            container.appendChild(item);
+        });
+
+        section.appendChild(header);
+        section.appendChild(container);
+        list.appendChild(section);
+    });
+}
+
+function renderEffectEditor(){
+
+    const editor =
+        document.getElementById(
+            "effectEditor"
+        );
+
+    if(!selectedEffectKey){
+
+        editor.innerHTML = "";
+        setPanelVisibility("effectEditorPanel", false);
+
+        return;
+    }
+
+    setPanelVisibility("effectEditorPanel", true);
+
+    const effect =
+        effectsData[selectedEffectKey];
+
+    editor.innerHTML = `
+
+        <label>ID do efeito</label>
+
+        <input
+            id="effect-id"
+            value="${selectedEffectKey}"
+        >
+
+        <label>Tipo</label>
+
+        <select id="effect-type">
+
+            <option
+                value="positive"
+                ${effect.type === "positive"
+                    ? "selected"
+                    : ""
+                }
+            >
+                Positive
+            </option>
+
+            <option
+                value="alert"
+                ${effect.type === "alert"
+                    ? "selected"
+                    : ""
+                }
+            >
+                Alert
+            </option>
+
+            <option
+                value="neutral"
+                ${effect.type === "neutral"
+                    ? "selected"
+                    : ""
+                }
+            >
+                Neutral
+            </option>
+
+            <option
+                value="condition"
+                ${effect.type === "condition"
+                    ? "selected"
+                    : ""
+                }
+            >
+                Condition
+            </option>
+
+            <option
+                value="negative"
+                ${effect.type === "negative"
+                    ? "selected"
+                    : ""
+                }
+            >
+                Negative
+            </option>
+
+        </select>
+
+        <label>Descrição</label>
+
+        <textarea id="effect-desc">${effect.desc}</textarea>
+
+        <label class="check-row">
+            <input
+                type="checkbox"
+                id="effect-no-underline"
+                ${effect.noUnderline ? "checked" : ""}
+            >
+            Sem underline
+        </label>
+
+        <hr>
+
+        <button onclick="applyEffectEdit()">
+            Aplicar
+        </button>
+
+        <button onclick="duplicateEffect()">
+            Duplicar
+        </button>
+
+        <button
+            class="danger"
+            onclick="deleteEffect()"
+        >
+            Excluir
+        </button>
+
+        <div class="preview">
+
+            <div class="badge ${effect.type}">
+                ${effect.type}
+            </div>
+
+            <div class="effect-tooltip-preview">
+
+                <div class="effect-tooltip-preview-title">
+                    ${selectedEffectKey}
+                </div>
+
+                <div class="effect-tooltip-preview-body">
+                    ${formatEffectTooltip(effect.desc, effect.noUnderline)}
+                </div>
+
+            </div>
+
+        </div>
+    `;
+
+    function escapeHtml(text){
+
+    return String(text || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+
+}
+
+    function normalizePreviewText(text){
+
+    const rawLines = String(text || "")
+        .replace(/\r\n?/g, "\n")
+        .split("\n");
+
+    while (rawLines.length && !rawLines[0].trim()) {
+        rawLines.shift();
+    }
+
+    while (rawLines.length && !rawLines[rawLines.length - 1].trim()) {
+        rawLines.pop();
+    }
+
+    const indentSizes = rawLines
+        .filter(line => line.trim().length)
+        .map(line => (line.match(/^\s*/) || [""])[0].length);
+
+    const commonIndent = indentSizes.length
+        ? Math.min(...indentSizes)
+        : 0;
+
+    return rawLines
+        .map(line => line.slice(commonIndent).trim())
+        .filter(line => line.length)
+        .join("\n");
+
+}
+
+    function formatEffectTooltip(text, disableUnderline = false){
+
+    let formattedText = escapeHtml(normalizePreviewText(text));
+
+    formattedText = formattedText.replace(
+        /\\n/g,
+        "<br>"
+    );
+
+    // c(#fff){Texto}
+    formattedText = formattedText.replace(
+        /c\((#[0-9a-fA-F]{3,8})\)\{([\s\S]+?)\}/g,
+        '<span style="color:$1;">$2</span>'
+    );
+
+    if (disableUnderline) {
+
+        // _***underline + bold + italic***_
+        formattedText = formattedText.replace(
+            /_\*\*\*~([\s\S]+?)~\*\*\*_/g,
+            '<b><i>$1</i></b>'
+        );
+
+        // _**underline + bold**_
+        formattedText = formattedText.replace(
+            /_\*\*([\s\S]+?)\*\*_/g,
+            '<b>$1</b>'
+        );
+
+        // **_bold + underline_**
+        formattedText = formattedText.replace(
+            /\*\*_([\s\S]+?)_\*\*/g,
+            '<b>$1</b>'
+        );
+
+        // _~underline + italic~_
+        formattedText = formattedText.replace(
+            /_~([\s\S]+?)~_/g,
+            '<i>$1</i>'
+        );
+
+        // ~_italic + underline_~
+        formattedText = formattedText.replace(
+            /~_([\s\S]+?)_~/g,
+            '<i>$1</i>'
+        );
+
+        // _underline_
+        formattedText = formattedText.replace(
+            /_([\s\S]+?)_/g,
+            '$1'
+        );
+
+    } else {
+
+        // _***underline + bold + italic***_
+        formattedText = formattedText.replace(
+            /_\*\*\*~([\s\S]+?)~\*\*\*_/g,
+            '<u><b><i>$1</i></b></u>'
+        );
+
+        // ***~bold + italic~***
+        formattedText = formattedText.replace(
+            /\*\*\*~([\s\S]+?)~\*\*\*/g,
+            '<b><i>$1</i></b>'
+        );
+
+        // _**underline + bold**_
+        formattedText = formattedText.replace(
+            /_\*\*([\s\S]+?)\*\*_/g,
+            '<u><b>$1</b></u>'
+        );
+
+        // **_bold + underline_**
+        formattedText = formattedText.replace(
+            /\*\*_([\s\S]+?)_\*\*/g,
+            '<b><u>$1</u></b>'
+        );
+
+        // _~underline + italic~_
+        formattedText = formattedText.replace(
+            /_~([\s\S]+?)~_/g,
+            '<u><i>$1</i></u>'
+        );
+
+        // ~_italic + underline_~
+        formattedText = formattedText.replace(
+            /~_([\s\S]+?)_~/g,
+            '<i><u>$1</u></i>'
+        );
+
+        // _underline_
+        formattedText = formattedText.replace(
+            /_([\s\S]+?)_/g,
+            '<u>$1</u>'
+        );
+    }
+
+    // **bold**
+    formattedText = formattedText.replace(
+        /\*\*([\s\S]+?)\*\*/g,
+        '<b>$1</b>'
+    );
+
+    // ~italic~
+    formattedText = formattedText.replace(
+        /~([\s\S]+?)~/g,
+        '<i>$1</i>'
+    );
+
+    return formattedText;
+}
+}
+
+function applyEffectEdit(){
+
+    if(!selectedEffectKey) return;
+
+    const oldKey = selectedEffectKey;
+
+    const newKey =
+        document.getElementById(
+            "effect-id"
+        ).value.trim();
+
+    const type =
+        document.getElementById(
+            "effect-type"
+        ).value;
+
+    const desc =
+        document.getElementById(
+            "effect-desc"
+        ).value;
+
+    const noUnderlineField =
+        document.getElementById(
+            "effect-no-underline"
+        );
+
+    const newData = {
+        desc,
+        type,
+        noUnderline: !!(noUnderlineField && noUnderlineField.checked)
+    };
+
+    if(oldKey !== newKey){
+
+        delete effectsData[oldKey];
+
+        effectsData[newKey] = newData;
+
+        selectedEffectKey = newKey;
+
+    }else{
+
+        effectsData[oldKey] = newData;
+    }
+
+    renderEffectsList();
+    renderEffectEditor();
+    saveEffects();
+}
+
+function createEffect(){
+
+    let name = "novo_efeito";
+
+    let counter = 1;
+
+    while(effectsData[name]){
+
+        name =
+            `novo_efeito_${counter}`;
+
+        counter++;
+    }
+
+    const newEffect = {
+
+        desc:"Descrição.",
+
+        type:"negative",
+
+        noUnderline:false
+    };
+
+    effectsData = {
+        [name]: newEffect,
+        ...effectsData
+    };
+
+    selectedEffectKey = name;
+
+    renderEffectsList();
+    renderEffectEditor();
+    saveEffects();
+}
+
+function duplicateEffect(){
+
+    if(!selectedEffectKey) return;
+
+    const original =
+        effectsData[selectedEffectKey];
+
+    let newKey =
+        selectedEffectKey + "_copy";
+
+    let counter = 1;
+
+    while(effectsData[newKey]){
+
+        newKey =
+            `${selectedEffectKey}_copy_${counter}`;
+
+        counter++;
+    }
+
+    effectsData[newKey] =
+        JSON.parse(
+            JSON.stringify(original)
+        );
+
+    selectedEffectKey = newKey;
+
+    renderEffectsList();
+    renderEffectEditor();
+    saveEffects();
+}
+
+function deleteEffect(){
+
+    if(!selectedEffectKey) return;
+
+    const confirmed = confirm(
+        `Excluir efeito?\n\n"${selectedEffectKey}"`
+    );
+
+    if(!confirmed) return;
+
+    delete effectsData[selectedEffectKey];
+
+    selectedEffectKey = null;
+
+    renderEffectsList();
+    renderEffectEditor();
+    saveEffects();
+}
+
+function saveEffects(){
+
+    try{ sessionStorage.setItem('jsonStudio.effectsFilter', effectsFilter); }catch(e){}
+
+    const snapshot = JSON.parse(JSON.stringify(effectsData));
+
+    effectsSaveQueue = effectsSaveQueue
+        .then(() => writeEditorJson(
+            EDITOR_API_PATHS.effects,
+            snapshot
+        ))
+        .catch(error => {
+            console.error("Erro ao salvar effects.json:", error);
+        });
+
+    return effectsSaveQueue;
+}
+
+// =========================
+
+loadChars();
+loadEffects();
+
+showModule(activeModule);
+
+</script>
+</body>
+</html>
