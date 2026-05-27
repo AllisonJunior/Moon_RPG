@@ -30,6 +30,7 @@
 @Tremor_Burst
 @Rupture
 @Sinking
+@Paralyze
 @Bind
 @Fragile
 
