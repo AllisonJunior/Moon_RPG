@@ -105,6 +105,17 @@
             "target": "baby.skill"
           }
         ]
+      },
+      {
+        "type": "group",
+        "label": "Sedentos",
+        "children": [
+          {
+            "label": "Lazarento",
+            "target": "lazarento.skill"
+          }
+        ],
+        "folder": "Sedentos"
       }
     ]
   },
