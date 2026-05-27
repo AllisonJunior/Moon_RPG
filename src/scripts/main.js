@@ -156,9 +156,63 @@ function formatEffectReferences(text, folder = "") {
                 // ignore parsing errors and fall back to default color
             }
 
-            return `[<img class="effect-icon" src="${iconPath}" onerror="this.remove()"><span style="color:${effectColor}; text-decoration: underline; text-decoration-color: ${effectColor}; text-decoration-thickness: from-font; text-underline-offset: 0.08em; text-decoration-skip-ink: auto;">${effect}</span>]{${tooltipKey}}`;
+            const displayEffect = effect.replace(/_/g, " ");
+
+            return `[<img class="effect-icon" src="${iconPath}" onerror="this.remove()"><span style="color:${effectColor}; text-decoration: underline; text-decoration-color: ${effectColor}; text-decoration-thickness: from-font; text-underline-offset: 0.08em; text-decoration-skip-ink: auto;">${displayEffect}</span>]{${tooltipKey}}`;
         }
     );
+}
+
+function renderEffectsMarkdown(text) {
+
+    const source = String(text || "");
+    const lines = source.split(/\r?\n/);
+    const output = [];
+
+    for (let i = 0; i < lines.length; i++) {
+
+        const line = lines[i];
+        const columnMatch = line.match(/^\s*<div class="effects_column"(?:\s+title="([^"]*)")?>\s*$/i);
+
+        if (!columnMatch) {
+            output.push(line);
+            continue;
+        }
+
+        const columnTitle = columnMatch[1].trim();
+        const effects = [];
+
+        i++;
+
+        while (i < lines.length && !/^\s*<\/div>\s*$/i.test(lines[i])) {
+            const effectLine = lines[i].trim();
+
+            if (effectLine.startsWith("@")) {
+                const effectName = effectLine.slice(1).trim();
+
+                if (effectName) {
+                    effects.push(effectName);
+                }
+            }
+
+            i++;
+        }
+
+        const rows = effects.length
+            ? effects.map(effect => `<li class="effects_item">@${effect}</li>`).join("")
+            : `<li class="effects_empty">Nenhum efeito encontrado</li>`;
+
+        output.push(
+            `<div class="effects_column">` +
+            `<div class="effects_card">` +
+            `<div class="effects_header">${escapeHtml(columnTitle)}</div>` +
+            `<ul class="effects_list">${rows}</ul>` +
+            `</div>` +
+            `</div>`
+        );
+    }
+
+    return output.join("\n");
 }
 
 // =========================
@@ -179,6 +233,10 @@ function loadMarkdown(path, element) {
             let preprocessed = String(text || "");
             preprocessed = preprocessed.replace(/!b\{([\s\S]*?)\}/g, (m, c) => `c(#ff0000){${c}}`);
             preprocessed = preprocessed.replace(/!g\{([\s\S]*?)\}/g, (m, c) => `c(#2E2EFF){${c}}`);
+
+            if (/(^|[\\/])effects\.md$/i.test((path || "").replace(/\\/g, "/"))) {
+                preprocessed = renderEffectsMarkdown(preprocessed);
+            }
 
             // First, apply inline formatting (bold, italic, color tokens)
             const inlineFormatted = formatSkillInlineStyles(preprocessed);
@@ -2524,7 +2582,8 @@ const TOOLTIP_TYPE_COLORS =
     positive: "#5793e2",
     alert: "#d7d713",
     neutral: "#ffffff",
-    condition: "#2f7d44"
+    condition: "#2f7d44",
+    panic_type: "#ff69b4"
 };
 
 function resolveTooltipEntry(key) {

@@ -23,6 +23,16 @@
       }
     ]
   },
+  "departed": {
+    "desc": "Ao acertar esse alvo recupere 1 de Vida e 1 de Stagger (~Butterfly Potency~ vezes por turno).",
+    "type": "panic_type",
+    "noUnderline": false
+  },
+  "butterfly": {
+    "desc": "c(#fffb00){**[Efeito Exclusivo de _E.G.O::Solemn Lament_ - Unique Sinking]**}\\n\\n\n\n- ~X~ Máximo: 8.\\n\n- Se ~X~ estiver no máximo, ao ser acertado por um ataque que aplique esse efeito, sofra dano adicional equivalente a (~X~ * (Tipos de Sinking no alvo (incluindo esse) + Tipos de Panic Types (incluindo esse))).\\n\\n\n\n**Fim do turno**\\n\n- Ative todos os tipos de Sinking no alvo (~X~/2) vezes.\\n\n- Se ~X~ estiver no máximo por três turnos ganhe Panic Type [Departed].\\n\\n\n\n**Panic Type [Departed]:** Ao acertar esse alvo recupere 1 de Vida e 1 de Stagger (~X~ vezes por turno).",
+    "type": "negative",
+    "noUnderline": false
+  },
   "consequence": {
     "desc": "c(#fffb00){**[Efeito Exclusivo de _Leonard Boss_]**}\\n\\n\n\nCause dano adicional equivalente a soma da Potency de todos os efeitos negativos presentes no alvo.",
     "type": "negative",
@@ -63,11 +73,6 @@
     "type": "condition",
     "noUnderline": false
   },
-  "butterfly": {
-    "desc": "c(#fffb00){**[Efeito Exclusivo de _E.G.O::Solemn Lament_ - Unique Sinking]**}\\n\\n\n\n- ~X~ Máximo: 8.\\n\n- Se ~X~ estiver no máximo, ao ser acertado por um ataque que aplique esse efeito, sofra dano adicional equivalente a (~X~ * (Tipos de Sinking no alvo (incluindo esse) + Tipos de Panic Types (incluindo esse))).\\n\\n\n\n**Fim do turno**\\n\n- Ative todos os tipos de Sinking no alvo (~X~/2) vezes.\\n\n- Se ~X~ estiver no máximo por três turnos ganhe Panic Type [Departed].\\n\\n\n\n**Panic Type [Departed]:** Ao acertar esse alvo recupere 1 de Vida e 1 de Stagger (~X~ vezes por turno).",
-    "type": "negative",
-    "noUnderline": false
-  },
   "bristle": {
     "desc": "c(#fffb00){**[Efeito Exclusivo de _Axel Weber_ - Unique Sinking]**}\\n\\n\n\nAo ser acertado sofra ~X~ de dano.\\n\\n\n\n**Fim do turno**: Se ~X~ estiver em 35+ ganhe Panic Type [Bristles].\\n\\n\n\n**Panic Type [Bristles]:** Por todo esse combate ganhe 1 Power Down. A primeira vez que for acertado por um ataque que aplique esse efeito, o aumente em 2d8. ",
     "type": "negative",
@@ -89,12 +94,17 @@
     "noUnderline": false
   },
   "hardblood": {
-    "desc": "c(#fffb00){**[Potency ~Only~]**}\\n\\n\n\n- ~X~ Máximo: 15.\\n\n- ~X~ é consumido por Skills para ativar efeitos.\\n\n- ~X~ não reduz abaixo de 1.\n",
+    "desc": "c(#fffb00){**[Efeito Exclusivo de _Viktor Valenhardt_ - Unique Charge]**}\\n\nc(#fffb00){**[Potency ~Only~]**}\\n\\n\n\n- ~X~ Máximo: 15.\\n\n- ~X~ é consumido por Skills para ativar efeitos.\\n\n- ~X~ não reduz abaixo de 1.\n",
     "type": "positive",
     "noUnderline": false
   },
   "hardblood_armor": {
-    "desc": "c(#fffb00){**[Potency ~Only~]**}\\n\\n\n\n**Por este turno:** Ganhe Shield equivalente a ~X~.\\n\\n\n\n**Fim do turno:** Perca o Shield (provindo desse efeito) e reduza ~X~ em 1.\n \n ",
+    "desc": "c(#fffb00){**[Efeito Exclusivo de _Viktor Valenhardt_]**}\\n\nc(#fffb00){**[Potency ~Only~]**}\\n\\n\n\n**Por este turno:** Ganhe Shield equivalente a ~X~.\\n\\n\n\n**Fim do turno:** Perca o Shield (provindo desse efeito) e reduza ~X~ em 1.\n \n ",
+    "type": "positive",
+    "noUnderline": false
+  },
+  "charge": {
+    "desc": "c(#fffb00){**[Potency ~Only~]**}\\n\\n\n\n- ~X~ é utilizado para ativar efeitos, com base no seu incremento.\\n\n- ~X~ possui possui um valor máximo.\n",
     "type": "positive",
     "noUnderline": false
   },
@@ -271,6 +281,16 @@
   "pierce": {
     "desc": "Perfurante.",
     "type": "neutral",
+    "noUnderline": false
+  },
+  "bristles": {
+    "desc": "A primeira vez que for acertado por um ataque que aplique esse efeito, o aumente em 2d8. \\n\\n\n\n**Por todo o combate:** Ganhe 1 Power Down. \\n",
+    "type": "panic_type",
+    "noUnderline": false
+  },
+  "sinked": {
+    "desc": "Ataques que aplicam Sinking aplicam +1.\\n\\n\n\n**No fim do turno:** aumente ~X~ em 2d6.\n",
+    "type": "panic_type",
     "noUnderline": false
   }
 }

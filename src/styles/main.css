@@ -109,7 +109,10 @@
  align-items: center;
 
  text-align: center;
+ font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
  font-size: 16px;
+ line-height: 1;
+ text-decoration: none;
 
  color: rgba(0, 0, 0, 1);
  background-color: #ffffff;

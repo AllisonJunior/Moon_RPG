@@ -235,7 +235,7 @@ passive(Imparável [势不可挡])
 
 passive(Monstro [怪物])
 {
- Se você tiver @Berserker, uma vez por turno após utilizar a Skill ~Subjugação [征服]~ utilize logo em seguida a Skill ~ Tremor [震颤]~ (no mesmo alvo).
+ Se você tiver @Berserker, uma vez por turno após utilizar a Skill ~Subjugação [征服]~ utilize logo em seguida a Skill ~ Tremor Imparável [无法阻止的震颤]~ (no mesmo alvo).
 }
 
 !passives-end

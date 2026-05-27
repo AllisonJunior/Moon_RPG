@@ -1,5 +1,124 @@
-<img src="../../res/img/quixote_dancing.gif" style="float: right; margin-top: 60px;">
+<div class="effects_table">
+<div class="effects_column" title="Positivos">
 
-# Effects
+@Poise
+@Charge
+@Crit_Dmg_Up
+@Power_Up
+@Armor
+@Assist_Defense
+@Resist
+@Vigor
+@Haste
+@Protection
 
-#### Eu ainda vou adicionar! Por enquanto fique com essa gif da quixotinha dançandinho!
+</div>
+</div>
+
+
+
+
+
+<div class="effects_table">
+<div class="effects_column" title="Negativos">
+
+@Burn
+@Bleed
+@Bleed_Deluge
+@Bloodied
+@Tremor
+@Tremor_Burst
+@Rupture
+@Sinking
+@Bind
+@Fragile
+
+</div>
+</div>
+
+
+
+
+
+<div class="effects_table">
+<div class="effects_column" title="Outros">
+
+@Sin
+@Bloodfeast
+
+</div>
+</div>
+
+
+
+
+
+---
+
+
+
+
+
+<div class="effects_table">
+<div class="effects_column" title="Efeitos Únicos - Axel Weber & E.G.O::Solemn Lament">
+
+@Commander
+@Bristle
+@The_Living_&_The_Departed
+@Reload
+@Butterfly
+
+</div>
+</div>
+
+
+<div class="effects_table">
+<div class="effects_column" title="Efeitos Únicos - Wuhan Xia">
+
+@Strider_Wu
+@Berserker
+@Concussion
+
+</div>
+</div>
+
+
+<div class="effects_table">
+<div class="effects_column" title="Efeitos Únicos - Viktor Valenhardt">
+
+@Hardblood
+@Hardblood_Armor
+@Prey
+@Returning_Bloodlust
+
+</div>
+</div>
+
+
+<div class="effects_table">
+<div class="effects_column" title="Efeitos Únicos - Leonard Boss & Pibble [???]">
+
+@Important_To_Me
+@Karma
+@Consequence
+
+</div>
+</div>
+
+
+
+
+
+---
+
+<div class="effects_table">
+<div class="effects_column" title="Panic Types">
+
+@Sinked
+@Bristles
+@Departed
+
+</div>
+</div>
+
+---
