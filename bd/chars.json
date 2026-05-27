@@ -21,6 +21,10 @@
         "target": "leonard boss.skill"
       },
       {
+        "label": "Pibble",
+        "target": "pibble.skill"
+      },
+      {
         "label": "Saya",
         "target": "saya.skill"
       },
@@ -29,6 +33,29 @@
         "target": "hana.skill"
       }
     ]
+  },
+  {
+    "type": "group",
+    "label": "Restaurante Yángguāng",
+    "children": [
+      {
+        "label": "Sr. Yang",
+        "target": "sr. yang.skill"
+      },
+      {
+        "label": "Dan",
+        "target": "dan.skill"
+      },
+      {
+        "label": "Alan",
+        "target": "alan.skill"
+      },
+      {
+        "label": "Vertin",
+        "target": "vertin.skill"
+      }
+    ],
+    "folder": "Restaurante Yángguāng"
   },
   {
     "type": "group",
@@ -57,7 +84,27 @@
         "type": "group",
         "label": "Dunkelheit",
         "folder": "Dunkelheit",
-        "children": []
+        "children": [
+          {
+            "type": "group",
+            "label": "Filhos",
+            "folder": "Filhos",
+            "children": [
+              {
+                "label": "Zwitte Sohn (2º Filho)",
+                "target": "zwitte sohn (2º filho).skill"
+              },
+              {
+                "label": "Dritter Sohn (3º Filho)",
+                "target": "dritter sohn (3º filho).skill"
+              }
+            ]
+          },
+          {
+            "label": "Baby",
+            "target": "baby.skill"
+          }
+        ]
       }
     ]
   },
@@ -75,5 +122,16 @@
         "target": "hunk.skill"
       }
     ]
+  },
+  {
+    "type": "group",
+    "label": "Desconhecido",
+    "children": [
+      {
+        "label": "Garota",
+        "target": "garota.skill"
+      }
+    ],
+    "folder": "Desconhecido"
   }
 ]

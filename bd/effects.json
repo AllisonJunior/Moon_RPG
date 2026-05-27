@@ -234,13 +234,43 @@
     "noUnderline": false
   },
   "stagger": {
-    "desc": "Estabilidade do Personagem.",
+    "desc": "Estabilidade do personagem.",
     "type": "neutral",
     "noUnderline": true
   },
   "burn": {
     "desc": "c(#fffb00){**[Potency ~&~ Count]**}\\n\\n\n\nNo fim do(s) próximo(s) ~Y~ turno(s), sofra ~X~ de dano.\n\n",
     "type": "negative",
+    "noUnderline": false
+  },
+  "life": {
+    "desc": "Vitalidade do personagem.",
+    "type": "negative",
+    "noUnderline": false
+  },
+  "ca": {
+    "desc": "Dificuldade de acertar o personagem (CA, classe de armadura).",
+    "type": "neutral",
+    "noUnderline": false
+  },
+  "speed": {
+    "desc": "Ordem de ação do personagem no turno.",
+    "type": "neutral",
+    "noUnderline": false
+  },
+  "blunt": {
+    "desc": "Esmagante.",
+    "type": "neutral",
+    "noUnderline": false
+  },
+  "slash": {
+    "desc": "Cortante.",
+    "type": "neutral",
+    "noUnderline": false
+  },
+  "pierce": {
+    "desc": "Perfurante.",
+    "type": "neutral",
     "noUnderline": false
   }
 }

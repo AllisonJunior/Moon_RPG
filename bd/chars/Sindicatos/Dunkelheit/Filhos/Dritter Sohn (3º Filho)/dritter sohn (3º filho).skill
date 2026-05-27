@@ -1,0 +1,76 @@
+!overview-start 
+
+name: Dritter Sohn (3º Filho);
+
+life: 2500;
+stagger: 550;
+ca: 4;
+speed: 1 ~ 5;
+
+blunt-res: resistant;
+slash-res: normal;
+pierce-res: vulnerable;
+
+description
+(
+ Um dos "filhos" do sindicato Dunkelheit, na verdade um dos gêmeos, durante o decorrer do combate o outro gemêo apareceu, caindo simultaneâmente ao outro irmão, mesmo não estando tão ferido. \n
+Os dois gêmeos não falavam e pareciam somente grunhir. 
+)
+
+!overview-end
+
+
+
+
+!weapons-start 
+
+title: Mãos
+flavor: Arma Única;
+sin: wrath; 
+hit: +1;
+dmg: 2d6 + 1;
+dmg_type: blunt; 
+
+coin
+{
+}
+
+!weapons-end
+
+
+
+
+
+!skills-start
+
+title: Soco Pesado;
+sin: wrath; 
+dmg: blunt; 
+mp: 1;
+
+coin
+{
+ (on_hit) Aplique 1 @Paralyze
+ (on_hit) Aplique 5 @Bleed
+ (on_hit) Alvo precisa fazer um salvaguarda de força DC 10, em caso de falha é empurrado 30 feet para trás
+}
+
+!skills-end
+
+
+
+
+
+!defense-start
+
+title: Contra Atacar;
+sin: wrath; 
+type: counter; 
+
+coin
+{
+ (on_hit) Aplique 5 @Bleed
+ (on_hit) Aplique +1 @Bleed @Count
+}
+
+!defense-end

@@ -2737,6 +2737,22 @@ color: var(--fx-tag-color);
   padding-top: 24px;
 }
 
+/* When a defense section is the only kit content, suppress the generated ::before separator */
+.skills-passives-section.no-separator::before,
+.chars-page .chars-overview-strip .skills-passives-section.no-separator::before,
+.chars-page .chars-header .chars-dynamic .skills-passives-section.no-separator::before,
+.page_container .chars-dynamic .skills-passives-section.no-separator::before,
+.skills-defense-section.no-separator::before,
+.chars-page .chars-overview-strip .skills-defense-section.no-separator::before,
+.chars-page .chars-header .chars-dynamic .skills-defense-section.no-separator::before,
+.page_container .chars-dynamic .skills-defense-section.no-separator::before {
+  content: none;
+  display: none;
+  height: 0;
+  margin: 0;
+  background: none;
+}
+
 .chars-page .chars-header .chars-dynamic .skills-passives-section::before,
 .chars-page .chars-header .chars-dynamic .skills-defense-section::before,
 .page_container .chars-dynamic .skills-passives-section::before,

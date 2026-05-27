@@ -110,7 +110,7 @@ end
  - 1 @Assist_Defense
  - 2 @Haste 
  - 2 @Vigor
- (turn_end) Ganhe 5 @Resist (1x por turno)
+ (turn_end) Ganhe 5 @Resist
 }
 
 ---

@@ -244,16 +244,61 @@ function loadSkill(path, element, kind = "") {
 
                         const kitCharacterName = escapeHtml(overviewName || characterName || "");
 
+                        // If the parsed HTML already begins with a section that has
+                        // the `no-separator` marker (e.g., defenses or passives when
+                        // they're the first/only section), avoid rendering the kit
+                        // header's own separator to prevent a duplicate line.
+                        const startsWithNoSeparator = /^(\s*<div class="(skills-defense-section|skills-passives-section) no-separator")/i.test(html);
+
                         const kitHtml = `
                             <div class="chars-kit" data-skill-path="${kitTargetPath}">
                                 <div class="chars-kit-name">Kit</div>
                                 <div class="chars-kit-character">${kitCharacterName}</div>
-                                <div class="chars-kit-separator"></div>
+                                ${startsWithNoSeparator ? '' : '<div class="chars-kit-separator"></div>'}
                             </div>
                         `;
 
-                        // Render the kit header but do not attach interactive handlers — feature disabled
+                        // Render the kit header plus the full parsed skills into the current mount
                         element.innerHTML = kitHtml + html;
+
+                        // Also ensure the header area shows the kit (useful for the Kit tab view).
+                        try {
+                            const header = document.querySelector('.chars-page .chars-header');
+                            const nav = document.querySelector('.chars-page .chars-section-tabs');
+
+                            if (header && nav) {
+                                try {
+                                    // Do not show kit header when Overview tab is active.
+                                    const activeTab = document.querySelector('.chars-page .chars-section-tab.active');
+                                    const activeText = activeTab ? (activeTab.textContent || '').trim() : '';
+                                    const kitNode = element.querySelector('.chars-kit');
+
+                                    // If we actually want to show the kit in the header, create the mount and append.
+                                    if (kitNode && activeText !== 'Overview') {
+                                        let headerDynamic = header.querySelector('.chars-dynamic');
+                                        if (!headerDynamic) {
+                                            headerDynamic = document.createElement('div');
+                                            headerDynamic.className = 'chars-dynamic';
+                                            nav.insertAdjacentElement('afterend', headerDynamic);
+                                        }
+
+                                        headerDynamic.innerHTML = '';
+                                        headerDynamic.appendChild(kitNode.cloneNode(true));
+                                        headerDynamic.classList.add('is-mounted');
+                                    } else {
+                                        // If an existing empty mount is present, remove it to avoid CSS gap
+                                        const existing = header.querySelector('.chars-dynamic');
+                                        if (existing) {
+                                            try { existing.parentElement.removeChild(existing); } catch (e) {}
+                                        }
+                                    }
+                                } catch (e) {
+                                    // ignore header mount errors
+                                }
+                            }
+                        } catch (e) {
+                            // ignore header mount errors
+                        }
                     }
                     else {
                         // Only render skill content if there's actually something to show
@@ -390,9 +435,9 @@ function extractOverviewData(text) {
             }
 
             if (!started) {
-                if (line.includes("(") || line.includes("[")) {
+                if (line.includes("(") || line.includes("[") || line.includes("{")) {
                     started = true;
-                    line = line.replace(/^.*?[\(\[]\s*/, "");
+                    line = line.replace(/^.*?[\(\[\{]\s*/, "");
                 }
                 else {
                     continue;
@@ -400,7 +445,7 @@ function extractOverviewData(text) {
             }
 
 
-            const closingIndex = line.search(/[\)\]]/);
+            const closingIndex = line.search(/[\)\]\}]/);
 
             if (closingIndex >= 0) {
                 const after = line.slice(closingIndex + 1).trim();
@@ -480,8 +525,8 @@ function extractOverviewData(text) {
     return {
         name,
         life: readValue("life"),
-        speed: readValue("speed").replace(/\s*~\s*/g, " - "),
         stagger: readValue("stagger"),
+        speed: readValue("speed"),
         ca: readValue("ca"),
         description: readBlock("description"),
         resistances: {
@@ -1216,9 +1261,10 @@ function setCharacterOverviewData(data) {
         const label = escapeHtml(resistance.label || "Normal");
         const multiplier = escapeHtml(resistance.multiplier || "");
         const tone = escapeHtml(resistance.tone || "normal");
+        const tooltipKey = String(type || "").trim().toLowerCase();
 
         return `
-            <div class="overview-item overview-item-resistance">
+            <div class="overview-item overview-item-resistance" data_tooltip="${tooltipKey}">
                 <img class="overview-icon" src="${iconPath}" alt="${type}">
                 <div class="overview-res-text">
                     <span class="overview-res-label tone-${tone}">${label}</span>
@@ -1231,39 +1277,40 @@ function setCharacterOverviewData(data) {
 
     if (safeLife) {
         statusItems.push(`
-            <div class="overview-item">
+            <div class="overview-item" data_tooltip = "life">
                 <img class="overview-icon" src="../../res/skills/hp.png" alt="Life">
                 <span class="overview-main-value">${safeLife}</span>
             </div>
         `);
     }
 
+    if (safeStagger) {
+        statusItems.push(`
+            <div class="overview-item" data_tooltip = "stagger">
+                <img class="overview-icon" src="../../res/skills/stagger.png" alt="Stagger">
+                <span class="overview-main-value">${safeStagger}</span>
+            </div>
+        `);
+    }
+    
+        if (safeCA) {
+            statusItems.push(`
+                <div class="overview-item" data_tooltip = "ca">
+                    <img class="overview-icon" src="../../res/skills/defense.png" alt="CA">
+                    <span class="overview-main-value">${safeCA}</span>
+                </div>
+            `);
+        }
+    
     if (safeSpeed) {
         statusItems.push(`
-            <div class="overview-item">
+            <div class="overview-item" data_tooltip = "speed">
                 <img class="overview-icon" src="../../res/skills/speed.png" alt="Speed">
                 <span class="overview-main-value">${safeSpeed}</span>
             </div>
         `);
     }
 
-    if (safeStagger) {
-        statusItems.push(`
-            <div class="overview-item">
-                <img class="overview-icon" src="../../res/skills/stagger.png" alt="Stagger">
-                <span class="overview-main-value">${safeStagger}</span>
-            </div>
-        `);
-    }
-
-    if (safeCA) {
-        statusItems.push(`
-            <div class="overview-item">
-                <img class="overview-icon" src="../../res/skills/defense.png" alt="CA">
-                <span class="overview-main-value">${safeCA}</span>
-            </div>
-        `);
-    }
 
     // Build Resistances items conditionally
     const resistanceItems = [];
@@ -1307,6 +1354,12 @@ function setCharacterOverviewData(data) {
                 <div class="overview-description">${safeDescription}</div>
             </div>
         `;
+    }
+
+    if (!finalHtml.trim()) {
+        overviewElement.classList.remove("is-visible");
+        overviewElement.innerHTML = "";
+        return;
     }
 
     overviewElement.innerHTML = finalHtml;
@@ -2109,7 +2162,8 @@ function updateSkillSubmenuAvailability(wrapper = null) {
             const idx = parseInt(btn.getAttribute('data-skill-index'));
             const desiredMp = !isNaN(idx) ? String(idx + 1) : null;
                 if (desiredMp) {
-                enabled = Boolean(searchRoot.querySelector(`.skill-card-row[data-mp="${desiredMp}"]:not(.weapon-row):not(.ego-row)`));
+                // Ensure we only consider true skill rows (exclude weapons, ego, defenses and passives)
+                enabled = Boolean(searchRoot.querySelector(`.skill-card-row[data-mp="${desiredMp}"]:not(.weapon-row):not(.ego-row):not(.defense-row):not(.passive-row)`));
             }
         } else if (type === 'passives') {
             enabled = Boolean(searchRoot.querySelector('.skills-passives-section:not(.skills-ego-passives-section) .skill-card-row.passive-row'));
@@ -2126,6 +2180,18 @@ function updateSkillSubmenuAvailability(wrapper = null) {
             try { btn.setAttribute('disabled', 'true'); } catch (e) {}
         }
     });
+
+    // If no submenu button is currently active, select the first enabled one by default
+    try {
+        const enabledButtons = buttons.filter(b => !b.classList.contains('disabled'));
+        const anyActive = buttons.some(b => b.classList.contains('active'));
+        if (!anyActive && enabledButtons.length > 0) {
+            buttons.forEach(b => b.classList.remove('active'));
+            enabledButtons[0].classList.add('active');
+        }
+    } catch (e) {
+        // ignore
+    }
 
     // Disable/enable the main "Skills" tab button based on whether any kit content exists
     const sectionTabs = document.querySelectorAll('.chars-page .chars-section-tab');
@@ -3373,6 +3439,9 @@ function parseSkill(text, sourcePath = "", charFolder = "", characterName = "") 
 
             pushCurrentPassive();
 
+            // Ensure parser is activated even if no prior !skills-start block
+            started = true;
+
             inDefense = true;
             inWeapons = false;
             mode = null;
@@ -3398,6 +3467,9 @@ function parseSkill(text, sourcePath = "", charFolder = "", characterName = "") 
         if (line === "!passives-start") {
 
             pushCurrentPassive();
+
+            // Ensure parser is activated when passives appear standalone
+            started = true;
 
             inPassives = true;
             mode = null;
@@ -4011,7 +4083,11 @@ function parseSkill(text, sourcePath = "", charFolder = "", characterName = "") 
         html += `</div>`;
     }
 
-    if (weaponSections.length && (skillSections.length || passiveSections.length || defenseSections.length || egoSections.length)) {
+    // Only add a generic separator after weapons if the following sections
+    // include skills/passives/ego content. Defense sections render their own
+    // ::before separator, so avoid adding the extra <div> when the next
+    // block is solely defenses to prevent duplicate lines.
+    if (weaponSections.length && (skillSections.length || passiveSections.length || egoSections.length || egoPassiveSections.length)) {
         html += `<div class="skills-separator"></div>`;
     }
 
@@ -4025,7 +4101,12 @@ function parseSkill(text, sourcePath = "", charFolder = "", characterName = "") 
     }
 
     if (passiveSections.length) {
-        html += `<div class="skills-passives-section"><br>`;
+        // If passives are the first kit section (nothing before them), suppress the separator before them.
+        const passiveClass = (!weaponSections.length && !skillSections.length)
+            ? 'skills-passives-section no-separator'
+            : 'skills-passives-section';
+
+        html += `<div class="${passiveClass}"><br>`;
         passiveSections.forEach((passive) => {
             html += buildPassive(passive);
         });
@@ -4034,7 +4115,13 @@ function parseSkill(text, sourcePath = "", charFolder = "", characterName = "") 
     }
 
     if (defenseSections.length) {
-        html += `<div class="skills-defense-section">`;
+        // If defenses are the first/only kit section, mark it to avoid generating
+        // a visual separator before it (UI prefers no separator in that case).
+        const defenseClass = (!weaponSections.length && !skillSections.length && !passiveSections.length && !egoSections.length && !egoPassiveSections.length)
+            ? 'skills-defense-section no-separator'
+            : 'skills-defense-section';
+
+        html += `<div class="${defenseClass}">`;
         // render defenses using buildSkill so they behave exactly like normal skills
         defenseSections.forEach((def) => {
             // ensure label is a capitalized type name when present

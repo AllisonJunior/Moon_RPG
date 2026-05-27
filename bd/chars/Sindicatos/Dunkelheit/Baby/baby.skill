@@ -1,0 +1,71 @@
+!overview-start 
+
+name: Baby;
+
+life: 210;
+stagger: 75;
+ca: 7;
+speed: 1 ~ 4;
+
+blunt-res: normal;
+slash-res: normal;
+pierce-res: vulnerable;
+
+description
+(
+ Membro de menor escalão dentro do Sindicato Dunkelheit, são inimigos que focam no combate corpo a corpo, com o uso de suas luvas reforçadas.
+)
+
+!overview-end
+
+
+
+
+!weapons-start 
+
+title: Luvas Reforçadas;
+flavor: Arma Única;
+sin: sinless; 
+hit: +1;
+dmg: d6 + 1;
+dmg_type: blunt; 
+
+coin
+{
+}
+
+!weapons-end
+
+
+
+
+
+!skills-start
+
+title: Socar;
+sin: sinless; 
+dmg: blunt; 
+mp: 1;
+
+coin
+{
+ (on_hit) Aplique 5 @Bleed   
+}
+
+!skills-end
+
+
+
+
+
+!defense-start
+
+title: Bloquear;
+sin: sinless; 
+type: defense; 
+
+coin
+{
+}
+
+!defense-end
