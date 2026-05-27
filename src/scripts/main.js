@@ -731,6 +731,224 @@ function resolveCharacterSkillPath(folder, fileName, characterFolder = "") {
     return normalizedFileName;
 }
 
+const characterImageResolutionCache = new Map();
+const characterImageWarmCache = new Set();
+const characterSkillWarmCache = new Set();
+
+function normalizeAssetCacheKey(...parts) {
+    return parts
+        .map(part => String(part || "").trim().toLowerCase())
+        .join("::");
+}
+
+function getCharacterImageKey(folder, characterName, imageFileName, type) {
+    return normalizeAssetCacheKey(folder, characterName, imageFileName, type);
+}
+
+function resolveCharacterImageSrcCached(
+    folder,
+    characterName,
+    imageFileName,
+    type = "showcase"
+) {
+    const cacheKey = getCharacterImageKey(folder, characterName, imageFileName, type);
+
+    if (characterImageResolutionCache.has(cacheKey)) {
+        return characterImageResolutionCache.get(cacheKey);
+    }
+
+    const promise = resolveCharacterImageSrc(folder, characterName, imageFileName, type)
+        .catch(() => "")
+        .then(src => src || "");
+
+    characterImageResolutionCache.set(cacheKey, promise);
+    return promise;
+}
+
+function warmSkillPath(path) {
+    const normalizedPath = String(path || "").trim();
+
+    if (!normalizedPath || characterSkillWarmCache.has(normalizedPath)) {
+        return;
+    }
+
+    characterSkillWarmCache.add(normalizedPath);
+
+    fetch(normalizedPath, {
+        cache: "force-cache"
+    })
+        .then(response => response.text())
+        .catch(() => {});
+}
+
+function warmImageSrc(src) {
+    const normalizedSrc = String(src || "").trim();
+
+    if (!normalizedSrc || characterImageWarmCache.has(normalizedSrc)) {
+        return;
+    }
+
+    characterImageWarmCache.add(normalizedSrc);
+
+    const image = new Image();
+    image.decoding = "async";
+    image.src = normalizedSrc;
+
+    image.onload = () => {
+        if (typeof image.decode === "function") {
+            image.decode().catch(() => {});
+        }
+    };
+
+    image.onerror = () => {};
+}
+
+function getCharacterAssetCandidates(node, inheritedFolder = "") {
+    if (!node || typeof node !== "object") {
+        return null;
+    }
+
+    const isGroup = node.type === "group";
+    const hasChildren = Array.isArray(node.children) && node.children.length > 0;
+    const nodeFolder = [inheritedFolder, node.folder || ""]
+        .filter(Boolean)
+        .join("/")
+        .trim();
+
+    if (isGroup && hasChildren) {
+        return null;
+    }
+
+    const label = node.label || node.title || node.name || "";
+    const rawTarget = String(node.target || node.content || node.path || "").trim();
+
+    if (!rawTarget && !String(label || "").trim()) {
+        return null;
+    }
+
+    const characterFolder = resolveCharacterFolderName(label, rawTarget);
+    const skillPath = resolveCharacterSkillPath(nodeFolder, rawTarget, characterFolder);
+    const baseCharacter = String(label || characterFolder || rawTarget || "").trim();
+
+    const explicitShowcase = String(
+        node.showcaseSrc ||
+        node.showcase ||
+        node.showcaseImg ||
+        node.showcaseImage ||
+        node.imageShowcase ||
+        node.image ||
+        ""
+    ).trim();
+
+    const explicitCombat = String(
+        node.combatSrc ||
+        node.combat ||
+        node.combatImg ||
+        node.combatImage ||
+        node.imageCombat ||
+        ""
+    ).trim();
+
+    return {
+        skillPath,
+        folder: nodeFolder,
+        characterName: baseCharacter,
+        showcaseSource: explicitShowcase,
+        combatSource: explicitCombat,
+        nodeFolder,
+        rawTarget,
+        characterFolder
+    };
+}
+
+function collectCharacterAssetJobs(nodes, inheritedFolder = "") {
+    const jobs = [];
+
+    const visit = (node, folder = "") => {
+        if (!node || typeof node !== "object") {
+            return;
+        }
+
+        const nextFolder = [folder, node.folder || ""]
+            .filter(Boolean)
+            .join("/")
+            .trim();
+
+        if (node.type === "group" && Array.isArray(node.children) && node.children.length) {
+            node.children.forEach(child => visit(child, nextFolder));
+            return;
+        }
+
+        const assetData = getCharacterAssetCandidates(node, folder);
+
+        if (assetData) {
+            jobs.push(assetData);
+        }
+    };
+
+    nodes.forEach(node => visit(node, inheritedFolder));
+    return jobs;
+}
+
+function scheduleCharacterAssetPreload(nodes) {
+    const jobs = collectCharacterAssetJobs(nodes);
+
+    if (!jobs.length) {
+        return;
+    }
+
+    const batchSize = 3;
+    let index = 0;
+
+    const runBatch = () => {
+        const batch = jobs.slice(index, index + batchSize);
+        index += batch.length;
+
+        if (!batch.length) {
+            return;
+        }
+
+        Promise.allSettled(batch.map(job => {
+            if (job.skillPath) {
+                warmSkillPath(job.skillPath);
+            }
+
+            const showcaseSeed = job.showcaseSource || "showcase";
+            const combatSeed = job.combatSource || "combat";
+
+            return Promise.allSettled([
+                resolveCharacterImageSrcCached(job.folder, job.characterName, showcaseSeed, "showcase").then(src => {
+                    if (src) {
+                        warmImageSrc(src);
+                    }
+                }),
+                resolveCharacterImageSrcCached(job.folder, job.characterName, combatSeed, "combat").then(src => {
+                    if (src) {
+                        warmImageSrc(src);
+                    }
+                })
+            ]);
+        }))
+            .finally(() => {
+                if (index < jobs.length) {
+                    if (typeof window.requestIdleCallback === "function") {
+                        window.requestIdleCallback(runBatch, { timeout: 1200 });
+                    }
+                    else {
+                        window.setTimeout(runBatch, 0);
+                    }
+                }
+            });
+    };
+
+    if (typeof window.requestIdleCallback === "function") {
+        window.requestIdleCallback(runBatch, { timeout: 1200 });
+    }
+    else {
+        window.setTimeout(runBatch, 0);
+    }
+}
+
 function verifyImageExists(src) {
 
     return new Promise(resolve => {
@@ -908,6 +1126,8 @@ async function initCharsNavigation() {
                 ${nodes.map(node => buildCharsNode(node)).join("")}
             </div>
         `;
+
+        scheduleCharacterAssetPreload(nodes);
     }
     catch (error) {
         console.error("Erro ao carregar chars.json:", error);
@@ -1031,7 +1251,7 @@ function updateSelectedCharacterAssets(button) {
             const character = pageContainer.dataset.characterFolder || pageContainer.dataset.characterName || "";
 
             // Resolve showcase
-            const resolvedShowcase = await resolveCharacterImageSrc(folder, character, pageContainer.dataset.showcaseImg || showcaseSrc, "showcase");
+            const resolvedShowcase = await resolveCharacterImageSrcCached(folder, character, pageContainer.dataset.showcaseImg || showcaseSrc, "showcase");
 
             if (resolvedShowcase) {
                 pageContainer.dataset.showcaseSrc = resolvedShowcase;
@@ -1042,7 +1262,7 @@ function updateSelectedCharacterAssets(button) {
             }
 
             // Resolve combat
-            const resolvedCombat = await resolveCharacterImageSrc(folder, character, pageContainer.dataset.combatImg || combatSrc, "combat");
+            const resolvedCombat = await resolveCharacterImageSrcCached(folder, character, pageContainer.dataset.combatImg || combatSrc, "combat");
 
             if (resolvedCombat) {
                 pageContainer.dataset.combatSrc = resolvedCombat;
