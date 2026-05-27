@@ -4,11 +4,11 @@
 @Poise
 @Charge
 @Crit_Dmg_Up
-@Power_Up
 @Armor
 @Assist_Defense
 @Resist
 @Vigor
+@Power_Up
 @Haste
 @Protection
 
@@ -31,6 +31,7 @@
 @Rupture
 @Sinking
 @Paralyze
+@Power_Down
 @Bind
 @Fragile
 
