@@ -128,8 +128,3 @@ Sua Vida máxima é aumentada em 5 + seu nível.
 Ao atacar sem usar Skills, E.G.O ou Armas Especiais ataque duas vezes adicionais.
 
 ---
-
-### Carcaça de Algo Que Nunca Esteve Ali   
-Sua CA é aumentada em +1.
-
----

@@ -9,13 +9,13 @@ Ambos são aumentados todo nível com base na fórmula presente na classe escolh
 
 ---
 
-### Atributos
-A cada 10 níveis você ganha 2 pontos de atributos.
+### Mp
+A cada 5 níveis o valor base é aumentado em +1.
 
 ---
 
-### Proficiência e Mp
-A cada 5 níveis o valor base de ambos é aumentado em +1.
+### Proficiência
+A cada 10 níveis o seu valor base é aumentado em +1.
 
 ---
 
