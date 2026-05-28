@@ -103,7 +103,7 @@ coin
 end 
 {
  (turn_end) Um aliado de sua escolha ganha 1 @Sin de uma afinidade a sua escolha
- (turn_end) Aplique 2 dos seguintes beneficios, em dois aliados distintos ou só em um aliado:
+ (turn_end) Aplique 2 beneficios distintos, em dois aliados ou em um só aliado:
  - 1 @Protection
  - 1 @Power_Up     
  - 1 @Crit_Dmg_Up
