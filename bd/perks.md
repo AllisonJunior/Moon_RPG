@@ -29,13 +29,8 @@ Aumente o dano te todos os seus ataques em +10 para cada 5 feet movimentado no t
 
 ---
 
-### Prodígio
-Ao aplicar/ganhar um efeito, você pode escolher aumentar a Potency ou o Count dele em +1 (quando possível).
-
----
-
 ### Concentração
-Quando um combate começa ganhe: 4 !g{@Power_Up}, 4 !g{@Armor}, 2 Mp e 1 !g{@Sin} de cada uma das afinidades que você possui.
+Quando um combate começa ganhe: 4 !g{@Power_Up}, 4 !g{@Armor}, 2 Mp Extra e 1 !g{@Sin} de cada uma das afinidades que você possui.
 
 ---
 
@@ -69,11 +64,6 @@ Ataques a distância feitos contra você tem seu dano reduzido em 5. A redução
 
 ---
 
-### Resistência Lendária
-Enquanto com 20% ou menos da vida máxima, ganhe 2 !g{@Power_Up} e 5 !g{@Resist}.
-
----
-
 ### Pequena Moeda Enferrujada
 Uma vez por turno ao utilizar a sua Attack Skill 1, você pode gastar sua ação bônus para a executar novamente. No nível 20, é permitido reusar as Attack Skills 2 e 3, com o custo adicional de Mp equivalente a (Mp da Skill - 1). No nível 30, é permitido reusar E.G.O se tiver Mp o suficiente para o utilizar novamente.
 
@@ -88,3 +78,39 @@ No início de um combate ganhe d8 !g{@Haste} por todo o combate.
 Ao sofrer Stagger aplique 5 !b{@Paralyze} no atacante.
 
 ---
+
+### Perversão 
+Ao ganhar @Sin de Skills ganhe +1.
+
+---
+
+### Eclipse das Mariposas Escarlates
+No início do turno ao causar dano com uma Skill pela primeira vez, cause dano adicional equivalente a metade do dano causado em um inimigo aleatório.
+
+---
+
+### Litografia
+Quando um inimigo que você atacou ao menos uma vez no combate sofrer Stagger recupere 10% da sua vida máxima, vida excedente é convertida em shield.
+
+---
+
+### Analgésico
+No turno que sofrer Stagger ganhe 5 !g{@Protection}.
+
+---
+
+### Aproveitador Maldito
+Ao acertar um ataque unilateral cause 50% de dano adicional.
+
+---
+
+### Oráculo
+Uma vez por turno como uma ação livre você pode converter a afinidade de X @Sin seu ou de seus aliados (se eles permitirem) para uma outra, que você ou seus aliados possuam.
+
+---
+
+### Chance, Loucura, Desejo e Escolha
+Uma vez por turno ao utilizar E.G.O você pode escolher rolar d100, onde em um resultado 1 a 60 o dano causado pelo E.G.O é reduzido em 50%, em um resultado 59 a 99 o dano causado é aumentado em 50% e em um resultado 100 o dano causado é aumentado em 150%.
+
+---
+
