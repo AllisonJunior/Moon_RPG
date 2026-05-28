@@ -84,28 +84,28 @@ Ao ganhar @Sin de Skills ganhe +1.
 
 ---
 
-### Eclipse das Mariposas Escarlates
-No início do turno ao causar dano com uma Skill pela primeira vez, cause dano adicional equivalente a metade do dano causado em um inimigo aleatório.
-
----
-
 ### Litografia
 Quando um inimigo que você atacou ao menos uma vez no combate sofrer Stagger recupere 10% da sua vida máxima, vida excedente é convertida em shield.
 
 ---
 
-### Analgésico
+### Analgésico Simplório
 No turno que sofrer Stagger ganhe 5 !g{@Protection}.
 
 ---
 
-### Aproveitador Maldito
-Ao acertar um ataque unilateral cause 50% de dano adicional.
+### Seu Aproveitador Maldito
+Seus ataques unilaterais causam 50% de dano adicional.
+
+---
+
+### Postura Refinada
+Sua Stagger máxima é aumentada em 4 + seu nível.
 
 ---
 
 ### Oráculo
-Uma vez por turno como uma ação livre você pode converter a afinidade de X @Sin seu ou de seus aliados (se eles permitirem) para uma outra, que você ou seus aliados possuam.
+Uma vez por turno como uma ação livre você pode converter a afinidade de X @Sin seu ou de seus aliados (se eles permitirem) para ~X~ de uma outra, que você ou seus aliados possuam.
 
 ---
 
@@ -114,3 +114,22 @@ Uma vez por turno ao utilizar E.G.O você pode escolher rolar d100, onde em um r
 
 ---
 
+### Linha de Costurar Afiada
+Ao acertar o seu primeiro ataque no turno cause dano adicional nos alvos acertados igual a 50% do dano total causado.
+
+---
+
+### Vida Bem Definida
+Sua Vida máxima é aumentada em 5 + seu nível.
+
+---
+
+### Ataque Extra
+Ao atacar sem usar Skills, E.G.O ou Armas Especiais ataque duas vezes adicionais.
+
+---
+
+### Carcaça de Algo Que Nunca Esteve Ali   
+Sua CA é aumentada em +1.
+
+---
