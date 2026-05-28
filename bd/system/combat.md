@@ -25,7 +25,7 @@ Além dos pontos de vida, cada personagem possui uma barra de "postura", que tem
 No turno que a "postura" do personagem é quebrada e até o fim do próximo, se ele for um:
 
 - Jogador - Todas as suas resistências são alteradas para Vulnerável.
-- NPC - Todas as suas resistências são alteradas para Vulnerável e ele não pode agir.
+- NPC - Todas as suas resistências são alteradas para Vulnerável e ele ganha @Immobilized por dois turnos (o em que foi atordoado e o próximo).
 
 Note que, conforme o personagem sobe de nível o valor da "Stagger" também aumenta.
 

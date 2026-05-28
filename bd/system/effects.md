@@ -23,6 +23,8 @@
 <div class="effects_column" title="Negativos">
 
 @Burn
+@Dark_Flame
+@Poison
 @Bleed
 @Bleed_Deluge
 @Bloodied
@@ -34,6 +36,7 @@
 @Power_Down
 @Bind
 @Fragile
+@Immobilized
 
 </div>
 </div>
@@ -66,9 +69,9 @@
 
 @Commander
 @Bristle
-@The_Living_&_The_Departed
-@Reload
 @Butterfly
+@The_Living_&_The_Departed
+@Reload_(Solemn_Lament)
 
 </div>
 </div>

@@ -2978,9 +2978,12 @@ function applyEffectEdit(){
 
     if(oldKey !== newKey){
 
-        delete effectsData[oldKey];
-
-        effectsData[newKey] = newData;
+        effectsData = replaceEffectKeyPreservingOrder(
+            effectsData,
+            oldKey,
+            newKey,
+            newData
+        );
 
         selectedEffectKey = newKey;
 
@@ -2992,6 +2995,27 @@ function applyEffectEdit(){
     renderEffectsList();
     renderEffectEditor();
     saveEffects();
+}
+
+function replaceEffectKeyPreservingOrder(source, oldKey, newKey, newValue){
+
+    const nextData = {};
+    const keys = Object.keys(source);
+
+    keys.forEach(key => {
+        if(key === oldKey){
+            nextData[newKey] = newValue;
+            return;
+        }
+
+        nextData[key] = source[key];
+    });
+
+    if(!Object.prototype.hasOwnProperty.call(nextData, newKey)){
+        nextData[newKey] = newValue;
+    }
+
+    return nextData;
 }
 
 function createEffect(){

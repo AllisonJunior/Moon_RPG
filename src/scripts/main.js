@@ -108,7 +108,7 @@ function formatSkillInlineStyles(text) {
 function formatEffectReferences(text, folder = "") {
 
     return String(text || "").replace(
-        /@\{([^}]+)\}(?:\(([^)]+)\))?|@([A-Za-z0-9_&-]+)(?:\(([^)]+)\))?/g,
+        /@\{([^}]+)\}(?:\(([^)]+)\))?|@([A-Za-z0-9_&()\-]+)(?:\(([^)]+)\))?/g,
         (
             match,
             complexEffect,
@@ -199,7 +199,12 @@ function renderEffectsMarkdown(text) {
         }
 
         const rows = effects.length
-            ? effects.map(effect => `<li class="effects_item">@${effect}</li>`).join("")
+            ? effects.map(effect => {
+                // If the effect name contains parentheses, wrap it in @{...}
+                // so the parser treats the whole name as a single effect key.
+                const rendered = /[()]/.test(effect) ? `@{${effect}}` : `@${effect}`;
+                return `<li class="effects_item">${rendered}</li>`;
+            }).join("")
             : `<li class="effects_empty">Nenhum efeito encontrado</li>`;
 
         output.push(

@@ -23,9 +23,24 @@
       }
     ]
   },
+  "immobilized": {
+    "desc": "Não pode agir por este turno.",
+    "type": "negative",
+    "noUnderline": false
+  },
+  "dark_flame": {
+    "desc": "c(#fffb00){**[Unique Burn]**}\\n\\n\n\n**Fim do turno:** Sofra (Burn * ~X~) de dano. ",
+    "type": "negative",
+    "noUnderline": false
+  },
   "departed": {
     "desc": "Ao acertar esse alvo recupere 1 de Vida e 1 de Stagger (~Butterfly Potency~ vezes por turno).",
     "type": "panic_type",
+    "noUnderline": false
+  },
+  "poison": {
+    "desc": "c(#fffb00){**[Potency ~Only~]**}\\n\\n\n\n**Fim do turno:** Sofra ~X~ de dano, então reduza ~X~ pela metade.\n \n\n",
+    "type": "negative",
     "noUnderline": false
   },
   "butterfly": {
@@ -65,11 +80,6 @@
   },
   "the_living_&_the_departed": {
     "desc": "c(#fffb00){**[Efeito Exclusivo de _E.G.O::Solemn Lament_ - Ammo]**}\\n\nc(#fffb00){**[Potency ~Only~]**}\\n\\n\n\n\n- ~X~ Máximo: 12.\\n\n- ~X~ é consumido para ativar efeitos do E.G.O::Solemn Lament.\\n\n- Ataques cancelam se ~X~ acabar.",
-    "type": "condition",
-    "noUnderline": false
-  },
-  "reload": {
-    "desc": "Ganhe 12 The Living & The Departed (1x por turno).",
     "type": "condition",
     "noUnderline": false
   },
@@ -291,6 +301,11 @@
   "sinked": {
     "desc": "Ataques que aplicam Sinking aplicam +1.\\n\\n\n\n**No fim do turno:** aumente ~X~ em 2d6.\n",
     "type": "panic_type",
+    "noUnderline": false
+  },
+  "reload_(solemn_lament)": {
+    "desc": "Ganhe 12 The Living & The Departed (1x por turno).",
+    "type": "condition",
     "noUnderline": false
   }
 }
