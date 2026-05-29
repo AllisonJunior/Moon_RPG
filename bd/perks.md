@@ -99,11 +99,6 @@ Seus ataques unilaterais causam 50% de dano adicional.
 
 ---
 
-### Postura Refinada
-Sua Stagger máxima é aumentada em 4 + seu nível.
-
----
-
 ### Oráculo
 Uma vez por turno como uma ação livre você pode converter a afinidade de X @Sin seu ou de seus aliados (se eles permitirem) para ~X~ de uma outra, que você ou seus aliados possuam.
 
@@ -119,12 +114,17 @@ Ao acertar o seu primeiro ataque no turno cause dano adicional nos alvos acertad
 
 ---
 
-### Vida Bem Definida
-Sua Vida máxima é aumentada em 5 + seu nível.
+### Ataque Extra
+Ao atacar sem usar Skills, E.G.O ou Armas Especiais ataque duas vezes adicionais.
 
 ---
 
-### Ataque Extra
-Ao atacar sem usar Skills, E.G.O ou Armas Especiais ataque duas vezes adicionais.
+### Luar Perfeito
+Quando um combate começa ao invés de você ganhar 3 Mp você só ganha 1 Mp, mas em troca a partir do próximo turno você passa a ganhar 2 Mp no fim do turno.
+
+---
+
+### Le Lorde Kamui
+Ao ativar sua reação de Evadir aumente o resultado final: em +1 se o alvo tiver um efeito negativo; em +1 se você for mais rápido que o inimigo.
 
 ---

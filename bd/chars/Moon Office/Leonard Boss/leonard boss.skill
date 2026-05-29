@@ -175,6 +175,11 @@ passive(Suporte Único)
  Três vezes por aliado e uma vez por turno, você pode repassar um efeito presente em você para um aliado, seja ele positivo ou negativo.
 }
 
+passive(Insanidade)
+{
+ Uma vez por inimigo você pode devolver um efeito aplicado por ele em você.
+}
+
 !passives-end
 
 
