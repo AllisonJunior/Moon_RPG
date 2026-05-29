@@ -128,3 +128,8 @@ Quando um combate começa ao invés de você ganhar 3 Mp você só ganha 1 Mp, m
 Ao ativar sua reação de Evadir aumente o resultado final: em +1 se o alvo tiver um efeito negativo; em +1 se você for mais rápido que o inimigo.
 
 ---
+
+### Maldito Livro do Péssimo Sindicato Conhecido Como Middle 
+Uma vez por turno ao ativar a reação de Clash você ganha 20% da sua Vida Máxima como Shield por este turno.
+
+---
