@@ -66,6 +66,7 @@ end
 {
  (skill_end) Aplique @Bloodied   
  (skill_end) Se o alvo tiver @Bleed recupere 3 pontos de vida
+ (turn_end) O alvo dessa Skill ganha @Bloodied
 }
 
 ---
@@ -89,8 +90,9 @@ coin
 
 end
 {
- (skill_end) Aplique @Bloodied
+ (skill_end) Aplique @Bloodied no(s) alvo(s) dessa Skill
  (skill_end) Consuma 5 @Hardblood
+ (turn_end) O(s) alvo(s) dessa Skill ganha(m) @Bloodied
 }
 
 ---

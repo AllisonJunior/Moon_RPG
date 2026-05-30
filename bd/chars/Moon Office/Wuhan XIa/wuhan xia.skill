@@ -238,6 +238,14 @@ passive(Monstro [怪物])
  Se você tiver @Berserker, uma vez por turno após utilizar a Skill ~Subjugação [征服]~ utilize logo em seguida a Skill ~ Tremor Imparável [无法阻止的震颤]~ (no mesmo alvo).
 }
 
+passive(Um Mero Cachecol... Não... A Última Memória de Minha Lorde)
+{
+ - Quando um combate começa você ganha 15 @Shield (que não expira no fim do turno) e 3 @Resist (que dura até o fim desse combate).  
+ - Ao ganhar @Berserker ganhe 20 @Shield (que não expira no fim do turno).
+ - Ao ativar @Tremor_Burst você ganha 5 @Shield, duas vezes por turno (que não expira no fim do turno).
+ - Ao ativar @Tremor_Burst você aplica 2 @Bind uma vez por turno.
+}
+
 !passives-end
 
 
@@ -263,8 +271,7 @@ coin
 
 end
 {
- (turn_end) Ganhe 1 @Power_Up
- (turn_end) Ganhe 1 @Haste
+ (turn_end) Ganhe 2 @Haste
 }
 
 !defense-end

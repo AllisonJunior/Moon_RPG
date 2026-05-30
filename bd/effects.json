@@ -54,12 +54,12 @@
     "noUnderline": false
   },
   "karma": {
-    "desc": "c(#fffb00){**[Efeito Exclusivo de _Leonard Boss_]**}\\n\nc(#fffb00){**[Potency ~Only~]**}\\n\\n\n\n- Quando um efeito negativo for ativado sofra ~X~ de dano.\\n\n- Ao ser acertado por Leonard Boss aumente o Count de um efeito negativo em +1, uma vez por Skill (quando possível).\\n\\n\n\n**Fim do turno:** Aumente a Potency de um efeito negativo em ~X~/2 (quando possível).\\n",
+    "desc": "c(#fffb00){**[Efeito Exclusivo de _Leonard Boss_]**}\\n\nc(#fffb00){**[Potency ~Only~]**}\\n\\n\n\n- Uma vez por ativação de efeito negativo no turno, sofra ~X~ de dano.\\n\n- Ao ser acertado por Leonard Boss aumente o Count de um efeito negativo em +2, uma vez por Skill (quando possível).\\n\\n\n\n**Fim do turno:** Aumente a Potency de um efeito negativo no alvo em +1 para cada 10 na Stack (quando possível).\n",
     "type": "negative",
     "noUnderline": false
   },
   "bloodied": {
-    "desc": "**Por este turno e o Próximo:** Não perca Bleed Count. \n ",
+    "desc": "**Por este turno:** Não perca Bleed Count. \n ",
     "type": "negative",
     "noUnderline": false
   },
@@ -219,7 +219,7 @@
     "noUnderline": false
   },
   "berserker": {
-    "desc": "c(#fffb00){**[Efeito Exclusivo de _Wuhan Xia_]**}\\n\\n\n\nSe transforme, ganhando os seguintes efeitos:\\n\\n\n\n- Aumente o seu movimento máximo em +15 feet.\\n\n- Ganhe 1 Protection, 1 Power Up e 2 Haste por todo o combate.\\n\n- A sua última moeda de Skills e E.G.O ativa Tremor Burst e aumenta a Count de Rupture e Tremor em +1.",
+    "desc": "c(#fffb00){**[Efeito Exclusivo de _Wuhan Xia_]**}\\n\\n\n\nSe transforme, ganhando os seguintes efeitos:\\n\\n\n\n- Aumente o seu movimento máximo em +15 feet.\\n\n- Ganhe 1 Protection, 1 Resist e 2 Haste por todo o combate.\\n\n- A sua última moeda de Skills e E.G.O ativa Tremor Burst e aumenta a Count de Rupture e Tremor em +1.",
     "type": "positive",
     "noUnderline": false
   },
