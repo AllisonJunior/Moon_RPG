@@ -184,7 +184,7 @@ dmg: pierce;
 mp: 3;
 c_mp: 3-2;
 
-coin
+coin(u)
 { 
  (on_hit) Ative o @Bleed no alvo 3x
  (on_hit) Cause 40 de dano adicional para cada 1 @Hardblood
