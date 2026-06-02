@@ -219,7 +219,7 @@
     "noUnderline": false
   },
   "bind": {
-    "desc": "c(#fffb00){**[Potency ~Only~]**}\\n\\n\n\n**Por este turno:** Reduza sua Speed em mais ~X~.\n ",
+    "desc": "c(#fffb00){**[Potency ~Only~]**}\\n\\n\n\n**Por este turno:** Reduza sua Speed em menos ~X~.\n ",
     "type": "negative",
     "noUnderline": false
   },
@@ -254,7 +254,7 @@
     "noUnderline": false
   },
   "resist": {
-    "desc": "c(#fffb00){**[Potency ~Only~]**}\\n\\n\n\n**Por este turno:** O dano de ataques é reduzido em ~X~.\n ",
+    "desc": "c(#fffb00){**[Potency ~Only~]**}\\n\\n\n\n**Por este turno:** O dano de ataques e efeitos é reduzido em ~X~.\n ",
     "type": "positive",
     "noUnderline": false
   },
