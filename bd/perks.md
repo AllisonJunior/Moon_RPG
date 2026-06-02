@@ -25,7 +25,7 @@ Uma vez por combate ao falhar em uma rolagem você pode refazer essa rolagem, po
 ---
 
 ### Descarga Cinética
-Aumente o dano te todos os seus ataques em +10 para cada 5 feet movimentado no turno.
+Aumente o dano de um de seus ataques em +10 para cada 5 feet movimentado no turno.
 
 ---
 

@@ -29,17 +29,17 @@ coin
 ---
 
 title: E.G.O::Solemn Lament;
-flavor: Arma Especial - Mp 2;
+flavor: Arma Especial - Mp 1;
 sin: gloom; 
-hit: Proficiência + Inteligência + 1;
+hit: Proficiência + Inteligência + 1 (Alcance de +35 feet);
 dmg: 1d12 + Inteligência;
 dmg_type: pierce; 
 img: solemn_lament;
 
 info
 {
- Essa arma possui 30 feet de alcance
- Essa arma começa com 12 @The_Living_&_The_Departed, no início de um combate. 
+ @Unfocused_Volley
+ Essa arma começa com 15 @The_Living_&_The_Departed, no início de um combate
  A ação de @{Reload_(Solemn_Lament)} custa uma ação bônus
 }
 
@@ -47,7 +47,38 @@ coin
 { 
  Consuma 1 @The_Living_&_The_Departed
  (on_hit) Aplique 1 @Butterfly
- (on_hit) Reuse essa moeda para cada efeito negativo no alvo (5x por turno)
+}
+
+coin
+{ 
+ Consuma 1 @The_Living_&_The_Departed
+ (on_hit) Aplique 1 @Butterfly
+}
+
+coin
+{ 
+ Consuma 1 @The_Living_&_The_Departed
+ (on_hit) Aplique 1 @Butterfly
+}
+
+coin
+{ 
+ Consuma 1 @The_Living_&_The_Departed
+ (on_hit) Aplique 1 @Butterfly
+}
+
+coin
+{ 
+ Consuma 1 @The_Living_&_The_Departed
+ (on_hit) Aplique 1 @Butterfly
+ (on_crit) Aplique 1 @Butterfly
+ (on_crit10) Aplique 5 @Butterfly
+}
+
+end
+{
+ (attack_end) Recupere 5 de Stagger
+ (attack_end) Recupere 5 de Vida
 }
 
 !weapons-end
@@ -259,6 +290,11 @@ title: Evasão Simbólica;
 sin: gloom; 
 type: evade; 
 
+info
+{
+ Aumente o resultado final do teste de esquiva em +1 para cada tipo de @Sinking único no alvo
+}
+
 coin
 {
  (on_evade) Ganhe +1 @Poise @Count   
@@ -271,4 +307,3 @@ end
 }
 
 !defense-end
-

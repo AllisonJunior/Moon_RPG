@@ -43,8 +43,7 @@ mp: 1;
 info
 {
  (on_use) Consuma até 50 @Bloodfeast e ganhe 1 @Hardblood para cada 10 @Bloodfeast consumido
- - Se falhar em consumir @Bloodfeast, ganhe 5 @Bleed   
- Se @Hardblood estiver em 10 converta essa Skill para ~█████████ Variant Blood Arts 42: Disparaître Le Ver~ (1x por turno)
+ Se @Hardblood estiver em 5 converta essa Skill para ~█████████ Variant Blood Arts 42: Disparaître Le Ver~ (1x por turno)
 }
 
 coin
@@ -64,9 +63,7 @@ coin
 
 end
 {
- (skill_end) Aplique @Bloodied   
- (skill_end) Se o alvo tiver @Bleed recupere 3 pontos de vida
- (turn_end) O alvo dessa Skill ganha @Bloodied
+ (skill_end) Aplique @Bloodied no alvo neste e no próximo turno  
 }
 
 ---
@@ -79,20 +76,20 @@ c_mp: 1-2;
 
 info
 {
- @Atk_Weight atkw(4) c(#d7d713){(~10 feet~)} 
- Ative @Bleed uma vez para cada @Atk_Weight não utilizado  
+ Consuma 5 @Hardblood
+ Ative @Bleed uma vez para cada @Atk_Weight não utilizado 
+ @Atk_Weight atkw(4) c(#d7d713){(~10 feet~)}  
 }
 
-coin
+coin(u)
 { 
  (on_hit) Aplique 30 @Bleed
+ (on_hit_without_cracking) Aplique 5 @Bleed
 }
 
 end
 {
- (skill_end) Aplique @Bloodied no(s) alvo(s) dessa Skill
- (skill_end) Consuma 5 @Hardblood
- (turn_end) O(s) alvo(s) dessa Skill ganha(m) @Bloodied
+ (skill_end) Aplique @Bloodied no(s) alvo(s) dessa Skill neste e no próximo turno
 }
 
 ---
@@ -105,8 +102,7 @@ mp: 2;
 info
 {
  (on_use) Consuma até 50 @Bloodfeast e ganhe 1 @Hardblood para cada 10 @Bloodfeast consumido
- - Se falhar em consumir @Bloodfeast, ganhe 5 @Bleed   
- Se @Hardblood estiver em 10 converta essa Skill para ~█████████ Variant Blood Arts 33: Désir sincère Et Éphémère~ (1x por turno)
+ Se @Hardblood estiver em 5 converta essa Skill para ~█████████ Variant Blood Arts 33: Désir sincère Et Éphémère~ (1x por turno)
 }
 
 coin
@@ -121,8 +117,7 @@ coin
 
 end
 {
- (skill_end) Se o alvo tiver @Bleed recupere 7 pontos de Vida
- (skill_end) Se o alvo tiver @Bleed recupere 3 pontos de Stagger
+ (skill_end) Recupere 15 de Vida por moeda acertada (vida excedente é convertida em @Shield que não expira no fim do turno)
 }
 
 ---
@@ -133,14 +128,21 @@ dmg: pierce;
 mp: 2;
 c_mp: 2-2;
 
-coin
+info
+{
+ Consuma 5 @Hardblood
+} 
+
+coin(u)
 { 
  (on_hit) Aplique +15 @Bleed @Count
 }
 
 end
 {
- (skill_end) Consuma 5 @Hardblood
+ (skill_end) Recupere 20 de Vida (vida excedente é convertida em @Shield que não expira no fim do turno)
+ (skill_end) Ganhe 5 de Stagger
+ (skill_end) Ganhe 2 @Hardblood_Armor
 }
 
 ---
@@ -153,7 +155,6 @@ mp: 3;
 info
 {
  (on_use) Consuma até 50 @Bloodfeast e ganhe 1 @Hardblood para cada 10 @Bloodfeast consumido
- - Se falhar em consumir @Bloodfeast, ganhe 10 @Bleed   
  Se @Hardblood estiver em 10 converta essa Skill para ~█████████ Variant Blood Arts 17: Pièces Séparées~ (1x por turno)
 }
 
@@ -185,7 +186,7 @@ c_mp: 3-2;
 
 coin
 { 
- (on_hit) Ative o @Bleed no alvo 2x
+ (on_hit) Ative o @Bleed no alvo 3x
  (on_hit) Cause 40 de dano adicional para cada 1 @Hardblood
  (on_hit) Ative @Bleed_Deluge no alvo 
 }
@@ -212,8 +213,8 @@ passive(Bloodfiend - 3ª Kindred)
 
 passive(Suposto 6º Sentido)
 {
- - Uma vez por turno ao sofrer um ataque unilateral você pode responder a esse ataque com a sua reação de combate, Counter.
- - Uma vez por turno ao sofrer um ataque unilateral você pode responder a esse ataque com a sua reação de combate, Defender.
+ - Uma vez por turno ao sofrer um ataque unilateral você pode responder a esse ataque com a sua reação de combate, ~Perdição~ (Counter).
+ - Uma vez por turno ao sofrer um ataque unilateral você pode responder a esse ataque com a sua reação de combate, ~Sangue Reforçado~ (Defender).
 }
 
 passive(Desestabilizar)
@@ -223,7 +224,7 @@ passive(Desestabilizar)
 
 passive(Resistência Lendária)
 {
- Uma vez por combate ao ter seus pontos de Vida reduzidos a 0, você ignora esse dano e fica com 1 de Vida.
+ Uma vez por combate ao ter seus pontos de Vida reduzidos a 0, você ignora esse dano e fica com 1 de Vida (3x por combate). A primeira vez que esse efeito é ativado o mesmo também recupera todos os seus pontos de Stagger.
 }
 
 passive(Fragmentos...)
@@ -248,8 +249,6 @@ dmg_type: pierce;
 info
 {
  (on_use) Consuma até 50 @Bloodfeast e ganhe 1 @Hardblood para cada 10 @Bloodfeast consumido
- - Se falhar em consumir @Bloodfeast, ganhe 5 @Bleed   
- Se @Hardblood estiver em 10+ converta essa Skill para ~█████████ Variant Blood Arts 1: Perdition Simple Et Amère~ (1x por turno)
 }
 
 coin
@@ -260,19 +259,15 @@ coin
 
 ---
 
-title: █████████ Variant Blood Arts 1: Perdition Simple Et Amère;
+title: Sangue Reforçado;
 sin: lust; 
-type: counter; 
+type: defense; 
 dmg_type: pierce;
 
-coin
+info
 {
- (on_clash_win) Aplique 5 @Bleed   
-}
-
-coin
-{
- (on_clash_win) Aplique 5 @Bleed   
+ (on_use) Consuma até 50 @Bloodfeast e ganhe 1 @Hardblood para cada 10 @Bloodfeast consumido
+ (on_use) Aumente a redução de dano em @Hardblood (1x por turno)
 }
 
 !defense-end

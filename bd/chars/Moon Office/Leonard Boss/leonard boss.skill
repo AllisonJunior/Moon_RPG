@@ -193,9 +193,14 @@ title: Hehehehehe...;
 sin: gluttony; 
 type: evade; 
 
+info
+{
+ Aumente o resultado do teste de esquiva em +2 se o alvo tiver 10+ @Karma
+}
+
 coin
 {
- (on_evade) Se o alvo tiver 20+ @Karma use a Skill ~Crueldade...~ no alvo (2x por turno)
+ (on_evade) Se o alvo tiver 35+ @Karma use a Skill ~Crueldade...~ no alvo (2x por turno)
 }
 
 !defense-end

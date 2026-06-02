@@ -49,7 +49,9 @@
 <div class="effects_column" title="Outros">
 
 @Sin
+@{E.G.O_Passive}
 @Bloodfeast
+@Bloodfeast_Consumed
 
 </div>
 </div>
@@ -70,8 +72,11 @@
 @Commander
 @Bristle
 @Butterfly
+@Bristle_Shard
+@Bristle_Deluge
 @The_Living_&_The_Departed
 @Reload_(Solemn_Lament)
+
 
 </div>
 </div>
@@ -94,6 +99,7 @@
 @Hardblood
 @Hardblood_Armor
 @Prey
+@Blood_Rain
 @Returning_Bloodlust
 
 </div>

@@ -3017,6 +3017,7 @@ function parseSkill(text, sourcePath = "", charFolder = "", characterName = "") 
         "(combat_start)": `<color ="#d7d713"><b>[Ínicio do Combate]</b></color>`,
 
         "(on_hit)": `<color ="#FFFF00">[Em um Acerto]</color>`,
+        "(on_hit_without_cracking)": `<color ="#FFFF00">[Em um Acerto Sem a Moeda Quebrar]</color>`,
         "(on_clash_win)": `<color ="#FFFF00">[Ao Ganhar o Clash]</color>`,
         "(on_clash_lose)": `<color ="#ff1d1d">[Ao Perder o Clash]</color>`,
         "(on_nohit)": `<color ="#d42727">[Ao Errar]</color>`,
@@ -3024,6 +3025,7 @@ function parseSkill(text, sourcePath = "", charFolder = "", characterName = "") 
         "(on_crit10)": `<color ="#14d758">[Em um Crítico Natural]</color>`,
         "(turn_end)": `<color ="#8f7fb4"><b>[Fim do Turno]</b></color>`,
         "(skill_end)": `<color ="#d2be05"><b>[Fim da Skill]</b></color>`,
+        "(attack_end)": `<color ="#fffb08"><b>[Fim do Ataque]</b></color>`,
 
         "(hability)": `<color ="#ffffff"><b>[Habilidade]</b></color>`
     };
@@ -3351,8 +3353,8 @@ function parseSkill(text, sourcePath = "", charFolder = "", characterName = "") 
         const costText = (skill._isWeapon || skill._isEgo)
             ? String(skill.flavor || "").trim()
             : (skill._defenseLabel || `Skill ${skill.c_mp || skill.mp}`);
-        const weaponHitText = skill._isWeapon ? String(skill.hit || "").trim() : "";
-        const weaponDmgText = skill._isWeapon ? String(skill.dmg || "").trim() : "";
+        const weaponHitText = (skill._isWeapon || skill._isEgo) ? String(skill.hit || "").trim() : "";
+        const weaponDmgText = (skill._isWeapon || skill._isEgo) ? String(skill.dmg || "").trim() : "";
         const egoRiskPath = skill._isEgo ? resolveEgoRiskIconPath(skill.level) : "";
         const egoCostHtml = skill._isEgo && Array.isArray(skill.cost) && skill.cost.length
             ? `
@@ -3407,7 +3409,7 @@ function parseSkill(text, sourcePath = "", charFolder = "", characterName = "") 
 
                      ${skill._isDefense && !showDefenseDmgType ? "" : `
                      <img class="slot-dmgtype"
-                         src="${showDefenseDmgType ? dmgMap[normalizedDefenseDmgType] : (skill._defenseIcon || dmgMap[skill._isWeapon ? skill.dmg_type : skill.dmg])}"
+                         src="${showDefenseDmgType ? dmgMap[normalizedDefenseDmgType] : (skill._defenseIcon || dmgMap[(skill._isWeapon || skill._isEgo) ? skill.dmg_type : skill.dmg])}"
                          width="56">
                      `}
 
@@ -3436,7 +3438,7 @@ function parseSkill(text, sourcePath = "", charFolder = "", characterName = "") 
 
                  ${skill._isDefense && !showDefenseDmgType ? "" : `
                  <img class="slot-dmgtype"
-                     src="${showDefenseDmgType ? dmgMap[normalizedDefenseDmgType] : dmgMap[skill._isWeapon ? skill.dmg_type : skill.dmg]}"
+                     src="${showDefenseDmgType ? dmgMap[normalizedDefenseDmgType] : dmgMap[(skill._isWeapon || skill._isEgo) ? skill.dmg_type : skill.dmg]}"
                      width="56">
                  `}
 
@@ -3655,7 +3657,8 @@ function parseSkill(text, sourcePath = "", charFolder = "", characterName = "") 
                 flavor: "",
                 hit: "",
                 sin: "sinless",
-                dmg: "slash",
+                dmg: "",
+                dmg_type: "slash",
                 mp: "3",
                 level: "",
                 c_mp: "",
@@ -3966,7 +3969,8 @@ function parseSkill(text, sourcePath = "", charFolder = "", characterName = "") 
                 flavor: "",
                 hit: "",
                 sin: "sinless",
-                dmg: "slash",
+                dmg: "",
+                dmg_type: "slash",
                 mp: "3",
                 level: "",
                 c_mp: "",
@@ -4089,6 +4093,14 @@ function parseSkill(text, sourcePath = "", charFolder = "", characterName = "") 
                 line.replace("dmg:", "")
                     .replace(";", "")
                     .trim();
+        }
+
+        if (line.startsWith("dmg_type:") && currentEgo) {
+            currentEgo.dmg_type =
+                line.replace("dmg_type:", "")
+                    .replace(";", "")
+                    .trim()
+                    .toLowerCase();
         }
 
         if (line.startsWith("dmg_type:") && currentDefense) {

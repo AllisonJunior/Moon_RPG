@@ -242,8 +242,8 @@ passive(Um Mero Cachecol... Não... A Última Memória de Minha Lorde)
 {
  - Quando um combate começa você ganha 15 @Shield (que não expira no fim do turno) e 3 @Resist (que dura até o fim desse combate).  
  - Ao ganhar @Berserker ganhe 20 @Shield (que não expira no fim do turno).
- - Ao ativar @Tremor_Burst você ganha 5 @Shield, duas vezes por turno (que não expira no fim do turno).
- - Ao ativar @Tremor_Burst você aplica 2 @Bind uma vez por turno.
+ - Ao ativar @Tremor_Burst você ganha 5 @Shield (que não expira no fim do turno, 2x por turno).
+ - Ao ativar @Tremor_Burst você aplica 2 @Bind no próximo turno (1x por turno).
 }
 
 !passives-end
