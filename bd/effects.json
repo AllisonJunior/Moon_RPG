@@ -24,7 +24,7 @@
     ]
   },
   "blood_rain": {
-    "desc": "c(#fffb00){**[Efeito Exclusivo de _Viktor Valenhardt_]**}\\n\\n\n\n**Por este turno**: Sangue começa chover do céu em um raio de 35 feet focado em você. Enquanto chove, os seguintes efeitos ficam ativos: \\n\\n\n\n- Todos os alvos a sua escolha que estiverem dentro da chuva ganham d10 + 5 Bleed\\n\n- Ative o Bleed dos alvos dentro da chuva 1x e então reduza o Count em 1.\\n\n - Como ação livre Viktor pode ordenar que 1 Cavaleiro de Sangue se sacrifique entrando na frente de um ataque (dentro da chuva)\\n",
+    "desc": "c(#fffb00){**[Efeito Exclusivo de _Viktor Valenhardt_]**}\\n\\n\n\n**Por este turno**: Sangue começa chover do céu em um raio de 35 feet focado em você. Enquanto chove, os seguintes efeitos ficam ativos: \\n\\n\n\n- Todos os alvos a sua escolha que estiverem dentro da chuva ganham d10 + 5 Bleed\\n\n- Ative o Bleed dos alvos dentro da chuva 1x e então reduza o Count em 1\\n\n - Como ação livre Viktor pode ordenar que 1 Cavaleiro de Sangue se sacrifique entrando na frente de um ataque (dentro da chuva)\\n",
     "type": "negative",
     "noUnderline": false
   },
