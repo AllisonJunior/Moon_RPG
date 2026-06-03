@@ -31,7 +31,7 @@ coin
 title: E.G.O::Solemn Lament;
 flavor: Arma Especial - Mp 1;
 sin: gloom; 
-hit: Proficiência + Inteligência + 1 (Alcance de +35 feet);
+hit: Proficiência + Inteligência + 1 (Alcance de +95 feet);
 dmg: 1d12 + Inteligência;
 dmg_type: pierce; 
 img: solemn_lament;
@@ -307,3 +307,102 @@ end
 }
 
 !defense-end
+
+
+
+
+
+!ego-start
+
+title: Thysania Agrippina;
+sin: gloom; 
+hit: +6;
+dmg: 4d8 + Destreza + Nível;
+dmg_type: pierce; 
+flavor: E.G.O Awakening;
+img: Awakening;
+level: zayin;
+
+cost 
+{
+ gloom: 9;
+ gluttony: 2;     
+}
+
+info
+{
+ @Atk_Weight atkw(3) c(#d7d713){(~25 feet~)}
+ (on_use) Ganhe +2 @Poise @Count   
+}
+
+coin
+{   
+ (on_hit) Aplique 10 @Sinking
+ (on_hit) Aplique 10 @Bristle
+ (on_hit) Aplique 1 @Bristle_Shard  
+ (on_crit) Aplique 5 @Sinking
+ (on_crit) Aplique 5 @Bristle
+ (on_crit) Aplique 1 @Bristle_Shard  
+}
+
+end
+{
+ (skill_end) Todos os aliados recuperam 5 Pontos de Vida     
+ (skill_end) Todos os aliados recuperam 5 Pontos de Stagger 
+ (skill_end) Você ganha 5 @Shield
+ (skill_end) Um aliado utiliza a sua E.G.O Awakening em um alvo (1x por aliado no turno)    
+}
+
+---
+
+title: Thysania Agrippina;
+sin: gloom; 
+hit: +8;
+dmg: 10d8 + Destreza + Nível;
+dmg_type: pierce; 
+flavor: E.G.O. Corrosion;
+img: Corrosion;
+level: zayin;
+
+cost 
+{
+ gloom: 15;
+ gluttony: 4;     
+ pride: 2;
+}
+
+info 
+{
+ @Atk_Weight atkw(5) c(#d7d713){(~30 feet~)}
+ (on_use) Ganhe +4 @Poise @Count
+ Aumente o dano final em +5 para cada tipo de Panic Type no alvo
+ Aumente o dano final em +5 para cada 2 @Commander
+ Aumente o dano final em +5 para cada efeito negativo no alvo
+ Aumente o dano final em +10 para cada @Atk_Weight não utilizado
+}
+
+coin
+{
+ (on_hit) Aplique 2 @Bristle_Shard
+ (on_crit) Aplique 2 @Bristle_Shard
+}
+
+end
+{
+ (skill_end) Um aliado utiliza a sua E.G.O Corrosion em um alvo (1x por aliado no turno)  
+ (skill_end) Ganhe 10 @Shield (não expira no fim do turno)
+ (turn_end) Todos os aliados recuperam 10 Pontos de Vida
+ (turn_end) Todos os aliados recuperam 10 Pontos de Stagger
+ (turn_end) Todos os aliados ganham 1 @Protection
+}
+
+---
+
+passive(Extensão do Meu Ser)
+{
+ - Ganhe 1 @Power_Up por todo o combate.
+ - Uma vez por turno ao acertar um alvo, você pode ativar @Bristle_Deluge no mesmo.
+ - As três primeiras vezes que sofrer Stagger ignore e recupere sua Stagger completamente.
+}
+
+!ego-end

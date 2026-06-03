@@ -204,3 +204,81 @@ coin
 }
 
 !defense-end
+
+
+
+
+
+!ego-start
+
+title: Монстр;
+sin: gloom; 
+hit: +6;
+dmg: 10d10 + Destreza + Nível;
+dmg_type: pierce; 
+flavor: E.G.O Awakening;
+img: Awakening;
+level: zayin;
+
+cost 
+{
+ pride: 9;    
+ gluttony: 2;    
+ lust: 4;   
+ sloth: 3; 
+}
+
+info
+{
+ Para cada efeito negativo no alvo aumente o dano final em +10
+}
+
+coin
+{   
+ (on_hit) Aplique 10 @Karma
+ (on_hit) Ative @Consequence no alvo
+}
+ 
+---
+
+title: Монстр;
+sin: gloom; 
+hit: +8;
+dmg: 2d10 + Destreza + Nível
+dmg_type: slash
+flavor: E.G.O Corrosion;
+img: Corrosion;
+level: zayin;
+
+cost 
+{
+ pride: 1    
+ gluttony: 2   
+ lust: 2   
+ sloth: 1 
+}
+
+info
+{
+ As moedas dessa Skill ignoram reações (Defense Skills) 
+}
+
+coin(u) 
+{
+ (on_hit) Aplique 5 @Karma
+}
+
+end
+{
+ (skill_end) Se transforme em Монстр
+}
+
+---
+
+passive(Pibble Gosta Muito de Você ⸜(｡˃ ᵕ ˂ )⸝♡)
+{
+ - Ganhe 5 @Resist por todo o combate.
+ - A cada 4 ataques aplique 10 @Karma e cause @Karma de dano adicional
+}
+
+!ego-end

@@ -271,3 +271,101 @@ info
 }
 
 !defense-end
+
+
+
+
+
+
+!ego-start
+
+title: Briser Le Silence Et La Beauté... Ma █████████;
+sin: lust; 
+hit: +6;
+dmg: 4d10 + Destreza + Nível;
+dmg_type: pierce; 
+flavor: E.G.O Awakening;
+img: Awakening;
+level: zayin;
+
+cost 
+{
+ gluttony: 8;    
+ wrath: 3;
+ lust: 5; 
+}
+
+coin(u)
+{   
+ (on_hit) Aplique 2 @Bleed    
+ (on_hit) Ative o @Bleed do alvo 2x
+ (on_hit_without_cracking) Cause dano adicional equivalente a @Bloodfeast_Consumed
+}
+
+coin(u)
+{   
+ (on_hit) Aplique 2 @Bleed   
+ (on_hit) Ative o @Bleed do alvo 2x
+ (on_hit_without_cracking) Cause dano adicional equivalente a @Bloodfeast_Consumed
+}
+
+coin(u)
+{   
+ (on_hit) Aplique 2 @Bleed    
+ (on_hit) Ative o @Bleed do alvo 2x
+ (on_hit_without_cracking) Cause dano adicional equivalente a @Bloodfeast_Consumed
+}
+
+end
+{
+ (skill_end) Invoque 4 Cavaleiros de Sangue   
+}
+
+---
+
+title: Briser Le Silence Et La Beauté... Ma █████████;
+sin: lust; 
+hit: +8;
+dmg: 8d10 + Destreza + Nível;
+dmg_type: pierce; 
+flavor: E.G.O Corrosion;
+img: Corrosion;
+level: zayin;
+
+cost 
+{
+ gluttony: 2;    
+ wrath: 4;
+ lust: 14; 
+}
+
+info
+{
+ @Atk_Weight atkw(3) c(#d7d713){(~15 feet~)}    
+ Para cada @Atk_Weight nao utilizado aplique +2 @Bleed @Count 
+}
+
+coin(u)
+{
+ (on_hit) Aplique 10 @Bleed
+ (on_hit) Aplique +5 @Bleed @Count
+ (on_hit) Cause dano adicional equivalente a @Bloodfeast_Consumed
+ (on_hit) Ative @Bleed_Deluge
+}
+
+end
+{
+ (skill_end) Invoque 2 Cavaleiros de Sangue   
+ (turn_end) Ganhe @Blood_Rain
+}
+
+---
+
+passive(Extensão do Meu Ser)
+{
+ - Ganhe 2 @Hardblood_Armor.
+ - No fim do seu turno você pode consumir até 50 @Bloodfeast (seguindo a mesma regra de conversão das suas Skills).
+ - Para cada 10 @Bloodfeast consumido ganhe 5 de Vida (vida excedente é convertida em @Shield que não expira no fim do turno).
+}
+
+!ego-end

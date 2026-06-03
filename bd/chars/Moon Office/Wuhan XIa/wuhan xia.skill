@@ -275,3 +275,106 @@ end
 }
 
 !defense-end
+
+
+
+
+
+!ego-start 
+
+title: Vanguarda Mortal [致命先锋];
+sin: gluttony; 
+hit: +6;
+dmg: 4d12 + Força + Nível;
+dmg_type: blunt; 
+flavor: E.G.O Awakening;
+img: Awakening;
+level: zayin;
+
+cost 
+{
+ gluttony: 7;
+ envy: 1;     
+}
+
+info
+{
+ @Atk_Weight atkw(4) c(#d7d713){(~45 feet~)} 
+ As moedas e ataques provindos desse E.G.O não reduzem @Rupture @Count 
+}
+
+coin
+{   
+ (on_hit) Ative @Tremor_Burst 1x no alvo
+ (on_hit) Aplique 1 @Concussion
+ (on_hit) Aplique 1 @Bind no próximo turno
+}
+
+coin
+{   
+ (on_hit) Ative @Tremor_Burst 1x no alvo 
+ (on_hit) Aplique 1 @Concussion
+ (on_hit) Aplique 1 @Bind no próximo turno
+}
+
+coin(u)
+{   
+ (on_hit) Ative @Tremor_Burst 2x no alvo 
+ (on_hit) Aplique 2 @Concussion
+ (on_hit) Aplique 6 @Bind no próximo turno
+}
+
+end
+{
+ (skill_end) Ganhe 5 @Shield
+ (skill_end) Faça 3 Ataques Base em um alvo
+ (turn_end) Ganhe 1 @Protection
+ (turn_end) Ganhe 2 @Haste
+}
+
+---
+
+title: Vanguarda Mortal [致命先锋];
+sin: gluttony; 
+hit: +8;
+dmg: 8d12 + Força + Nível + 20;
+dmg_type: blunt; 
+flavor: E.G.O. Corrosion;
+img: Corrosion;
+level: zayin;
+
+cost 
+{
+ gluttony: 14;
+ envy: 2;     
+}
+
+info
+{
+ @Atk_Weight atkw(8) c(#d7d713){(~45 feet~)} 
+ As moedas e ataques provindos desse E.G.O não reduzem @Rupture @Count 
+ Aumente o dano final em +20 para cada @Atk_Weight não utilizado
+}
+
+coin(u)
+{   
+ (on_hit) Ative @Tremor_Burst 4x no alvo 
+ (on_hit) Aplique 6 @Concussion
+ (on_hit) Aplique 10 @Bind no próximo turno
+}
+
+end
+{
+ (skill_end) Ganhe 10 @Shield
+ (skill_end) Faça 6 Ataques Base em um alvo, se ele entrar em Stagger reuse a moeda desse E.G.O (1x por turno)
+}
+
+---
+
+passive(Vanguarda [先锋])
+{
+ - Ganhe 15 @Shield. 
+ - @Shield ganho por você não expira mais no fim do turno.
+}
+
+!ego-end
