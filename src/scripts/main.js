@@ -3014,6 +3014,8 @@ function parseSkill(text, sourcePath = "", charFolder = "", characterName = "") 
     {
         "(on_use)": `<color ="#9394e4"><b>[Ao Usar]</b></color>`,
         "(on_evade)": `<color ="#d7d713"><b>[Ao Esquivar]</b></color>`,
+        "(on_defense)": `<color ="#d7d713"><b>[Ao Defender]</b></color>`,
+        "(on_ally_protection)": `<color ="#00e1ff"><b>[Ao Defender Um Aliado]</b></color>`,
         "(combat_start)": `<color ="#d7d713"><b>[Ínicio do Combate]</b></color>`,
 
         "(on_hit)": `<color ="#FFFF00">[Em um Acerto]</color>`,
@@ -3032,7 +3034,7 @@ function parseSkill(text, sourcePath = "", charFolder = "", characterName = "") 
 
     const sinColorMap =
     {
-        wrath: "#ff3e3e",
+        wrath: "#ff0000",
         lust: "#FFA500",
         sloth: "#FFFF00",
         gloom: "#94a2f2",
