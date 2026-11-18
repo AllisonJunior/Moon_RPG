@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+       <title>Efeitos | Moon</title>
+
+       <link rel="stylesheet" href="../styles/pages.css">
+       <link rel="icon" href="../../res/img/main.ico">
+</head>
+
+<body>
+       <button class="return_btn" onclick="nav('../../index.html')"></button>
+
+       <div class="page_container">
+              <nav class="navbar" aria-label="Seções de efeitos">
+                     <div class="nav-right">
+                            <button type="button" showcase data-md="../../bd/effects/positive.md">Positivos</button>
+                            <button type="button" data-md="../../bd/effects/negative.md">Negativos</button>
+                            <button type="button" data-md="../../bd/effects/other.md">Outros</button>
+                            <button type="button" data-md="../../bd/effects/unique.md">Únicos</button>
+                     </div>
+              </nav>
+
+              <div mkd-content></div>
+
+              <button class="btn" onclick="nav('../../index.html')">Voltar</button>
+       </div>
+
+       <div class="stars"></div>
+
+       <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+       <script src="../scripts/main.js"></script>
+       <script src="../scripts/stars.js"></script>
+</body>
+
+</html>
