@@ -15,7 +15,7 @@
     "noUnderline": false
   },
   "Sum of Consequences": {
-    "desc": "Cause dano no alvo igual a (Consequence + (Potency de Todos os efeitos no alvo)).",
+    "desc": "Cause dano no alvo igual a (Consequence + (Potency de todos os efeitos negativos no alvo)).",
     "type": "negative",
     "noUnderline": false
   },

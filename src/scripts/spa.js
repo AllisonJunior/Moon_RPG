@@ -187,6 +187,26 @@
             await initialise(container);
             window.playMoonTransition?.(container, "is-route-entering");
             container.classList.remove("is-route-preparing");
+            if (route === routes.personagens) {
+                const shell = container.querySelector(".chars-shell");
+                const resetScroll = () => {
+                    if (token === renderToken) {
+                        window.scrollCharactersPageToTop?.();
+                    }
+                };
+                const prefersReducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+
+                if (!shell || prefersReducedMotion) {
+                    resetScroll();
+                } else {
+                    const handlePanelAnimationEnd = (event) => {
+                        if (event.target !== shell || event.animationName !== "moon-panel-enter") return;
+                        shell.removeEventListener("animationend", handlePanelAnimationEnd);
+                        resetScroll();
+                    };
+                    shell.addEventListener("animationend", handlePanelAnimationEnd);
+                }
+            }
         } catch (error) {
             container.classList.remove("is-route-preparing");
             container.innerHTML = `<section class="spa-error"><h1>Não foi possível abrir esta página</h1><p>${error.message}</p></section>`;

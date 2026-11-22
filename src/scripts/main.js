@@ -22,10 +22,28 @@ function nav(_page) {
     window.location.href = targetUrl.href;
 }
 
+function scrollCharactersPageToTop() {
+    const shell = document.querySelector(".chars-page .chars-shell");
+    if (!shell) return;
+
+    const prefersReducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+    shell.scrollIntoView({
+        behavior: prefersReducedMotion ? "auto" : "smooth",
+        block: "start"
+    });
+}
+
+window.addEventListener("pageshow", () => {
+    if (document.body.classList.contains("chars-page")) {
+        scrollCharactersPageToTop();
+    }
+});
+
 function showCharacterBrowser() {
     const pageContainer = document.querySelector(".chars-page .page_container");
     if (!pageContainer) return;
 
+    scrollCharactersPageToTop();
     window.hideMoonTooltip?.();
     pageContainer.dataset.characterImageToken = `${Date.now()}-${Math.random().toString(36).slice(2)}`;
     pageContainer.dataset.skillBadgeToken = `${Date.now()}-${Math.random().toString(16).slice(2)}`;
@@ -2964,7 +2982,7 @@ async function initMarkdownButtons() {
             if (!path) return;
 
             const activeCharacter = document.querySelector(".chars-page .nav-right button.active");
-            const shouldScrollToTop = activeCharacter && activeCharacter !== button;
+            const shouldScrollToTop = activeCharacter !== button;
         
             // Limpa/reseta ANTES de carregar o conteúdo
             setActiveButton(button, { openAncestors: true });
@@ -2989,15 +3007,9 @@ async function initMarkdownButtons() {
             if (shouldScrollToTop) {
                 const pageContainer = document.querySelector(".chars-page .page_container");
                 const characterToken = pageContainer?.dataset.characterImageToken;
-                const prefersReducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
-
                 Promise.resolve(contentLoad).then(() => {
                     if (pageContainer?.dataset.characterImageToken !== characterToken) return;
-
-                    document.querySelector(".chars-page .chars-shell")?.scrollIntoView({
-                        behavior: prefersReducedMotion ? "auto" : "smooth",
-                        block: "start"
-                    });
+                    scrollCharactersPageToTop();
                 });
             }
         });
