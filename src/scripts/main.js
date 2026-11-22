@@ -2962,6 +2962,15 @@ async function initMarkdownButtons() {
             const kind = button.getAttribute("data-kind");
         
             if (!path) return;
+
+            const activeCharacter = document.querySelector(".chars-page .nav-right button.active");
+            if (activeCharacter && activeCharacter !== button) {
+                const prefersReducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+                window.scrollTo({
+                    top: 0,
+                    behavior: prefersReducedMotion ? "auto" : "smooth"
+                });
+            }
         
             // Limpa/reseta ANTES de carregar o conteúdo
             setActiveButton(button, { openAncestors: true });
