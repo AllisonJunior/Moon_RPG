@@ -1,35 +1,8 @@
 # Nível
 
-O nível do personagem influência nos seguintes aspectos de um personagem:
-
----
-
-### Vida e Stagger
-Ambos são aumentados todo nível com base na fórmula presente na classe escolhida.
-
----
-
-### Mp
-A cada 5 níveis o valor base é aumentado em +1.
-
----
-
-### Proficiência
-A cada 10 níveis o seu valor base é aumentado em +1.
-
----
-
-### Skills
-Ao atingir o nível 30, você se torna capaz de utilizar Skills como ações bônus.
-
----
-
-### E.G.O
-Ao atingir o nível 50, você se torna capaz de utilizar E.G.O como ações bônus.
-
----
-
-### Ações
-A cada 60 níveis você ganha uma ação adicional.
-
----
+O nível de um personagem influência diversos aspectos de um personagem: 
+- É o modificador responsável por afetar diretamente a fórmula de cálculo de pontos de vida e marcas de stagger de um personagem.
+- A cada 10 níveis o personagem ganha +1 ponto de atributo. 
+- A cada 20 níveis o personagem ganha +1 perk.
+- A cada 30 níveis os Moon Points máximos são aumentados em +1.
+- A cada 50 níveis o personagem ganha +1 ação.

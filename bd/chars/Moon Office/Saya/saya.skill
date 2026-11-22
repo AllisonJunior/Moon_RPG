@@ -1,11 +1,28 @@
-!overview-start
+S-OVERVIEW
 
-name: Saya;
+NAME: Saya
 
-description 
-(
- Dona do Moon Office e uma Fixer de Grau 1 de apenas 17 anos, apesar de que a mesma reside na cidade, o seu temperamento e personalidade são extremamente amigáveis, principalmente quando se trata de Axel e Hana.\n
- Seu passado e motivações ainda é algo que a mesma mantém para si própria.\n
-)
+DESCRIPTION (Detalhes Gerais)
+{
+**Idade:** 17
+**Sexo:** Feminino
+**Altura:** 1,67 m
+**Aniversário:** Maio
+**Personalidade:** Amável - Brincalhona - Curiosa - Sem Noção
+**Especialidade:** Combate
+**Adora:** Comer (principalmente doces preparados por Axel)
+**Odeia:** Mal Astral - Sindicatos - Fome
+}
 
-!overview-end 
+DESCRIPTION (Observações)
+{
+Uma jovem de 17 anos que comanda um recém formado escritório, Moon Office. Apesar da aparência aqueles que acabaram entrando em seu caminho não tiveram tanta sorte.
+
+Apesar de ser a cabeça chefe do escritório quem realmente cuida da parte técnica e legislativa do mesmo é Hana, que comumente precisa lidar com diversos problemas causados por Saya durante as missões.
+
+Sua personalidade é estranhamente de uma "garota normal", ela tem interesses sobre certos assuntos como também as vezes age de forma teimosa e desleixada, mas, é alguém que se importa bastante com aqueles que considera família. 
+
+Ela odeia sindicatos, já eles...
+}
+
+E-OVERVIEW

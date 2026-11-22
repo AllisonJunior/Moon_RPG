@@ -1,122 +1,28 @@
-!overview-start
+S-OVERVIEW
 
-name: Hana;
+NAME: Hana
 
-life: ???;
-stagger: ???;
-ca: 14;
-speed: 6 ~ 8;
-
-blunt-res: normal;
-slash-res: normal;
-pierce-res: normal;
-
-description 
-(
- Co-fundadora e única financeadora do Moon Office, atualmente ela é a pessoa responsável pela parte financeira do escritório.\n
- Possui 35 anos e é dona de uma das personalidades mais "complexas" da cidade, apesar disso ela trata Saya como se fosse sua própria filha.\n
- No seu tempo livre ela trabalha na locadora de filmes adultos (~apesar de claramente não precisar~).
-)
-
-!overview-end 
-
-
-
-
-
-!weapons-start 
-
-title: Adaga Desgastada;
-flavor: Arma Única;
-sin: wrath; 
-hit: ???;
-dmg: 8d10 + 8;
-dmg_type: slash; 
-img: fire_dagger;
-
-coin
+DESCRIPTION (Detalhes Gerais)
 {
- (on_hit) Aplique 3 @Burn
- (on_hit) Aplique 3 @Bleed
+**Idade:** 35
+**Sexo:** Feminino
+**Altura:** 1,71 m
+**Aniversário:** Fevereiro
+**Personalidade:** Direta - Piadista - Psicótica
+**Especialidade:** Combate
+**Adora:** Filmes ruins
+**Odeia:** Não ter o que fazer enquanto entediada
 }
 
-!weapons-end
-
-
-
-
-
-!skills-start
-
-title: ...;
-sin: wrath; 
-dmg: slash; 
-mp: 3;
-c_mp: ???;
-
-coin
-{ 
- (on_hit) Aplique 5 @Burn
-}
-
-coin
-{ 
- (on_hit) Aplique 5 @Bleed
-}
-
-coin
+DESCRIPTION (Observações)
 {
- (on_hit) Aplique +1 @Burn @Count
- (on_hit) Aplique +1 @Bleed @Count
+Uma pessoa com uma personalidade complexamente única. Apesar da sua aparência descontraída a mesma claramente mostra um alto grau de proficiência e experiência em combate, seus movimentos são rápidos e precisos, nunca, desnecessários.\n
+
+Junto de Saya a mesma fundou o até então conhecido Moon Office, apesar de que desde a sua fundação White Knight nunca mais atuou como Fixer, o que mudou com a chegada deles.\n
+
+Assim como Axel ela também participou da Guerra da Fumaça, mas por algum motivo a mesma sempre muda de assunto quando questionada.
 }
 
----
+E-OVERVIEW
 
-title: Memória Perdida;
-sin: wrath; 
-dmg: slash; 
-mp: 3;
-c_mp: ???;
-
-info
-{
- (on_use) Crie 1 Mang
-}
-
-coin
-{ 
- (on_hit) Cause ((@Burn + @Bleed) x 2) de dano adicional
-}
-
-!skills-end
-
-
-
-
-
-!passives-start
-
-passive(████████ ███████)
-{
- Uma vez por turno Hana pode auxíliar ou proteger um dos membros da Moon Office com uma ação livre.
-}
-
-!passives-end
-
-
-
-
-
-!defense-start
-
-title: Evasão Simbólica;
-sin: wrath; 
-type: defense; 
-
-coin
-{
- (on_defense) Aplique +1 @Burn @Count
- (on_ally_protection) Conceda 10 @Shield ao aliado protegido
-}
-
-!defense-end
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 

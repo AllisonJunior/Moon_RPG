@@ -11,16 +11,19 @@
        <div class ="menu">
              <img src="res/img/moon-office.png" alt="Moon Office" width="260" height="220">
              <div class = "menu_container_btn">
-                   <a class="menu_btn" href="src/pages/system.html">Sistema</a>
-                   <a class="menu_btn" href="src/pages/races.html">Raças</a>
-                   <a class="menu_btn" href="src/pages/classes.html">Classes</a>
-                   <a class="menu_btn" href="src/pages/perks.html">Perks</a>
-                   <a class="menu_btn" href="src/pages/chars.html">Personagens</a>
+                   <a class="menu_btn" href="index.html?pagina=Sistema">Sistema</a>
+                   <a class="menu_btn" href="index.html?pagina=Classes">Classes</a>
+                   <a class="menu_btn" href="index.html?pagina=Perks">Perks</a>
+                   <a class="menu_btn" href="index.html?pagina=Efeitos">Efeitos</a>
+                   <a class="menu_btn" href="index.html?pagina=Personagens">Personagens</a>
              </div>
        </div>
+       <main id="spa-root" hidden aria-live="polite"></main>
        
        <div class="stars"></div>    
        <script src="src/scripts/stars.js"></script>
+       <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+       <script src="src/scripts/spa.js"></script>
        <script src="src/scripts/main.js"></script>
 </body>
 </html>

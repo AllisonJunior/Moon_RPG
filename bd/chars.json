@@ -1,8 +1,103 @@
 [
   {
     "type": "group",
+    "label": "Wings",
+    "children": [
+      {
+        "type": "group",
+        "label": "R. Corp",
+        "children": [
+          {
+            "label": "Wolf",
+            "target": "wolf.skill"
+          }
+        ],
+        "folder": "R. Corp"
+      }
+    ],
+    "folder": "Wings"
+  },
+  {
+    "type": "group",
+    "label": "Associações",
+    "children": [
+      {
+        "type": "group",
+        "label": "Hana",
+        "children": [
+          {
+            "label": "Schnikki",
+            "target": "schnikki.skill"
+          },
+          {
+            "label": "Kai",
+            "target": "kai.skill"
+          }
+        ],
+        "folder": "Hana"
+      }
+    ],
+    "folder": "Associações"
+  },
+  {
+    "type": "group",
+    "label": "Sindicatos",
+    "children": [
+      {
+        "type": "group",
+        "label": "Dunkelheit",
+        "children": [
+          {
+            "label": "Zwitte Sohn",
+            "target": "zwitte sohn.skill"
+          },
+          {
+            "label": "Dritter Sohn",
+            "target": "dritter sohn.skill"
+          },
+          {
+            "label": "Vierte Tochter",
+            "target": "vierte tochter.skill"
+          },
+          {
+            "label": "Baby",
+            "target": "baby.skill"
+          }
+        ],
+        "folder": "Dunkelheit"
+      },
+      {
+        "type": "group",
+        "label": "Culto da Pele Pálida",
+        "children": [
+          {
+            "label": "Sem Nome",
+            "target": "sem nome.skill"
+          }
+        ],
+        "folder": "Culto da Pele Pálida"
+      },
+      {
+        "type": "group",
+        "label": "Index",
+        "children": [
+          {
+            "label": "Endo",
+            "target": "endo.skill"
+          },
+          {
+            "label": "Voz Feminina",
+            "target": "voz feminina.skill"
+          }
+        ],
+        "folder": "Index"
+      }
+    ],
+    "folder": "Sindicatos"
+  },
+  {
+    "type": "group",
     "label": "Moon Office",
-    "folder": "Moon Office",
     "children": [
       {
         "label": "Axel Weber",
@@ -21,109 +116,40 @@
         "target": "leonard boss.skill"
       },
       {
-        "label": "Pibble",
-        "target": "pibble.skill"
+        "label": "Hana",
+        "target": "hana.skill"
       },
       {
         "label": "Saya",
         "target": "saya.skill"
-      },
-      {
-        "label": "Hana",
-        "target": "hana.skill"
-      }
-    ]
-  },
-  {
-    "type": "group",
-    "label": "Restaurante Yángguāng",
-    "children": [
-      {
-        "label": "Sr. Yang",
-        "target": "sr. yang.skill"
-      },
-      {
-        "label": "Dan",
-        "target": "dan.skill"
-      },
-      {
-        "label": "Alan",
-        "target": "alan.skill"
-      },
-      {
-        "label": "Vertin",
-        "target": "vertin.skill"
       }
     ],
-    "folder": "Restaurante Yángguāng"
-  },
-  {
-    "type": "group",
-    "label": "Associações",
-    "folder": "Associações",
-    "children": [
-      {
-        "type": "group",
-        "label": "Deyvat'",
-        "folder": "Deyvat'",
-        "children": [
-          {
-            "label": "Donald",
-            "target": "donald.skill"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "type": "group",
-    "label": "Sindicatos",
-    "folder": "Sindicatos",
-    "children": [
-      {
-        "type": "group",
-        "label": "Dunkelheit",
-        "folder": "Dunkelheit",
-        "children": [
-          {
-            "type": "group",
-            "label": "Filhos",
-            "folder": "Filhos",
-            "children": [
-              {
-                "label": "Zwitte Sohn (2º Filho)",
-                "target": "zwitte sohn (2º filho).skill"
-              },
-              {
-                "label": "Dritter Sohn (3º Filho)",
-                "target": "dritter sohn (3º filho).skill"
-              }
-            ]
-          },
-          {
-            "label": "Baby",
-            "target": "baby.skill"
-          }
-        ]
-      },
-      {
-        "type": "group",
-        "label": "Sedentos",
-        "children": [
-          {
-            "label": "Lazarento",
-            "target": "lazarento.skill"
-          }
-        ],
-        "folder": "Sedentos"
-      }
-    ]
+    "folder": "Moon Office"
   },
   {
     "type": "group",
     "label": "Fixers",
-    "folder": "Fixers",
     "children": [
+      {
+        "type": "group",
+        "label": "Cores",
+        "children": [
+          {
+            "label": "The Indigo Elder",
+            "target": "the indigo elder.skill"
+          },
+          {
+            "label": "The Ashen Husk",
+            "target": "the ashen husk.skill"
+          },
+          {
+            "label": "The Rainbow Phantom",
+            "target": "the rainbow phantom.skill",
+            "hidden": true
+          }
+        ],
+        "folder": "Cores"
+      },
       {
         "label": "Kim Su",
         "target": "kim su.skill"
@@ -132,17 +158,49 @@
         "label": "Hunk",
         "target": "hunk.skill"
       }
-    ]
+    ],
+    "folder": "Fixers"
   },
   {
     "type": "group",
-    "label": "Desconhecido",
+    "label": "Outros",
     "children": [
       {
-        "label": "Garota",
-        "target": "garota.skill"
+        "type": "group",
+        "label": "Restaurante Yángguāng",
+        "children": [
+          {
+            "label": "Senhor Yang",
+            "target": "senhor yang.skill"
+          },
+          {
+            "label": "Dan",
+            "target": "dan.skill"
+          },
+          {
+            "label": "Alan",
+            "target": "alan.skill"
+          },
+          {
+            "label": "Vertin",
+            "target": "vertin.skill"
+          }
+        ],
+        "folder": "Restaurante Yángguāng"
+      },
+      {
+        "label": "Garota Faminta",
+        "target": "garota faminta.skill"
+      },
+      {
+        "label": "Ihei Hairu",
+        "target": "ihei hairu.skill"
+      },
+      {
+        "label": "Aparição",
+        "target": "aparição.skill"
       }
     ],
-    "folder": "Desconhecido"
+    "folder": "Outros"
   }
 ]

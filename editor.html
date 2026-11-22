@@ -171,6 +171,12 @@ button:hover{
     margin-bottom:14px;
 }
 
+.editor-topbar-actions{
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
 .gear-btn{
     width:38px;
     height:38px;
@@ -187,6 +193,29 @@ button:hover{
     display:flex;
     flex-direction:column;
     gap:12px;
+}
+
+.skill-variant-badge{
+    position:relative;
+    overflow:visible;
+}
+
+.skill-variant-badge.active {
+    border-color: rgba(196, 216, 255, 0.9);
+    box-shadow: inset 0 0 0 1px rgba(196, 216, 255, 0.55), 0 0 0 2px rgba(196, 216, 255, 0.18);
+    background: linear-gradient(180deg, rgba(126, 150, 195, 0.35), rgba(74, 90, 122, 0.28));
+}
+
+.skill-variant-badge.default::after {
+    content:"";
+    position:absolute;
+    top:1px;
+    right:1px;
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:#ffd76a;
+    box-shadow:0 0 0 2px rgba(24, 19, 33, 0.9);
 }
 
 .skill-viewer-toolbar{
@@ -211,13 +240,86 @@ button:hover{
     font-size:13px;
 }
 
-.skill-viewer-textarea{
-    min-height:520px;
-    resize:vertical;
+.skill-viewer-theme-switch{
+    display:flex;
+    align-items:center;
+    gap:6px;
+}
+
+.skill-theme-option{
+    width:32px;
+    height:32px;
+    padding:0;
+    border-radius:8px;
+    border:1px solid rgba(255,255,255,0.2);
+    background:rgba(118, 93, 158, 0.4);
+    color:#f0e8ff;
+    font-size:18px;
+    line-height:1;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    margin:0;
+}
+
+.skill-theme-option.active{
+    background:rgba(128, 96, 176, 0.8);
+    border-color:rgba(200, 175, 255, 0.8);
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,0.07);
+}
+
+.character-editor-theme-switch{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    margin-left:auto;
+}
+
+.skill-viewer-text-shell{
+    position:relative;
+    border:1px solid rgba(255,255,255,0.14);
+    border-radius:10px;
+    overflow:hidden;
+    background:#20172b;
+    transition:background 0.2s ease, border-color 0.2s ease;
+}
+
+#charEditor .skill-viewer-textarea{
+    width:100%;
+    min-height:820px;
+    height:820px;
     font-family:Consolas, "Courier New", monospace;
+    font-size:12px;
+    font-weight:400;
+    line-height:1.4;
+    letter-spacing:0;
     white-space:pre-wrap;
     overflow-wrap:anywhere;
     word-break:break-word;
+    tab-size:4;
+}
+
+#charEditor .skill-viewer-textarea{
+    display:block;
+    resize:vertical;
+    padding:12px;
+    border:0;
+    border-radius:0;
+    background:#20172b;
+    color:#f1ecff;
+    caret-color:#f1ecff;
+    margin:0;
+}
+
+.skill-viewer-panel[data-skill-theme="light"] .skill-viewer-text-shell{
+    border-color:#dfe6ff;
+    background:#fff;
+}
+
+#charEditor .skill-viewer-panel[data-skill-theme="light"] .skill-viewer-textarea{
+    background:#fff;
+    color:#1d2330;
+    caret-color:#1d2330;
 }
 
 .skill-viewer-status{
@@ -230,9 +332,12 @@ button:hover{
     color:#ffcf72;
 }
 
-input,
-textarea,
-select{
+#charEditor input,
+#charEditor textarea,
+#charEditor select,
+#effectEditor input,
+#effectEditor textarea,
+#effectEditor select{
     width:100%;
     padding:12px;
     border:none;
@@ -242,7 +347,8 @@ select{
     margin-bottom:10px;
 }
 
-input[type="checkbox"]{
+#charEditor input[type="checkbox"],
+#effectEditor input[type="checkbox"]{
     width:auto;
     margin:0;
 }
@@ -262,9 +368,18 @@ label{
     opacity:0.8;
 }
 
-textarea{
-    min-height:220px;
+#charEditor textarea,
+#effectEditor textarea{
+    min-height:165px;
     resize:vertical;
+}
+
+#effectEditor .button-row {
+    margin: 14px 0 18px;
+}
+
+#effectEditor .button-row button {
+    margin: 0;
 }
 
 hr{
@@ -675,6 +790,11 @@ hr{
 
         </div>
 
+        <div class="character-editor-theme-switch" aria-label="Tema global do editor de personagens" style="margin: 8px 0 12px; justify-content:flex-start;">
+            <button type="button" class="skill-theme-option active" data-character-theme-option="dark" aria-label="Tema escuro global" title="Tema escuro">☾</button>
+            <button type="button" class="skill-theme-option" data-character-theme-option="light" aria-label="Tema claro global" title="Tema claro">☀</button>
+        </div>
+
         <div id="tree"></div>
 
     </div>
@@ -686,15 +806,25 @@ hr{
             <div class="editor-topbar">
                 <h2>Editor</h2>
 
-                <button
-                    id="characterViewToggle"
-                    class="gear-btn hidden"
-                    type="button"
-                    title="Alternar para o arquivo .skill"
-                    onclick="toggleCharacterEditorView()"
-                >
-                    ⚙
-                </button>
+                <div class="editor-topbar-actions">
+                    <button
+                        id="openCharacterFolder"
+                        class="gear-btn hidden"
+                        type="button"
+                        title="Abrir pasta do personagem"
+                        aria-label="Abrir pasta do personagem"
+                        onclick="openSelectedCharacterFolder()"
+                    >📂</button>
+                    <button
+                        id="characterViewToggle"
+                        class="gear-btn hidden"
+                        type="button"
+                        title="Alternar para o arquivo .skill"
+                        onclick="toggleCharacterEditorView()"
+                    >
+                        ⚙
+                    </button>
+                </div>
             </div>
 
             <div id="charEditor" class="empty"></div>
@@ -876,6 +1006,8 @@ let characterSkillRenderToken = 0;
 let characterExtraImagesRenderToken = 0;
 let characterSkillOriginalContent = "";
 let characterSkillIsDirty = false;
+const characterSkillScrollPositions = new Map();
+let characterEditorTheme = sessionStorage.getItem("jsonStudio.characterEditorTheme") || "dark";
 
 // pending (rascunho) quando o usuário cria um novo item mas ainda não confirmou
 let pendingNode = null;
@@ -997,46 +1129,60 @@ function renderTree(){
 
     tree.innerHTML = "";
 
-    tree.addEventListener("dragover", (e) => {
+    // ==================================================
+    // Os listeners da raiz NÃO devem ser adicionados
+    // novamente a cada renderização.
+    //
+    // Usamos uma flag para instalar apenas uma vez.
+    // ==================================================
 
-        e.preventDefault();
+    if(!tree.dataset.dragHandlersInstalled){
 
-        tree.classList.add("drag-over-zone");
-    });
+        tree.addEventListener("dragover", (e) => {
 
-    tree.addEventListener("dragleave", () => {
+            e.preventDefault();
 
-        tree.classList.remove("drag-over-zone");
-    });
+            tree.classList.add("drag-over-zone");
+        });
 
-    tree.addEventListener("drop", (e) => {
+        tree.addEventListener("dragleave", () => {
 
-        e.preventDefault();
+            tree.classList.remove("drag-over-zone");
+        });
 
-        tree.classList.remove("drag-over-zone");
+        tree.addEventListener("drop", async (e) => {
 
-        if(!draggedItem) return;
+            e.preventDefault();
 
-        const draggedNode =
-            draggedItem.node;
+            tree.classList.remove(
+                "drag-over-zone"
+            );
 
-        draggedItem.parentArray.splice(
-            draggedItem.index,
-            1
-        );
+            if(!draggedItem){
+                return;
+            }
 
-        charsData.unshift(draggedNode);
+            await moveDraggedNode(
+                charsData,
+                charsData.length
+            );
+        });
 
-        draggedItem = null;
+        tree.dataset.dragHandlersInstalled = "true";
+    }
 
-        renderTree();
-        saveChars();
-    });
+    // ==================================================
+    // Renderiza a árvore
+    // ==================================================
 
     charsData.forEach((item, index) => {
 
         tree.appendChild(
-            createNode(item, charsData, index)
+            createNode(
+                item,
+                charsData,
+                index
+            )
         );
     });
 }
@@ -1068,7 +1214,7 @@ function createNode(node, parentArray, index){
         dropBefore.classList.remove("active");
     });
 
-    dropBefore.addEventListener("drop", (e) => {
+    dropBefore.addEventListener("drop", async (e) => {
 
         e.preventDefault();
 
@@ -1080,7 +1226,7 @@ function createNode(node, parentArray, index){
             isNodeInSubtree(draggedItem.node, node)
         ) return;
 
-        moveDraggedNode(parentArray, index);
+        await moveDraggedNode(parentArray, index);
     });
 
     wrapper.appendChild(dropBefore);
@@ -1181,33 +1327,42 @@ function createNode(node, parentArray, index){
         header.classList.remove("drag-over");
     });
 
-    header.addEventListener("drop", (e) => {
+    header.addEventListener("drop", async (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    header.classList.remove("drag-over");
 
-        e.preventDefault();
+    if (!draggedItem) return;
 
-        header.classList.remove("drag-over");
+    // Impede que um item seja solto em cima dele mesmo.
+    if (draggedItem.node === node) {
+        draggedItem = null;
+        return;
+    }
 
-        if(!draggedItem) return;
+    // Um grupo nunca pode ser colocado dentro de si mesmo
+    // ou dentro de qualquer descendente dele.
+    if (
+        draggedItem.node.type === "group" &&
+        isNodeInSubtree(draggedItem.node, node)
+    ) {
+        draggedItem = null;
+        return;
+    }
 
-        const draggedNode = draggedItem.node;
+    if (node.type === "group") {
+        // Soltar sobre uma pasta significa mover para dentro dela.
+        node.children = node.children || [];
+        const moved = await moveDraggedNode(node.children, node.children.length);
 
-        if(draggedNode === node) return;
-
-        if(
-            draggedNode.type === "group" &&
-            isNodeInSubtree(draggedNode, node)
-        ) return;
-
-        if(node.type === "group"){
-
-            moveDraggedNode(node.children ||= [], 0);
-
+        if (moved) {
             node.open = true;
-
-        }else{
-
-            moveDraggedNode(parentArray, index);
+            renderTree();
         }
+    } else {
+        // Soltar sobre outro personagem insere logo depois dele.
+        await moveDraggedNode(parentArray, index + 1);
+    }
     });
 
     dropAfter.addEventListener("dragover", (e) => {
@@ -1222,7 +1377,7 @@ function createNode(node, parentArray, index){
         dropAfter.classList.remove("active");
     });
 
-    dropAfter.addEventListener("drop", (e) => {
+    dropAfter.addEventListener("drop", async (e) => {
 
         e.preventDefault();
 
@@ -1234,7 +1389,7 @@ function createNode(node, parentArray, index){
             isNodeInSubtree(draggedItem.node, node)
         ) return;
 
-        moveDraggedNode(parentArray, index + 1);
+        await moveDraggedNode(parentArray, index + 1);
     });
 
     container.appendChild(header);
@@ -1264,36 +1419,415 @@ function createNode(node, parentArray, index){
     return wrapper;
 }
 
-function moveDraggedNode(targetArray, targetIndex){
+function getArrayFolderPath(targetArray){
 
-    if(!draggedItem) return;
-
-    if(!Array.isArray(targetArray)) return;
-
-    const draggedNode = draggedItem.node;
-
-    if(
-        targetArray === draggedItem.parentArray &&
-        targetIndex > draggedItem.index
-    ){
-        targetIndex -= 1;
+    if(targetArray === charsData){
+        return "";
     }
 
-    draggedItem.parentArray.splice(
-        draggedItem.index,
-        1
+    function walk(nodes, trail){
+
+        if(!Array.isArray(nodes)) return null;
+
+        if(nodes === targetArray){
+            return trail.join("/");
+        }
+
+        for(const item of nodes){
+
+            if(
+                item &&
+                item.type === "group" &&
+                Array.isArray(item.children)
+            ){
+                const groupPath = trail.concat(
+                    buildGroupFolderName(
+                        item.folder || item.label
+                    )
+                );
+
+                const result = walk(
+                    item.children,
+                    groupPath
+                );
+
+                if(result !== null){
+                    return result;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    return walk(charsData, []) || "";
+}
+
+function getDraggedDestinationFolderPath(node, targetArray){
+
+    const parentPath = getArrayFolderPath(targetArray);
+
+    const nodeFolderName = node.type === "group"
+        ? buildGroupFolderName(
+            node.folder || node.label
+        )
+        : buildCharacterFolderName(
+            node.label
+        );
+
+    return parentPath
+        ? `${parentPath}/${nodeFolderName}`
+        : nodeFolderName;
+}
+
+function findNodeLocation(targetNode){
+
+    function walk(nodes){
+
+        if(!Array.isArray(nodes)) return null;
+
+        for(let i = 0; i < nodes.length; i++){
+
+            const item = nodes[i];
+
+            if(item === targetNode){
+                return {
+                    parentArray: nodes,
+                    index: i
+                };
+            }
+
+            if(
+                item &&
+                item.type === "group" &&
+                Array.isArray(item.children)
+            ){
+                const result = walk(item.children);
+
+                if(result){
+                    return result;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    return walk(charsData);
+}
+
+const MAX_CHARACTER_FOLDER_DEPTH = 3;
+
+function getCharacterFolderDepth(targetArray){
+    const folderPath = getArrayFolderPath(targetArray);
+    return folderPath
+        ? folderPath.split("/").filter(Boolean).length
+        : 0;
+}
+
+function getGroupSubtreeDepth(node){
+    if(!node || node.type !== "group") return 0;
+
+    const children = Array.isArray(node.children) ? node.children : [];
+    const deepestChildGroup = children.reduce(
+        (deepest, child) => Math.max(deepest, getGroupSubtreeDepth(child)),
+        0
     );
 
-    targetArray.splice(
-        Math.max(0, Math.min(targetIndex, targetArray.length)),
-        0,
-        draggedNode
-    );
+    return 1 + deepestChildGroup;
+}
 
-    draggedItem = null;
+function canPlaceCharacterNodeIn(targetArray, node){
+    const targetDepth = getCharacterFolderDepth(targetArray);
 
-    renderTree();
-    saveChars();
+    return node?.type === "group"
+        ? targetDepth + getGroupSubtreeDepth(node) <= MAX_CHARACTER_FOLDER_DEPTH
+        : targetDepth <= MAX_CHARACTER_FOLDER_DEPTH;
+}
+
+let movingDraggedNode = false;
+
+async function moveDraggedNode(
+    targetArray,
+    targetIndex
+){
+
+    // ==================================================
+    // IMPEDE DUPLA EXECUÇÃO
+    // ==================================================
+
+    if(movingDraggedNode){
+        return false;
+    }
+
+    if(!draggedItem){
+        return false;
+    }
+
+    movingDraggedNode = true;
+
+    try{
+
+        const {
+            parentArray: sourceArray,
+            index: sourceIndex,
+            node: draggedNode
+        } = draggedItem;
+
+        if(!canPlaceCharacterNodeIn(targetArray, draggedNode)){
+            alert(`A árvore de personagens permite no máximo ${MAX_CHARACTER_FOLDER_DEPTH} níveis de pastas.`);
+            return false;
+        }
+
+        // ==================================================
+        // NÃO PERMITIR GRUPO DENTRO DE SI MESMO
+        // ==================================================
+
+        if(
+            draggedNode.type === "group" &&
+            targetArray === draggedNode.children
+        ){
+
+            draggedItem = null;
+
+            return false;
+        }
+
+        // ==================================================
+        // REORDENAÇÃO DENTRO DO MESMO PAI
+        // ==================================================
+
+        if(sourceArray === targetArray){
+
+            if(
+                sourceIndex === targetIndex ||
+                sourceIndex === targetIndex - 1
+            ){
+
+                draggedItem = null;
+
+                return false;
+            }
+
+            sourceArray.splice(
+                sourceIndex,
+                1
+            );
+
+            let finalIndex = targetIndex;
+
+            if(sourceIndex < targetIndex){
+                finalIndex--;
+            }
+
+            targetArray.splice(
+                finalIndex,
+                0,
+                draggedNode
+            );
+
+            const location =
+                findNodeLocation(
+                    draggedNode
+                );
+
+            if(location){
+
+                selectedNode =
+                    draggedNode;
+
+                selectedParent =
+                    location.parentArray;
+
+                selectedIndex =
+                    location.index;
+            }
+
+            draggedItem = null;
+
+            renderTree();
+
+            renderCharEditor();
+
+            await saveChars();
+
+            return true;
+        }
+
+        // ==================================================
+        // MOVIMENTO ENTRE PAIS
+        // ==================================================
+
+        const sourceFolderPath =
+            getNodeFolderPath(
+                draggedNode
+            );
+
+        const destinationFolderPath =
+            getDraggedDestinationFolderPath(
+                draggedNode,
+                targetArray
+            );
+
+        // ==================================================
+        // MOVER A PASTA FÍSICA PRIMEIRO
+        // ==================================================
+
+        if(
+            sourceFolderPath &&
+            destinationFolderPath &&
+            sourceFolderPath !== destinationFolderPath
+        ){
+
+            try{
+
+                const response =
+                    await fetch(
+                        resolveEditorApiUrl(
+                            "api/chars/rename"
+                        ),
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body: JSON.stringify({
+
+                                oldFolderPath:
+                                    sourceFolderPath,
+
+                                newFolderPath:
+                                    destinationFolderPath,
+
+                                oldFileName:
+                                    draggedNode.type === "group"
+                                        ? ""
+                                        : String(
+                                            draggedNode.target ||
+                                            buildCharacterTarget(
+                                                draggedNode.label
+                                            )
+                                        ).trim(),
+
+                                newFileName:
+                                    draggedNode.type === "group"
+                                        ? ""
+                                        : buildCharacterTarget(
+                                            draggedNode.label
+                                        ),
+
+                                type:
+                                    draggedNode.type
+                            })
+                        }
+                    );
+
+                if(!response.ok){
+
+                    const message =
+                        await response
+                            .text()
+                            .catch(() => "");
+
+                    throw new Error(
+                        message ||
+                        "Falha ao mover a pasta."
+                    );
+                }
+
+            }catch(error){
+
+                console.error(
+                    "Erro ao mover pasta:",
+                    error
+                );
+
+                alert(
+                    error &&
+                    error.message
+                        ? error.message
+                        : "Não foi possível mover o personagem."
+                );
+
+                draggedItem = null;
+
+                return false;
+            }
+        }
+
+        // ==================================================
+        // SOMENTE DEPOIS DO MOVE FÍSICO:
+        // altera charsData
+        // ==================================================
+
+        sourceArray.splice(
+            sourceIndex,
+            1
+        );
+
+        const finalIndex =
+            Math.min(
+                Math.max(
+                    targetIndex,
+                    0
+                ),
+                targetArray.length
+            );
+
+        targetArray.splice(
+            finalIndex,
+            0,
+            draggedNode
+        );
+
+        const location =
+            findNodeLocation(
+                draggedNode
+            );
+
+        if(location){
+
+            selectedNode =
+                draggedNode;
+
+            selectedParent =
+                location.parentArray;
+
+            selectedIndex =
+                location.index;
+        }
+
+        // ==================================================
+        // LIMPA O DRAG UMA ÚNICA VEZ
+        // ==================================================
+
+        draggedItem = null;
+
+        // ==================================================
+        // ATUALIZA A INTERFACE
+        // ==================================================
+
+        renderTree();
+
+        renderCharEditor();
+
+        // ==================================================
+        // SALVA SOMENTE DEPOIS DO MOVE
+        // ==================================================
+
+        await saveChars();
+
+        return true;
+
+    } finally {
+
+        // Mesmo se ocorrer qualquer erro inesperado,
+        // libera o bloqueio para o próximo drag.
+        movingDraggedNode = false;
+    }
 }
 
 function isNodeInSubtree(root, candidate){
@@ -1316,18 +1850,49 @@ function isNodeInSubtree(root, candidate){
 function updateCharacterViewToggle(isVisible){
 
     const button = document.getElementById("characterViewToggle");
+    const openFolderButton = document.getElementById("openCharacterFolder");
     if(!button) return;
 
     if(!isVisible){
         button.classList.add("hidden");
         button.title = "";
+        openFolderButton?.classList.add("hidden");
         return;
     }
 
     button.classList.remove("hidden");
+    openFolderButton?.classList.remove("hidden");
     button.title = characterEditorView === "skill"
         ? "Voltar para a edição"
         : "Alternar para o arquivo .skill";
+}
+
+async function openSelectedCharacterFolder(){
+    if(!selectedNode || selectedNode.type === "group" || selectedNode === pendingNode) return;
+
+    const folderPath = getCharacterFolderPath(selectedNode);
+    if(!folderPath) return;
+
+    try{
+        const response = await fetch(resolveEditorApiUrl("api/chars/open-folder"), {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ folderPath })
+        });
+        const responseBody = await response.text();
+        let result = {};
+        try{
+            result = responseBody ? JSON.parse(responseBody) : {};
+        }catch(error){
+            result = { error: responseBody };
+        }
+
+        if(!response.ok){
+            throw new Error(result.error || "Não foi possível abrir a pasta do personagem.");
+        }
+    }catch(error){
+        alert(error.message || "Não foi possível abrir a pasta do personagem.");
+    }
 }
 
 function toggleCharacterEditorView(){
@@ -1350,8 +1915,48 @@ function toggleCharacterEditorView(){
     renderCharEditor();
 }
 
+function syncCharacterThemeButtons(){
+    const themeButtons = document.querySelectorAll("[data-character-theme-option]");
+    themeButtons.forEach((button) => {
+        const isActive = button.dataset.characterThemeOption === characterEditorTheme;
+        button.classList.toggle("active", isActive);
+        button.setAttribute("aria-pressed", isActive ? "true" : "false");
+    });
+}
+
+function applyCharacterEditorTheme(nextTheme){
+    const normalizedTheme = nextTheme === "light" ? "light" : "dark";
+    characterEditorTheme = normalizedTheme;
+
+    try {
+        sessionStorage.setItem("jsonStudio.characterEditorTheme", normalizedTheme);
+    } catch (err) {
+        // ignore storage failures
+    }
+
+    syncCharacterThemeButtons();
+
+    const skillPanels = document.querySelectorAll("#charEditor .skill-viewer-panel");
+    skillPanels.forEach((panel) => {
+        panel.dataset.skillTheme = normalizedTheme;
+    });
+
+}
+
+document.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-character-theme-option]");
+    if(!button) return;
+
+    const nextTheme = button.dataset.characterThemeOption === "light" ? "light" : "dark";
+    applyCharacterEditorTheme(nextTheme);
+});
+
 function renderCharEditor(){
     const editor = document.getElementById("charEditor");
+    const previousSkillTextarea = document.getElementById("skillFileEditor");
+    if(previousSkillTextarea?.dataset.skillScrollKey){
+        characterSkillScrollPositions.set(previousSkillTextarea.dataset.skillScrollKey, previousSkillTextarea.scrollTop);
+    }
 
     if(!selectedNode){
         editor.innerHTML = "";
@@ -1372,6 +1977,8 @@ function renderCharEditor(){
         return;
     }
 
+    syncCharacterThemeButtons();
+
     let html = `
         <label>Nome</label>
 
@@ -1379,6 +1986,17 @@ function renderCharEditor(){
             id="edit-label"
             value="${selectedNode.label || ""}"
         >
+
+        ${selectedNode.type !== "group" ? `
+            <label class="check-row">
+                <input
+                    type="checkbox"
+                    id="edit-hidden"
+                    ${selectedNode.hidden ? "checked" : ""}
+                >
+                Esconder Personagem
+            </label>
+        ` : ""}
 
         ${isPending ? "" : `
             <label class="check-row">
@@ -1481,21 +2099,293 @@ function renderCharEditor(){
     }
 }
 
+function getCharacterSkillDefaultTarget(node){
+    if(!node || node.type === "group") return "";
+
+    const explicit = String(node.defaultTarget || "").trim();
+    if(explicit) return explicit;
+
+    return String(node.target || buildCharacterTarget(node.label || "")).trim();
+}
+
 function getSelectedCharacterSkillUrl(node){
 
     const folderPath = getCharacterFolderPath(node);
     if(!folderPath) return "";
 
-    const fileName = String(node.target || buildCharacterTarget(node.label || "")).trim();
+    const fileName = String(node.target || getCharacterSkillDefaultTarget(node) || buildCharacterTarget(node.label || "")).trim();
     if(!fileName) return "";
 
     return encodeURI(`bd/chars/${folderPath}/${fileName}`);
 }
 
-function renderCharacterSkillView(){
+function getCharacterSkillBaseName(rawTarget){
+    const normalized = String(rawTarget || "").trim();
+    const match = normalized.match(/^(.+?)(?:\((\d+)\))?\.skill$/i);
+    if(!match) return normalized.replace(/\.skill$/i, "");
+    return match[1].trim();
+}
+
+async function getCharacterSkillVariantCandidates(node){
+    if(!node || node.type === "group") return [];
+
+    const folderPath = getCharacterFolderPath(node);
+    if(!folderPath) return [];
+
+    const rawTarget = String(node.target || buildCharacterTarget(node.label || "")).trim();
+    const baseFileName = getCharacterSkillBaseName(rawTarget);
+    const candidates = [
+        `${baseFileName}.skill`,
+        `${baseFileName}(2).skill`,
+        `${baseFileName}(3).skill`,
+        `${baseFileName}(4).skill`,
+        `${baseFileName}(5).skill`
+    ];
+    const variants = [];
+    const seen = new Set();
+
+    for(const candidate of candidates){
+        const url = encodeURI(`bd/chars/${folderPath}/${candidate}`);
+        if(seen.has(candidate)) continue;
+        seen.add(candidate);
+
+        try{
+            const response = await fetch(resolveEditorApiUrl(url), { method: "HEAD", cache: "no-store" });
+            if(!response.ok) {
+                const fallback = await fetch(resolveEditorApiUrl(url), { cache: "no-store" });
+                if(!fallback.ok) continue;
+            }
+            variants.push(candidate);
+        }catch(err){
+            // ignore missing variants
+        }
+    }
+
+    return variants.length ? variants : [rawTarget];
+}
+
+async function createCharacterSkillVariant(node, variantIndex){
+    if(!node || node.type === "group" || node === pendingNode) return "";
+
+    const folderPath = getCharacterFolderPath(node);
+    if(!folderPath) return "";
+
+    const rawTarget = String(node.target || buildCharacterTarget(node.label || "")).trim();
+    const baseFileName = getCharacterSkillBaseName(rawTarget);
+    const fileName = variantIndex <= 1
+        ? `${baseFileName}.skill`
+        : `${baseFileName}(${variantIndex}).skill`;
+    const params = new URLSearchParams({
+        folderPath,
+        fileName
+    });
+
+    const response = await fetch(resolveEditorApiUrl(`api/chars/skill?${params.toString()}`), {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ content: "" })
+    });
+
+    if(response.ok) return fileName;
+
+    return "";
+}
+
+async function deleteCharacterSkillVariant(node, fileName){
+    if(!node || node.type === "group" || node === pendingNode || !fileName) return;
+
+    const folderPath = getCharacterFolderPath(node);
+    if(!folderPath) return;
+
+    const isBaseVariant = !/\(\d+\)\.skill$/i.test(fileName);
+    const title = isBaseVariant
+        ? `Limpar a versão ${fileName}?`
+        : `Deseja excluir a versão ${fileName}?`;
+    const message = isBaseVariant
+        ? `Você vai limpar o conteúdo de ${fileName}. O arquivo continuará existindo, mas ficará vazio.`
+        : `Você está removendo o arquivo ${fileName}. Essa ação não pode ser desfeita.`;
+
+    showVariantModal({
+        title: isBaseVariant ? "Limpar versão" : "Excluir versão",
+        message,
+        confirmLabel: isBaseVariant ? "Limpar" : "OK",
+        cancelLabel: "Cancelar",
+        kind: isBaseVariant ? "info" : "danger",
+        onConfirm: async () => {
+            const params = new URLSearchParams({ folderPath, fileName });
+            const response = await fetch(resolveEditorApiUrl(`api/chars/skill?${params.toString()}`), {
+                method: isBaseVariant ? "PUT" : "DELETE",
+                headers: isBaseVariant ? { "Content-Type": "application/json" } : undefined,
+                body: isBaseVariant ? JSON.stringify({ content: "" }) : undefined
+            });
+
+            if(!response.ok){
+                const payload = await response.json().catch(() => null);
+                showVariantModal({
+                    title: isBaseVariant ? "Falha ao limpar" : "Falha ao excluir",
+                    message: payload?.error || (isBaseVariant ? "Falha ao limpar a versão." : "Falha ao excluir a versão."),
+                    confirmLabel: "OK",
+                    cancelLabel: "",
+                    kind: "danger"
+                });
+                return;
+            }
+
+            if(isBaseVariant){
+                selectedNode.target = fileName;
+                renderCharacterSkillView();
+                return;
+            }
+
+            const remaining = await getCharacterSkillVariantCandidates(node);
+            const nextTarget = remaining.find(candidate => candidate.toLowerCase() !== fileName.toLowerCase()) || "";
+
+            if(nextTarget){
+                selectedNode.target = nextTarget;
+            } else {
+                const baseName = getCharacterSkillBaseName(fileName);
+                selectedNode.target = `${baseName}.skill`;
+            }
+
+            renderCharacterSkillView();
+        }
+    });
+}
+
+async function syncCharacterSkillVariantBadge(){
+    const badgeWrap = document.getElementById("skillVariantBadgeRow");
+    if(!badgeWrap || !selectedNode || selectedNode.type === "group" || selectedNode === pendingNode) {
+        if(badgeWrap) badgeWrap.innerHTML = "";
+        return;
+    }
+
+    const variants = await getCharacterSkillVariantCandidates(selectedNode);
+    const selectedTarget = String(selectedNode.target || buildCharacterTarget(selectedNode.label || "")).trim();
+    const defaultTarget = getCharacterSkillDefaultTarget(selectedNode);
+    const currentTarget = String(selectedNode.target || defaultTarget || "").trim();
+    const activeBaseName = getCharacterSkillBaseName(selectedTarget || defaultTarget);
+
+    badgeWrap.innerHTML = "";
+
+    for(let variantNumber = 1; variantNumber <= 5; variantNumber += 1){
+        const candidate = variantNumber === 1
+            ? `${activeBaseName}.skill`
+            : `${activeBaseName}(${variantNumber}).skill`;
+        const exists = variants.some(item => item.toLowerCase() === candidate.toLowerCase());
+        const isDefaultVariant = exists && candidate.toLowerCase() === defaultTarget.toLowerCase();
+        const isSelectedVariant = exists && candidate.toLowerCase() === selectedTarget.toLowerCase();
+
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "skill-variant-badge" + (isSelectedVariant ? " active" : "") + (isDefaultVariant ? " default" : "");
+        button.title = exists ? `Versão ${variantNumber}` : `Adicionar versão ${variantNumber}`;
+        button.setAttribute("aria-label", exists ? `Versão ${variantNumber}` : `Adicionar versão ${variantNumber}`);
+        button.style.width = "28px";
+        button.style.height = "28px";
+        button.style.padding = "3px";
+        button.style.borderRadius = "6px";
+        button.style.display = "inline-flex";
+        button.style.alignItems = "center";
+        button.style.justifyContent = "center";
+        button.style.opacity = exists ? "1" : "0.55";
+
+        const img = document.createElement("img");
+        img.src = `res/uptie/T${Math.min(variantNumber, 6)}.png`;
+        img.alt = `T${variantNumber}`;
+        img.style.display = "block";
+        img.style.width = "100%";
+        img.style.height = "100%";
+        img.style.objectFit = "contain";
+        img.style.pointerEvents = "none";
+
+        button.appendChild(img);
+        button.addEventListener("click", async () => {
+            if(exists){
+                selectedNode.target = candidate;
+                renderCharacterSkillView();
+                return;
+            }
+
+            showVariantModal({
+                title: "Adicionar versão",
+                message: `Adicionar a versão T${variantNumber} (${candidate})?`,
+                confirmLabel: "Adicionar",
+                cancelLabel: "Cancelar",
+                kind: "info",
+                onConfirm: async () => {
+                    const created = await createCharacterSkillVariant(selectedNode, variantNumber);
+                    if(created){
+                        selectedNode.target = created;
+                        renderCharacterSkillView();
+                    } else {
+                        showVariantModal({
+                            title: "Falha ao criar",
+                            message: "Não foi possível criar a versão solicitada.",
+                            confirmLabel: "OK",
+                            cancelLabel: "",
+                            kind: "danger"
+                        });
+                    }
+                }
+            });
+        });
+
+        badgeWrap.appendChild(button);
+    }
+
+    const defaultButton = document.createElement("button");
+    defaultButton.type = "button";
+    defaultButton.textContent = "Definir padrão";
+    defaultButton.title = "Usar esta versão ao abrir a página do personagem";
+    defaultButton.style.minWidth = "110px";
+    defaultButton.style.padding = "4px 10px";
+    defaultButton.style.borderRadius = "6px";
+    defaultButton.style.border = "1px solid rgba(255,255,255,0.2)";
+    defaultButton.style.background = "rgba(82, 96, 160, 0.9)";
+    defaultButton.style.color = "#fff";
+    defaultButton.style.cursor = "pointer";
+    defaultButton.disabled = !currentTarget;
+    defaultButton.addEventListener("click", () => {
+        const fileName = String(selectedNode.target || defaultTarget || "").trim();
+        if(!fileName) return;
+
+        selectedNode.defaultTarget = fileName;
+        selectedNode.target = fileName;
+        saveChars();
+        renderCharacterSkillView();
+    });
+
+    badgeWrap.appendChild(defaultButton);
+
+    const deleteButton = document.createElement("button");
+    deleteButton.type = "button";
+    deleteButton.textContent = "Excluir";
+    deleteButton.title = "Excluir a versão ativa";
+    deleteButton.style.minWidth = "70px";
+    deleteButton.style.padding = "4px 8px";
+    deleteButton.style.borderRadius = "6px";
+    deleteButton.style.border = "1px solid rgba(255,255,255,0.2)";
+    deleteButton.style.background = "rgba(90, 20, 20, 0.8)";
+    deleteButton.style.color = "#fff";
+    deleteButton.style.cursor = "pointer";
+    deleteButton.disabled = !currentTarget;
+    deleteButton.addEventListener("click", async () => {
+        const fileName = String(selectedNode.target || defaultTarget || "").trim();
+        if(!fileName) return;
+        await deleteCharacterSkillVariant(selectedNode, fileName);
+    });
+
+    badgeWrap.appendChild(deleteButton);
+}
+
+async function renderCharacterSkillView(){
 
     const editor = document.getElementById("charEditor");
     if(!editor || !selectedNode || selectedNode.type === "group" || selectedNode === pendingNode) return;
+    const previousSkillTextarea = document.getElementById("skillFileEditor");
+    if(previousSkillTextarea?.dataset.skillScrollKey){
+        characterSkillScrollPositions.set(previousSkillTextarea.dataset.skillScrollKey, previousSkillTextarea.scrollTop);
+    }
 
     const skillUrl = getSelectedCharacterSkillUrl(selectedNode);
     if(!skillUrl){
@@ -1512,8 +2402,10 @@ function renderCharacterSkillView(){
 
     const renderToken = ++characterSkillRenderToken;
 
+    const initialTheme = characterEditorTheme;
+
     editor.innerHTML = `
-        <div class="skill-viewer-panel">
+        <div class="skill-viewer-panel" data-skill-theme="${initialTheme}">
             <div class="skill-viewer-toolbar">
                 <div class="skill-viewer-meta">
                     <strong>${selectedNode.label || "Sem nome"}</strong>
@@ -1521,14 +2413,18 @@ function renderCharacterSkillView(){
                 </div>
 
                 <div class="skill-viewer-actions">
+                    <div id="skillVariantBadgeRow" style="display:flex; align-items:center; gap:4px; flex-wrap:wrap;"></div>
                     <button onclick="saveCharacterSkill()">Salvar</button>
                     <button class="danger" onclick="cancelCharacterSkillEdit()">Cancelar alteração</button>
                 </div>
             </div>
 
             <div class="skill-viewer-status" id="skillDirtyIndicator">Sem alterações pendentes</div>
+            <div id="skillVariantCaption" hidden style="display:none;"></div>
 
-            <textarea id="skillFileEditor" class="skill-viewer-textarea" spellcheck="false">Carregando arquivo .skill...</textarea>
+            <div class="skill-viewer-text-shell">
+                <textarea id="skillFileEditor" class="skill-viewer-textarea" spellcheck="false">Carregando arquivo .skill...</textarea>
+            </div>
 
             <div class="skill-viewer-actions">
                 <button onclick="saveCharacterSkill()">Salvar</button>
@@ -1537,11 +2433,19 @@ function renderCharacterSkillView(){
         </div>
     `;
 
+    applyCharacterEditorTheme(initialTheme);
+
     const textarea = document.getElementById("skillFileEditor");
     if(textarea){
+        textarea.dataset.skillScrollKey = skillUrl;
+        textarea.addEventListener("scroll", () => {
+            characterSkillScrollPositions.set(skillUrl, textarea.scrollTop);
+        }, { passive: true });
         textarea.addEventListener("input", onCharacterSkillInput);
     }
 
+    clearCharacterSkillCaption();
+    await syncCharacterSkillVariantBadge();
     loadCharacterSkillContent(textarea, skillUrl, renderToken);
 }
 
@@ -1568,6 +2472,7 @@ async function loadCharacterSkillContent(textarea, skillUrl, renderToken){
         characterSkillOriginalContent = content || "";
         characterSkillIsDirty = false;
         textarea.value = characterSkillOriginalContent;
+        textarea.scrollTop = characterSkillScrollPositions.get(textarea.dataset.skillScrollKey) || 0;
         updateCharacterSkillDirtyIndicator();
     }catch(err){
         if(renderToken !== characterSkillRenderToken) return;
@@ -1579,6 +2484,124 @@ async function loadCharacterSkillContent(textarea, skillUrl, renderToken){
     }
 }
 
+function showCharacterSkillCaption(message, kind = "error"){
+    const caption = document.getElementById("skillVariantCaption");
+    if(!caption) return;
+
+    caption.textContent = message || "";
+    caption.hidden = !message;
+    caption.style.display = message ? "block" : "none";
+    caption.style.marginTop = "8px";
+    caption.style.padding = "8px 10px";
+    caption.style.borderRadius = "6px";
+    caption.style.fontSize = "12px";
+    caption.style.lineHeight = "1.4";
+    caption.style.border = kind === "error"
+        ? "1px solid rgba(255, 123, 123, 0.7)"
+        : "1px solid rgba(132, 174, 214, 0.5)";
+    caption.style.background = kind === "error"
+        ? "rgba(104, 26, 26, 0.58)"
+        : "rgba(26, 42, 62, 0.68)";
+    caption.style.color = "#f5f7ff";
+}
+
+function clearCharacterSkillCaption(){
+    showCharacterSkillCaption("", "error");
+}
+
+function showVariantModal({ title, message, confirmLabel = "OK", cancelLabel = "Cancelar", onConfirm, kind = "info" }) {
+    const existing = document.getElementById("variantActionModal");
+    if(existing) existing.remove();
+
+    const overlay = document.createElement("div");
+    overlay.id = "variantActionModal";
+    overlay.style.position = "fixed";
+    overlay.style.inset = "0";
+    overlay.style.background = "rgba(13, 9, 18, 0.72)";
+    overlay.style.display = "flex";
+    overlay.style.alignItems = "center";
+    overlay.style.justifyContent = "center";
+    overlay.style.zIndex = "99999";
+    overlay.style.padding = "20px";
+
+    const panel = document.createElement("div");
+    panel.style.width = "min(500px, calc(100vw - 28px))";
+    panel.style.background = "#1d1428";
+    panel.style.border = "1px solid rgba(154, 128, 209, 0.65)";
+    panel.style.borderRadius = "12px";
+    panel.style.boxShadow = "0 18px 42px rgba(0, 0, 0, 0.5)";
+    panel.style.padding = "18px 20px 16px";
+    panel.style.color = "#f1eff8";
+
+    const heading = document.createElement("div");
+    heading.textContent = title || "Atenção";
+    heading.style.fontSize = "12px";
+    heading.style.fontWeight = "700";
+    heading.style.textTransform = "uppercase";
+    heading.style.letterSpacing = "0.08em";
+    heading.style.opacity = "0.72";
+    heading.style.marginBottom = "10px";
+
+    const body = document.createElement("div");
+    body.textContent = message || "";
+    body.style.fontSize = "16px";
+    body.style.lineHeight = "1.5";
+    body.style.marginBottom = "18px";
+    body.style.color = "#f4f2fb";
+
+    const actions = document.createElement("div");
+    actions.style.display = "flex";
+    actions.style.justifyContent = "flex-end";
+    actions.style.gap = "10px";
+    actions.style.flexWrap = "wrap";
+
+    const cancelButton = document.createElement("button");
+    cancelButton.type = "button";
+    cancelButton.textContent = cancelLabel;
+    cancelButton.style.background = "transparent";
+    cancelButton.style.border = "1px solid rgba(192, 174, 255, 0.9)";
+    cancelButton.style.borderRadius = "999px";
+    cancelButton.style.color = "#f1eff8";
+    cancelButton.style.padding = "10px 18px";
+    cancelButton.style.fontWeight = "700";
+    cancelButton.style.cursor = "pointer";
+    cancelButton.style.minWidth = "120px";
+    cancelButton.addEventListener("click", () => {
+        overlay.remove();
+    });
+
+    const confirmButton = document.createElement("button");
+    confirmButton.type = "button";
+    confirmButton.textContent = confirmLabel;
+    confirmButton.style.background = kind === "danger"
+        ? "#8d3d3d"
+        : "#a79be5";
+    confirmButton.style.color = kind === "danger" ? "#fff" : "#1d1428";
+    confirmButton.style.border = "1px solid rgba(167, 155, 229, 0.9)";
+    confirmButton.style.borderRadius = "999px";
+    confirmButton.style.padding = "10px 18px";
+    confirmButton.style.fontWeight = "800";
+    confirmButton.style.cursor = "pointer";
+    confirmButton.style.minWidth = "120px";
+    confirmButton.addEventListener("click", () => {
+        overlay.remove();
+        if(typeof onConfirm === "function") onConfirm();
+    });
+
+    if(cancelLabel === "") {
+        actions.appendChild(confirmButton);
+    } else {
+        actions.appendChild(confirmButton);
+        actions.appendChild(cancelButton);
+    }
+
+    panel.appendChild(heading);
+    panel.appendChild(body);
+    panel.appendChild(actions);
+    overlay.appendChild(panel);
+    document.body.appendChild(overlay);
+}
+
 function onCharacterSkillInput(){
 
     const textarea = document.getElementById("skillFileEditor");
@@ -1586,6 +2609,7 @@ function onCharacterSkillInput(){
 
     characterSkillIsDirty = textarea.value !== characterSkillOriginalContent;
     updateCharacterSkillDirtyIndicator();
+    clearCharacterSkillCaption();
 }
 
 async function saveCharacterSkill(){
@@ -1688,6 +2712,10 @@ function confirmPending(){
         pendingNode.folder = buildGroupFolderName(pendingNode.label);
     }else{
         pendingNode.target = buildCharacterTarget(pendingNode.label);
+        const hiddenField = document.getElementById("edit-hidden");
+        if(hiddenField && hiddenField.checked){
+            pendingNode.hidden = true;
+        }
     }
 
     pendingNode = null;
@@ -1949,7 +2977,9 @@ function findCharacterImagePath(nodes, targetNode, segments = []){
 
         if(node.type === "group"){
 
-            const groupSegment = normalizeFsSegment(node.folder || node.label, "Nova Pasta");
+            const groupSegment = buildGroupFolderName(
+                node.folder || node.label
+            );
 
             const found = findCharacterImagePath(
                 Array.isArray(node.children) ? node.children : [],
@@ -2073,13 +3103,17 @@ async function removeCharacterImage(kind){
 
 function getNodeFolderPath(node, overrideLabel = null){
 
-    if(!node) return "";
+    if(!node){
+        return "";
+    }
 
     const parts = [];
 
     function walk(nodes, trail){
 
-        if(!Array.isArray(nodes)) return false;
+        if(!Array.isArray(nodes)){
+            return false;
+        }
 
         for(const item of nodes){
 
@@ -2088,23 +3122,52 @@ function getNodeFolderPath(node, overrideLabel = null){
             if(item.type === "group"){
 
                 const groupLabel = item === node
-                    ? (overrideLabel !== null ? overrideLabel : item.label)
+                    ? (
+                        overrideLabel !== null
+                            ? overrideLabel
+                            : item.label
+                    )
                     : (item.folder || item.label);
 
-                const groupSegment = buildGroupFolderName(groupLabel);
+                const groupSegment =
+                    buildGroupFolderName(groupLabel);
 
                 if(item === node){
-                    parts.push(...trail, groupSegment);
+                    parts.push(
+                        ...trail,
+                        groupSegment
+                    );
                     return true;
                 }
 
-                if(walk(Array.isArray(item.children) ? item.children : [], trail.concat(groupSegment))) return true;
+                if(
+                    walk(
+                        Array.isArray(item.children)
+                            ? item.children
+                            : [],
+                        trail.concat(groupSegment)
+                    )
+                ){
+                    return true;
+                }
+
                 continue;
             }
 
             if(item === node){
-                const characterLabel = overrideLabel !== null ? overrideLabel : item.label;
-                parts.push(...trail, buildCharacterFolderName(characterLabel));
+
+                const characterLabel =
+                    overrideLabel !== null
+                        ? overrideLabel
+                        : item.label;
+
+                parts.push(
+                    ...trail,
+                    buildCharacterFolderName(
+                        characterLabel
+                    )
+                );
+
                 return true;
             }
         }
@@ -2113,6 +3176,7 @@ function getNodeFolderPath(node, overrideLabel = null){
     }
 
     walk(charsData, []);
+
     return parts.join("/");
 }
 
@@ -2209,6 +3273,12 @@ async function applyCharEdit(){
     }else{
 
         selectedNode.target = buildCharacterTarget(selectedNode.label);
+        const hiddenField = document.getElementById("edit-hidden");
+        if(hiddenField && hiddenField.checked){
+            selectedNode.hidden = true;
+        }else{
+            delete selectedNode.hidden;
+        }
     }
 
     renderTree();
@@ -2344,6 +3414,11 @@ function addGroupInside(){
         selectedNode.type !== "group"
     ) return;
 
+    if(getCharacterFolderDepth(selectedNode.children) + 1 > MAX_CHARACTER_FOLDER_DEPTH){
+        alert(`A árvore de personagens permite no máximo ${MAX_CHARACTER_FOLDER_DEPTH} níveis de pastas.`);
+        return;
+    }
+
     selectedNode.children ||= [];
 
     const label = "Novo Grupo";
@@ -2454,15 +3529,28 @@ function stripOpenFlags(node){
 
 function saveChars(){
 
-    const sanitizedCharsData = stripOpenFlags(charsData);
+    charsSaveQueue =
+        charsSaveQueue.then(async () => {
 
-    charsSaveQueue = charsSaveQueue
-        .then(() => writeEditorJson(
-            EDITOR_API_PATHS.chars,
-            sanitizedCharsData
-        ))
-        .catch(error => {
-            console.error("Erro ao salvar chars.json:", error);
+            // Captura o estado somente quando esta gravação
+            // chegar à vez na fila. Assim uma gravação antiga
+            // não consegue sobrescrever um movimento mais recente.
+            const sanitizedCharsData =
+                stripOpenFlags(charsData);
+
+            await writeEditorJson(
+                EDITOR_API_PATHS.chars,
+                sanitizedCharsData
+            );
+
+        }).catch(error => {
+
+            console.error(
+                "Erro ao salvar chars.json:",
+                error
+            );
+
+            throw error;
         });
 
     return charsSaveQueue;
@@ -2666,13 +3754,20 @@ function renderEffectEditor(){
     const effect =
         effectsData[selectedEffectKey];
 
+    const escapeEditorHtml = (value) => String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/\"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+
     editor.innerHTML = `
 
         <label>ID do efeito</label>
 
         <input
             id="effect-id"
-            value="${selectedEffectKey}"
+            value="${escapeEditorHtml(selectedEffectKey)}"
         >
 
         <label>Tipo</label>
@@ -2743,7 +3838,7 @@ function renderEffectEditor(){
 
         <label>Descrição</label>
 
-        <textarea id="effect-desc">${effect.desc}</textarea>
+        <textarea id="effect-desc">${escapeEditorHtml(effect.desc)}</textarea>
 
         <label class="check-row">
             <input
@@ -2756,20 +3851,22 @@ function renderEffectEditor(){
 
         <hr>
 
-        <button onclick="applyEffectEdit()">
-            Aplicar
-        </button>
+        <div class="button-row">
+            <button onclick="applyEffectEdit()">
+                Aplicar
+            </button>
 
-        <button onclick="duplicateEffect()">
-            Duplicar
-        </button>
+            <button onclick="duplicateEffect()">
+                Duplicar
+            </button>
 
-        <button
-            class="danger"
-            onclick="deleteEffect()"
-        >
-            Excluir
-        </button>
+            <button
+                class="danger"
+                onclick="deleteEffect()"
+            >
+                Excluir
+            </button>
+        </div>
 
         <div class="preview">
 

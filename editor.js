@@ -1,7 +1,8 @@
 const http = require("http");
 const fs = require("fs/promises");
+const { watch } = require("fs");
 const path = require("path");
-const { execFile } = require("child_process");
+const { execFile, spawn } = require("child_process");
 
 const rootDir = __dirname;
 const port = Number(process.env.PORT || 4173);
@@ -151,22 +152,77 @@ async function removeImageVariants(dirPath, baseName) {
 }
 
 async function renamePathPreservingContents(sourcePath, targetPath) {
+
     if (!sourcePath || !targetPath || sourcePath === targetPath) {
         return;
     }
 
-    await fs.mkdir(path.dirname(targetPath), { recursive: true });
+    async function copyThenRemoveSource() {
+        await fs.cp(sourcePath, targetPath, {
+            recursive: true,
+            errorOnExist: true,
+            force: false,
+            preserveTimestamps: true
+        });
+
+        try {
+            await fs.rm(sourcePath, {
+                recursive: true,
+                force: true
+            });
+        } catch (error) {
+            throw new Error(
+                `A pasta foi copiada para o destino, mas não foi possível remover a pasta original: ${error.message}`
+            );
+        }
+    }
+
+    // Garante somente a pasta-pai do destino.
+    await fs.mkdir(path.dirname(targetPath), {
+        recursive: true
+    });
 
     try {
+
+        // MOVIMENTO NORMAL:
+        // move a pasta inteira, preservando absolutamente todo
+        // o conteúdo dela.
         await fs.rename(sourcePath, targetPath);
+
+        return;
+
     } catch (error) {
-        if (error && error.code === "ENOENT") {
-            return;
+
+        let destinationExists = false;
+        if (error && error.code === "EPERM") {
+            try {
+                await fs.lstat(targetPath);
+                destinationExists = true;
+            } catch (statError) {
+                if (!statError || statError.code !== "ENOENT") {
+                    throw error;
+                }
+            }
         }
 
-        if (error && error.code === "EXDEV") {
-            await fs.cp(sourcePath, targetPath, { recursive: true });
-            await fs.rm(sourcePath, { recursive: true, force: true });
+        // Windows may report EPERM for both an existing destination and a
+        // locked source, so only report a name conflict when the target exists.
+        if (error && (
+            error.code === "EEXIST" ||
+            (error.code === "EPERM" && destinationExists)
+        )) {
+            throw new Error(
+                `A pasta de destino já existe: ${targetPath}`
+            );
+        }
+
+        // OneDrive and Windows can reject a directory rename even when the
+        // destination is free. Copy first, then remove the source only on success.
+        if (error && (
+            error.code === "EXDEV" ||
+            (error.code === "EPERM" && !destinationExists)
+        )) {
+            await copyThenRemoveSource();
             return;
         }
 
@@ -213,6 +269,8 @@ function getCharacterTargetName(node) {
     return `${baseName}.skill`;
 }
 
+const DEFAULT_CHARACTER_SKILL_CONTENT = "S-OVERVIEW\n\nDESCRIPTION\n{\n\n}\n\nE-OVERVIEW\n";
+
 async function ensureFileExists(filePath, content = "") {
     try {
         await fs.access(filePath);
@@ -222,54 +280,188 @@ async function ensureFileExists(filePath, content = "") {
 }
 
 async function syncCharsFilesystem(nodes, parentDir) {
-    await fs.mkdir(parentDir, { recursive: true });
+
+    await fs.mkdir(parentDir, {
+        recursive: true
+    });
 
     if (!Array.isArray(nodes)) {
         return;
     }
 
-    // Primeiro, crie/garanta os diretórios e arquivos esperados
+    // Guarda os nomes que DEVEM existir neste diretório.
     const desiredNames = new Set();
 
     for (const node of nodes) {
+
         if (!node || typeof node !== "object") {
             continue;
         }
 
+        // =========================
+        // GRUPO
+        // =========================
+
         if (node.type === "group") {
+
             const name = getGroupFolderName(node);
+
             desiredNames.add(name);
-            const groupDir = path.join(parentDir, name);
-            await fs.mkdir(groupDir, { recursive: true });
-            await syncCharsFilesystem(Array.isArray(node.children) ? node.children : [], groupDir);
+
+            const groupDir = path.join(
+                parentDir,
+                name
+            );
+
+            await fs.mkdir(groupDir, {
+                recursive: true
+            });
+
+            await syncCharsFilesystem(
+                Array.isArray(node.children)
+                    ? node.children
+                    : [],
+                groupDir
+            );
+
             continue;
         }
 
-        const name = getCharacterFolderName(node);
-        desiredNames.add(name);
-        const characterDir = path.join(parentDir, name);
-        await fs.mkdir(characterDir, { recursive: true });
+        // =========================
+        // PERSONAGEM
+        // =========================
 
-        const targetFile = path.join(characterDir, getCharacterTargetName(node));
-        await ensureFileExists(targetFile, "");
+        const name = getCharacterFolderName(node);
+
+        desiredNames.add(name);
+
+        const characterDir = path.join(
+            parentDir,
+            name
+        );
+
+        await fs.mkdir(characterDir, {
+            recursive: true
+        });
+
+        const targetFile = path.join(
+            characterDir,
+            getCharacterTargetName(node)
+        );
+
+        await ensureFileExists(
+            targetFile,
+            DEFAULT_CHARACTER_SKILL_CONTENT
+        );
     }
 
-    // Depois, remova diretórios que não estão mais presentes no JSON
+    // ==================================================
+    // LIMPEZA
+    //
+    // Aqui SIM podemos apagar pastas.
+    //
+    // Se uma pasta não está mais no chars.json,
+    // significa que o usuário removeu aquele item.
+    //
+    // O movimento NÃO passa por aqui com a pasta antiga,
+    // porque moveDraggedNode() primeiro move fisicamente
+    // a pasta e somente depois salva o JSON.
+    // ==================================================
+
     try {
-        const entries = await fs.readdir(parentDir, { withFileTypes: true });
+
+        const entries = await fs.readdir(
+            parentDir,
+            {
+                withFileTypes: true
+            }
+        );
 
         for (const entry of entries) {
-            if (!entry.isDirectory()) continue;
 
-            if (!desiredNames.has(entry.name)) {
-                const fullPath = path.join(parentDir, entry.name);
-                // removendo diretório obsoleto
-                await fs.rm(fullPath, { recursive: true, force: true });
+            if (!entry.isDirectory()) {
+                continue;
             }
+
+            if (desiredNames.has(entry.name)) {
+                continue;
+            }
+
+            const obsoletePath = path.join(
+                parentDir,
+                entry.name
+            );
+
+            await fs.rm(
+                obsoletePath,
+                {
+                    recursive: true,
+                    force: true
+                }
+            );
         }
-    } catch (err) {
-        // se não for possível ler/limpar, apenas continue sem quebrar
-        // isso evita perda de dados por erro inesperado
+
+    } catch (error) {
+
+        console.error(
+            "Erro ao limpar pastas obsoletas de chars:",
+            error
+        );
+    }
+}
+
+// Sincroniza a lista de imagens na pasta res/effects com res/effects/index.json
+async function syncEffectsIndex() {
+    const effectsDir = path.join(rootDir, "res", "effects");
+    const indexPath = path.join(effectsDir, "index.json");
+
+    try {
+        await fs.mkdir(effectsDir, { recursive: true });
+
+        const entries = await fs.readdir(effectsDir, { withFileTypes: true });
+
+        const imageFiles = entries
+            .filter(entry => entry.isFile())
+            .map(entry => entry.name)
+            .filter(name => isImageFileName(name) && name.toLowerCase() !== "index.json")
+            .sort((left, right) => left.localeCompare(right, "pt-BR", { sensitivity: "base" }));
+
+        let currentList = [];
+        try {
+            const content = await fs.readFile(indexPath, "utf8");
+            currentList = JSON.parse(content);
+        } catch (error) {
+            // Se não existir ou for inválido, inicia com lista vazia
+        }
+
+        if (JSON.stringify(currentList) !== JSON.stringify(imageFiles)) {
+            await fs.writeFile(indexPath, `${JSON.stringify(imageFiles, null, 2)}\n`, "utf8");
+            console.log("Arquivo res/effects/index.json atualizado.");
+        }
+    } catch (error) {
+        console.error("Erro ao sincronizar res/effects/index.json:", error.message);
+    }
+}
+
+// Observa mudanças na pasta res/effects para acionar a sincronização
+function watchEffectsDirectory() {
+    const effectsDir = path.join(rootDir, "res", "effects");
+
+    // Sincroniza imediatamente ao iniciar o servidor
+    syncEffectsIndex();
+
+    try {
+        let debounceTimer = null;
+        watch(effectsDir, (eventType, filename) => {
+            if (!filename || filename.toLowerCase() === "index.json") return;
+
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => {
+                syncEffectsIndex();
+            }, 300);
+        });
+    } catch (error) {
+        console.error("Erro ao observar diretório res/effects:", error.message);
     }
 }
 
@@ -288,24 +480,34 @@ async function handleDataRequest(request, response, resourceName) {
     }
 
     if (request.method === "PUT") {
-        try {
-            const body = await readBody(request);
-            const parsed = JSON.parse(body);
-            await fs.writeFile(filePath, `${JSON.stringify(parsed, null, 2)}\n`, "utf8");
+    try {
+        const body = await readBody(request);
+        const parsed = JSON.parse(body);
 
-            if (resourceName === "chars") {
-                await syncCharsFilesystem(parsed, path.join(rootDir, "bd", "chars"));
-            }
+        await fs.writeFile(
+            filePath,
+            `${JSON.stringify(parsed, null, 2)}\n`,
+            "utf8"
+        );
 
-            sendJson(response, 200, { ok: true });
-        } catch (error) {
-            sendJson(response, 400, {
-                ok: false,
-                error: error.message
-            });
+        if (resourceName === "chars") {
+            await syncCharsFilesystem(
+                parsed,
+                path.join(rootDir, "bd", "chars")
+            );
         }
 
-        return;
+        sendJson(response, 200, {
+            ok: true
+        });
+    } catch (error) {
+        sendJson(response, 400, {
+            ok: false,
+            error: error.message
+        });
+    }
+
+    return;
     }
 
     sendText(response, 405, "Method Not Allowed");
@@ -486,7 +688,7 @@ async function handleCharacterRenameRequest(request, response) {
 }
 
 async function handleCharacterSkillRequest(request, response) {
-    if (request.method !== "GET" && request.method !== "PUT") {
+    if (request.method !== "GET" && request.method !== "PUT" && request.method !== "DELETE") {
         sendText(response, 405, "Method Not Allowed");
         return;
     }
@@ -515,6 +717,16 @@ async function handleCharacterSkillRequest(request, response) {
             return;
         }
 
+        if (request.method === "DELETE") {
+            await fs.rm(targetFile, { force: true });
+            sendJson(response, 200, {
+                ok: true,
+                deleted: safeFileName,
+                folderPath
+            });
+            return;
+        }
+
         const body = JSON.parse(await readBody(request));
         const content = String(body.content || "");
 
@@ -524,6 +736,59 @@ async function handleCharacterSkillRequest(request, response) {
             ok: true,
             fileName: safeFileName,
             folderPath
+        });
+    } catch (error) {
+        sendJson(response, 400, {
+            ok: false,
+            error: error.message
+        });
+    }
+}
+
+async function handleOpenCharacterFolderRequest(request, response) {
+    if (request.method !== "POST") {
+        sendText(response, 405, "Method Not Allowed");
+        return;
+    }
+
+    try {
+        const body = JSON.parse(await readBody(request));
+        const folderPath = String(body.folderPath || "").trim();
+
+        if (!folderPath) {
+            throw new Error("Pasta do personagem ausente.");
+        }
+
+        const targetDir = resolveCharsDirPath(folderPath);
+        const stats = await fs.stat(targetDir);
+
+        if (!stats.isDirectory()) {
+            throw new Error("O caminho do personagem não é uma pasta.");
+        }
+
+        const fileManager = process.platform === "win32"
+            ? ["explorer.exe", [targetDir]]
+            : process.platform === "darwin"
+                ? ["open", [targetDir]]
+                : ["xdg-open", [targetDir]];
+
+        const fileManagerProcess = spawn(fileManager[0], fileManager[1], {
+            detached: true,
+            stdio: "ignore"
+        });
+
+        fileManagerProcess.once("error", error => {
+            if (!response.writableEnded) {
+                sendJson(response, 500, {
+                    ok: false,
+                    error: `Não foi possível abrir a pasta: ${error.message}`
+                });
+            }
+        });
+
+        fileManagerProcess.once("spawn", () => {
+            fileManagerProcess.unref();
+            sendJson(response, 200, { ok: true });
         });
     } catch (error) {
         sendJson(response, 400, {
@@ -558,6 +823,11 @@ const server = http.createServer(async (request, response) => {
 
     if (url.pathname === "/api/chars/skill") {
         await handleCharacterSkillRequest(request, response);
+        return;
+    }
+
+    if (url.pathname === "/api/chars/open-folder") {
+        await handleOpenCharacterFolderRequest(request, response);
         return;
     }
 
@@ -598,6 +868,9 @@ server.listen(port, () => {
     const url = `http://localhost:${port}/editor.html`;
 
     console.log(`Editor ativo em ${url}`);
+
+    // Inicia a observação da pasta res/effects
+    watchEffectsDirectory();
 
     if (process.platform === "win32" && process.env.NO_OPEN_BROWSER !== "1") {
         execFile("cmd", ["/c", "start", "", url], { windowsHide: true }, () => {});

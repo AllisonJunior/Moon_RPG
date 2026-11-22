@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <title>Moon Office</title>
+  <script>
+    (function () {
+      // GitHub Pages has no server-side rewrite rule. Preserve the requested
+      // SPA address while loading the application entry page.
+      var path = window.location.pathname;
+      var indexPosition = path.toLowerCase().indexOf("/index.html");
+      var base = indexPosition === -1 ? "/" : path.slice(0, indexPosition + 1);
+      var requested = path + window.location.search + window.location.hash;
+      window.location.replace(base + "index.html?spa-path=" + encodeURIComponent(requested));
+    }());
+  </script>
+</head>
+<body></body>
+</html>

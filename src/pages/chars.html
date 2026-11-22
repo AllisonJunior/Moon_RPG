@@ -5,7 +5,7 @@
 
 
 <head>
-       <title>Personagens | Moon</title>
+       <title><DEV> Personagens | Moon</title>
 
        <link rel="stylesheet" href="../styles/pages.css">
        <link rel="icon" href="../../res/img/main.ico">
@@ -20,7 +20,7 @@
 
                  <div class="sidebar-col">
                         <nav class="navbar">
-                               <button type="button" class="navbar-title" onclick="nav('./chars.html')">Personagens</button>
+                               <button type="button" class="navbar-title" onclick="showCharacterBrowser()">Personagens</button>
                                <hr class="navbar-separator" />
                                      <div class="chars-nav" data-chars-tree></div>
                                <hr class="navbar-separator navbar-separator-back" />
@@ -39,19 +39,27 @@
                              </div>
 
                       <nav class="chars-section-tabs" aria-label="Seções do personagem">
-                             <button type="button" class="chars-section-tab active">Overview</button>
-                             <button type="button" class="chars-section-tab">Armas</button>
-                             <button type="button" class="chars-section-tab">Skills</button>
-
-                             <div class="chars-skills-submenu" aria-label="Submenu de Skills" role="toolbar">
-                                    <button type="button" class="chars-skill-option" data-skill-type="skill" data-skill-index="0">Skill 1</button>
-                                    <button type="button" class="chars-skill-option" data-skill-type="skill" data-skill-index="1">Skill 2</button>
-                                    <button type="button" class="chars-skill-option" data-skill-type="skill" data-skill-index="2">Skill 3</button>
-                                    <button type="button" class="chars-skill-option" data-skill-type="defense">Defesa</button>
-                                    <button type="button" class="chars-skill-option" data-skill-type="passives">Passivas</button>
+                             <div class="chars-section-badge-wrap">
+                                    <button type="button" class="chars-section-badge" aria-label="Uptie T1" title="Uptie T1">
+                                           <img src="../../res/uptie/T1.png" alt="T1">
+                                    </button>
                              </div>
+                             <div class="chars-section-buttons">
+                                    <button type="button" class="chars-section-tab active">Overview</button>
+                                    <button type="button" class="chars-section-tab">Armas</button>
+                                    <button type="button" class="chars-section-tab">Skills</button>
 
-                             <button type="button" class="chars-section-tab">E.G.O</button>
+                                    <div class="chars-skills-submenu" aria-label="Submenu de Skills" role="toolbar">
+                                           <button type="button" class="chars-skill-option" data-skill-type="skill" data-skill-index="0">Skill 1</button>
+                                           <button type="button" class="chars-skill-option" data-skill-type="skill" data-skill-index="1">Skill 2</button>
+                                           <button type="button" class="chars-skill-option" data-skill-type="skill" data-skill-index="2">Skill 3</button>
+                                           <button type="button" class="chars-skill-option" data-skill-type="defense">Defesa</button>
+                                           <button type="button" class="chars-skill-option" data-skill-type="passives">Passivas</button>
+                                    </div>
+
+                                    <button type="button" class="chars-section-tab">E.G.O</button>
+                                    <button type="button" class="chars-section-tab" data-section="sanity">Sanidade</button>
+                             </div>
                       </nav>
                       </div>
 
@@ -60,7 +68,6 @@
                </div>
 
         </div>
-
 
        <div class="stars"></div>
 

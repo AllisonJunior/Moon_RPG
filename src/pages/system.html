@@ -14,24 +14,31 @@
 
 
 
-<body>
+<body class="system-page">
        <button class="return_btn" onclick="nav('../../index.html')"></button>
 
        <div class="page_container">
 
            <nav class="navbar">
                <div class="nav-right">
-                   <button showcase data-md="../../bd/system/intro.md">Introdução</button>                   
-                   <button data-md="../../bd/system/attributes.md">Atributos</button>                   
-                   <button data-md="../../bd/system/pfr.md">Proficiência</button>      
+                   <button data-md="../../bd/system/intro.md">Introdução</button>                   
+                   <button data-md="../../bd/system/rules.md">Regras</button>                   
+                   <button data-md="../../bd/system/attributes.md">Atributos</button>                                                         
+                   <button data-md="../../bd/system/combat.md" data-system-combat-toggle aria-expanded="false" aria-controls="systemCombatSubnav">Combate</button>
                    <button data-md="../../bd/system/level.md">Nível</button>                            
-                   <button data-md="../../bd/system/fixes.md">Ajustes</button>                                            
-                   <button data-md="../../bd/system/combat.md">Combate</button>                                                          
-                   <button data-md="../../bd/system/effects.md">Efeitos</button>                                                          
                </div>
            </nav>
 
-           <div mkd-content></div>
+           <nav id="systemCombatSubnav" class="system-combat-subnav" aria-label="Subseções de Combate" hidden>
+               <button type="button" data-system-combat-section data-md="../../bd/system/combat.md" aria-selected="true">Geral</button>
+               <button type="button" data-system-combat-section data-md="../../bd/system/reactions.md" aria-selected="false">Reações</button>
+               <button type="button" data-system-combat-section data-md="../../bd/system/weapons.md" aria-selected="false">Armas</button>
+               <button type="button" data-system-combat-section data-md="../../bd/system/skills.md" aria-selected="false">Skills</button>
+               <button type="button" data-system-combat-section data-md="../../bd/system/passives.md" aria-selected="false">Passivas</button>
+               <button type="button" data-system-combat-section data-md="../../bd/system/ego.md" aria-selected="false">E.G.O</button>
+           </nav>
+
+           <div mkd-content class="system-content"></div>
                       
            <button class="btn" onclick="nav('../../index.html')">Voltar</button>
        

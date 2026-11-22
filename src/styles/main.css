@@ -1,3 +1,53 @@
+html {
+ scrollbar-gutter: stable;
+ scrollbar-width: thin;
+ scrollbar-color: rgba(140, 160, 220, 0.65) rgba(255, 255, 255, 0.06);
+}
+
+/* Same scrollbar treatment used by the in-app tooltip. */
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+ width: 8px;
+}
+
+html::-webkit-scrollbar-track,
+body::-webkit-scrollbar-track {
+ background: rgba(255, 255, 255, 0.06);
+}
+
+html::-webkit-scrollbar-thumb,
+body::-webkit-scrollbar-thumb {
+ background: linear-gradient(
+   180deg,
+   rgba(140, 160, 220, 0.75),
+   rgba(115, 135, 195, 0.75)
+ );
+ border: 1px solid rgba(255, 255, 255, 0.12);
+ border-radius: 999px;
+}
+
+html::-webkit-scrollbar-thumb:hover,
+body::-webkit-scrollbar-thumb:hover {
+ background: linear-gradient(
+   180deg,
+   #d8e6ff,
+   #88a8ff
+ );
+ border-color: #eef4ff;
+}
+
+/* Fallback for browsers that expose the document scrollbar through body. */
+html.is-document-scrollbar-hovered,
+html.is-document-scrollbar-hovered body {
+ scrollbar-color: #a9c0ff rgba(255, 255, 255, 0.06);
+}
+
+html.is-document-scrollbar-hovered::-webkit-scrollbar-thumb,
+html.is-document-scrollbar-hovered body::-webkit-scrollbar-thumb {
+ background: linear-gradient(180deg, #d8e6ff, #88a8ff);
+ border-color: #eef4ff;
+}
+
  body 
 {
  background-color: #330a3f;
@@ -23,6 +73,12 @@
  pointer-events: none;
  overflow: hidden;
 } 
+
+/* Keep the animated star field behind every page layer, including SPA routes. */
+body > :not(.stars):not(.tooltip-box) {
+ position: relative;
+ z-index: 1;
+}
 
 /* Estrelas normais */
 .star
@@ -146,7 +202,7 @@
 
 .page_container 
 { 
- max-width: 900px;
+ max-width: 1000px;
  width: 100%;
     
  background-color: #1e293b;
@@ -154,4 +210,132 @@
  border-radius: 10px;
 
  box-shadow: 0 0 20px rgba(0,0,0,0.3);
+}
+
+#spa-root[hidden],
+.menu[hidden] {
+ display: none;
+}
+
+body.home-page > #spa-root,
+body.home-page > .tooltip-box {
+ display: none !important;
+}
+
+/* Route markup is assembled asynchronously. Keep it out of view until its
+   initializers finish so the panel animation always starts at frame zero. */
+#spa-root.is-route-preparing {
+ visibility: hidden;
+ opacity: 0;
+ pointer-events: none;
+}
+
+/* Shared route transition, available before page-specific CSS is loaded. */
+#spa-root.is-route-entering,
+.menu.is-route-entering {
+ animation: moon-route-enter 220ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.menu.is-route-leaving {
+ animation: moon-route-leave 140ms ease-in both;
+}
+
+#spa-root.is-route-leaving {
+ animation: moon-route-leave 160ms ease-in both;
+}
+
+/* The route fades as a whole, while its actual content panel settles into
+   place a little more slowly. This avoids the panel appearing to pop in once
+   the route markup has mounted. */
+#spa-root.is-route-entering .page_container,
+#spa-root.is-route-entering .chars-shell {
+ animation: moon-panel-enter 300ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Regular pages mount their section bar inside the panel. Give that bar its
+   own entrance as well, so it does not appear fully formed a frame before the
+   panel/content has settled. */
+#spa-root.is-route-entering .page_container > .navbar {
+ animation: moon-section-bar-enter 260ms cubic-bezier(0.22, 1, 0.36, 1) 25ms both;
+}
+
+#spa-root.is-route-entering .page_container > [mkd-content] {
+ animation: moon-panel-content-enter 260ms ease-out 65ms both;
+}
+
+@keyframes moon-route-enter {
+ from {
+  opacity: 0;
+ }
+ to {
+  opacity: 1;
+ }
+}
+
+@keyframes moon-route-leave {
+ from {
+  opacity: 1;
+  transform: scale(1);
+ }
+ to {
+  opacity: 0;
+  transform: scale(0.985);
+ }
+}
+
+@keyframes moon-panel-enter {
+ from {
+  opacity: 0;
+  transform: translateY(12px) scale(0.992);
+ }
+ to {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+ }
+}
+
+@keyframes moon-section-bar-enter {
+ from {
+  opacity: 0;
+  transform: translateY(-8px);
+ }
+ to {
+  opacity: 1;
+  transform: translateY(0);
+ }
+}
+
+@keyframes moon-panel-content-enter {
+ from {
+  opacity: 0;
+  transform: translateY(8px);
+ }
+ to {
+  opacity: 1;
+  transform: translateY(0);
+ }
+}
+
+@media (prefers-reduced-motion: reduce) {
+ #spa-root.is-route-entering,
+ .menu.is-route-entering,
+ .menu.is-route-leaving,
+ #spa-root.is-route-leaving,
+ #spa-root.is-route-entering .page_container,
+ #spa-root.is-route-entering .chars-shell,
+ #spa-root.is-route-entering .page_container > .navbar,
+ #spa-root.is-route-entering .page_container > [mkd-content] {
+  animation: none;
+ }
+}
+
+.spa-error {
+ position: relative;
+ z-index: 1;
+ width: min(680px, calc(100vw - 32px));
+ margin: 40px auto;
+ padding: 24px;
+ color: #e8e0ff;
+ background: rgba(24, 14, 41, 0.94);
+ border: 1px solid rgba(135, 105, 190, 0.65);
 }

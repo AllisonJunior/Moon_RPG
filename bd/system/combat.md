@@ -1,104 +1,42 @@
-# Combate
+# Regras Gerais do Combate
 
-O combate no Sistema Moon possui algumas mecânicas adicionais:
+Conforme explicado na introdução, o sistema Moon possui um grande foco em adaptar as diversas mecânicas do combate dinâmico de Limbus Company, onde, em outras palavras o sistema Moon possui um combate em que todas as suas escolhas possuem consequências diretas ou indiretas. 
 
----
+<h3><img src="../../res/img/speed.png" alt="" style="display:inline-block; width:24px; height:24px; vertical-align:middle; margin-right:8px;">Speed</h3>
+Em todo início de uma cena todos os participantes do combate devem rolar a sua Speed, para definir quando irão agir, essa rolagem no caso dos jogadores é definida por meio da classe, também podendo ser aumentada com efeitos ou perks.
 
-### Speed
-Quando um combate começa todos os seus participantes precisam fazer um teste conhecido como Speed (esse teste é definido com base na classe do personagem, mas existem meios de o alterar ou até mesmo o melhorar), que representa a ordem de ação do personagem.
+<h3><img src="../../res/img/action.png" alt="" style="display:inline-block; width:24px; height:24px; vertical-align:middle; margin-right:8px;">Ações</h3>
+No sistema Moon só existem dois tipos de ações: Ativas e Reativas. Por padrão todas as criaturas possuem um total de duas ações por turno, que podem ser utilizadas para usar ações de qualquer tipo sem restrições.
 
----
+<h3><img src="../../res/img/stagger.png" alt="" style="display:inline-block; width:24px; height:24px; vertical-align:middle; margin-right:8px;">Stagger</h3>
+A maioria das criaturas possuem uma ou mais marcações na sua vida, essas marcações são conhecidas como Marcas de Stagger. Quando uma criatura sofre dano além dessa marcação ele fica em Stagger pelo turno que isso aconteceu e o próximo. Uma criatura em Stagger tem todas as suas resistência alteradas para Vulnerável (2.0x) e não pode agir. Mas jogadores que entrarem em Stagger poderão ainda agir, só que: Todas as suas rolagens são feitas com desvantagem, seu movimento é reduzido pela metade e as suas ações são reduzidas pela metade (arredondado para cima).
 
-### Ataque Extra
-Um ataque comum pode ser feito com o custo de uma ação bônus.
+<h3><img src="../../res/img/sanity.png" alt="" style="display:inline-block; width:24px; height:24px; vertical-align:middle; margin-right:8px;">Sanidade (SP)</h3>
+Uma das principais mecânicas utilizadas no combate, a sanidade é responsável por determinar a probabilidade de rolar cara ou coroa em moedas das Skills do Kit de personagens, também sendo um recurso consumido para ativar E.G.O. Seu valor máximo sendo 45 e seu valor minímo sendo -45, seguindo a fórmula:
 
----
+~H = 50 + (SP)~
 
-### Resistências
-O Sistema Moon utiliza três tipos de dano base: Cortante (Slash), Perfurante (Pierce) e Esmagante (Blunt). Com isso, cada personagem acaba possuindo resistências distintas em relação a esses três tipos de dano, desde Normal a Vulnerável.
+Em outras palavras isso indica que um personagem tem uma probabilidade miníma de 5% de rolar cara e uma máxima de 95% de rolar cara. 
 
----
+Quando um combate começa todos os Jogadores por padrão começam com 0 de SP, salvo exceções ditadas pelo mestre, onde também o seu ganho e redução é delimitado pela aba de Sanidade presente no Kit do personagem, devido ao fato de que as criaturas podem e irão funcionar de formas distintas, como é o próprio caso de Kits com foco em Sanidade negativa e não positiva.
 
-### Stagger
-Além dos pontos de vida, cada personagem possui uma barra de "postura", que tem seu valor definido com base na sua classe. Em resumo, quando um personagem sofre dano esse dano também é diretamente refletido na "postura" (ela também considera as resistências do personagem). 
+Jogadores que também possuem a forma de E.G.O com corrosão precisam realizar um teste de prudência com DC variável caso atinjam a marca de -45 de Sanidade, em caso de falha nesse teste o mesmo ganha @(E.G.O Corrosion) no fim dessa mesma cena.
 
-No turno que a "postura" do personagem é quebrada e até o fim do próximo, se ele for um:
+<h3><img src="../../res/img/mp.png" alt="" style="display:inline-block; width:24px; height:24px; vertical-align:middle; margin-right:8px;">Moon Points (MP)</h3>
+Assim como a sanidade os Moon Points ou de forma simplificada MP, é um recurso utilizado por todas as criaturas para usar Skills do seu Kit devido ao fato de que por padrão elas possuem custos únicos para serem utilizadas. 
 
-- Jogador - Todas as suas resistências são alteradas para Vulnerável.
-- NPC - Todas as suas resistências são alteradas para Vulnerável e ele ganha @Immobilized por dois turnos (o em que foi atordoado e o próximo).
+Por padrão a quantidade de MP de todas as criaturas começa em 3, mas tal valor é aumentado com base em diversos fatores, no caso de Players se trata exclusivamente do seu nível ou item extremamente especial.
 
-Note que, conforme o personagem sobe de nível o valor da "Stagger" também aumenta.
+Quando um combate começa todas as criaturas ganham MP igual ao seu valor máximo, recuperando por padrão 1 MP no fim da cena, valor esse que pode ser aumentado com base em circunstâncias especiais.
 
----
+<h3><img src="../../res/img/sin.png" alt="" style="display:inline-block; width:24px; height:24px; vertical-align:middle; margin-right:8px;">Pecados (Sins)</h3>
+Por fim existe uma última mecânica importante referente ao Kit de um personagem, os chamados Pecados ou de forma simplificadas Sins. Normalmente toda arma, skill ou E.G.O possui uma afinidade com um dos 7 Sins, onde mecânicamente falando Sins são recursos que são ganhos quando uma arma, skill ou E.G.O são utilizados, e taís recursos são consumidos por E.G.O junto do SP para permitir a sua ativação.
 
-### Moon Points
-Cada personagem possui um recurso conhecido como "Mp" (Moon Points), que serve como um recurso que é consumido para permitir o uso de Skills, E.G.O, Armas Únicas e até mesmo itens especiais.
-
-Os Mp possuem um valor base de 3, mas esse valor também é aumentado conforme os níveis do personagem aumentam.
-
-- Quando um combate começa: Todos os personagens ganham Mp igual ao seu Mp base. 
-- Quando o turno de um personagem termina: Ele recupera 1 Mp.
-- Quando um personagem sofre Stagger ou Morre: O atacante recupera todo o seu Mp. 
-
----
-
-### Reações de Combate
-Os personagens possuem acesso a algumas reações adicionais:
-
-- <p style="margin-top: 10px;"> <b>Defender:</b> <br>Como reação a sofrer um ataque você pode entrar em uma postura defensiva e reduzir qualquer dano sofrido por você em 5 + Seu Nível.</p>
-- <p style="margin-top: 10px;"> <b>Contra Ataque:</b><br>Como reação a sofrer um ataque você pode tentar contra atacar seu atacante, desde que você possua alcance.</p>
-- <p style="margin-top: 10px;"> <b>Evadir:</b><br>Como reação a sofrer um ataque você pode tentar se esquivar, essa esquiva é um salvaguarda de destreza com DC equivalente ao acerto do ataque.</p>
-- <p style="margin-top: 10px;"> <b>Clash</b><br>Como reação a você ou um aliado em até 5 feet sofrer um ataque, você pode redirecionar o ataque para você e ativar um clash, onde ambos irão realizar um ataque, onde quem tiver o maior resultado ganha esse clash, causando dano crítico em quem perdeu.</p>
-
----
-
-
-### Skills
-
-Cada Personagem possui acesso a uma série de habilidades únicas, conhecidas como Skills que aplicam efeitos distintos, e melhoram a proficiência do personagem em combate. Elas são divididas da seguinte forma:
-
-#### - Attack Skills -
-
-<img src="../../res/img/skill_explanation.png">
-
-Existem um total de 3 Attack Skills (ignorando Attack Skills especiais), que custam uma ação (essa regra é ajustada ao chegar no nível 30) e Mp para serem utilizadas (Custo do Mp definido com base no nível da Skill).
-
-Todas as moedas (ataques) de uma Skill, são feitos no mesmo alvo.
-<br>
-<br>
-
-#### - Passives -
-
-<img src="../../res/img/passives.png">
+E como discutido acima, cada um dos sins discutidos possui uma cor e icone que o representa (mostrados abaixo) com exceção dos casos que realmente a arma, skill ou E.G.O não possua afinidade com nenhum pecado, a qual é denominada Sinless.
 
 <br>
-<br>
 
-#### - Defense Skill -
-
-<img src="../../res/img/defense.png">
-
-Uma Defense Skill substitui uma das quatro reações de combate, para uma versão melhorada que possui sinergia com o kit do personagem.
-
----
-
-### Armas
-Na interface das Attack Skills e algumas Defense Skills, temos a presença de moedas acima do nome da Skill, que já fora explicada que representa um ataque.
-
-O ponto é que esse ataque é feito com base no uso de uma arma base, que não possua afinidade com nenhum pecado (Verificar sessão Sin Affinity's).
-
-<img src="../../res/img/base_weapon.png">
-
-Existem também armas que possuem afinidade com algum pecado, que custam Mp para serem utilizadas e não podem ser utilizadas com Skills (pois já funcionam como Skills).
-
-<img src="../../res/img/bonus_weapon.png">
-
----
-
-### Sin Affinity's 
-Cada Skill, E.G.O e Arma Especial possui um Sin (pecado) vinculado. No fim do turno, você recebe 1 Sin Affinity para cada Skill, E.G.O e arma especial utilizada, do Sin respectivo, esses Sin são recursos que são consumidos para permitir o uso de E.G.O.
-
-<div style="display:flex; flex-wrap:wrap; justify-content:center; gap:24px; align-items:flex-start;">
+<div style="display:flex; flex-wrap:wrap; justify-content:center; gap:20px; align-items:flex-start;">
 <div style="text-align:center;">
 <h4>Wrath (Ira)</h4>
 <img src="../../res/skills/sins/wrath.png" alt="Wrath">
@@ -128,59 +66,3 @@ Cada Skill, E.G.O e Arma Especial possui um Sin (pecado) vinculado. No fim do tu
 <img src="../../res/skills/sins/envy.png" alt="Envy">
 </div>
 </div>
-
----
-
-### E.G.O
-Alguns poucos personagens possuem acesso a uma habilidade única conhecida como E.G.O (Exterminação de Orgão Geométrico), que precisa de uma certa maestria para ser utilizada, e é dividida nos seguintes riscos (quanto mais alto, mais forte e perigoso é):
-
-<div style="display:flex; flex-wrap:wrap; justify-content:center; gap:24px; align-items:flex-start;">
-<div style="text-align:center;">
-<img src="../../res/skills/risk/zayin.png" alt="Wrath">
-</div>
-<div style="text-align:center;">
-<img src="../../res/skills/risk/teth.png" alt="Wrath">
-</div>
-<div style="text-align:center;">
-<img src="../../res/skills/risk/he.png" alt="Wrath">
-</div>
-<div style="text-align:center;">
-<img src="../../res/skills/risk/waw.png" alt="Wrath">
-</div>
-<div style="text-align:center;">
-<img src="../../res/skills/risk/aleph.png" alt="Wrath">
-</div>
-<div style="text-align:center;">
-<img src="../../res/skills/risk/undef.png" alt="Wrath">
-</div>
-</div>
-
-O E.G.O só pode ser utilizado uma vez por turno, com o custo de uma ação, 3 Mp e algumas Sin's. O E.G.O possui duas formas distintas:
-
-#### - Awakening -
-
-<img src="../../res/img/ego_awakening.png">
-
-<br>
-<br>
-
-#### - Corrosion -
-
-Ao usar o 'E.G.O Corrosion' faça um teste de sanidade, com base no resultado existe a chance de você perder o controle temporariamente (a margem aumenta conforme o risco do E.G.O) ou atacar aliados. Note que E.G.O de risco Zayin é o único que foge a essa regra (salvo exceções, que envolvem acontecimentos na mesa).
-
-<img src="../../res/img/ego_corrosion.png">
-
-<br>
-
-#### - Passives -
-Ao utilizar o E.G.O pela primeira vez, você ganha acesso a essa passiva (Awakening ou Corrosion) por todo o combate.
-
-<img src="../../res/img/ego_passive.png">
-
----
-
-### Teste de Sanidade
-
-Se trata de um d100 que possui uma margem de erro que aumenta conforme o peso mental que ela carrega. Para um exemplo mais claro, no caso do uso de um E.G.O de risco Teth, o teste necessitaria que d100 > 5 para nada acontecer (lembre-se a penalidade não é fixa e sempre aumenta dinâmicamente).
-
----

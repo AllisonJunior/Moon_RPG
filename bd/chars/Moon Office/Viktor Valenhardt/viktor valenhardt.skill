@@ -1,371 +1,330 @@
-!overview-start
+S-OVERVIEW
 
-name: Viktor Valenhardt;
+NAME: Viktor Valenhardt
+HP: ???
+STAGGER: ???
+LEVEL: 67
+CA: ???
+SPEED: ???
 
-description 
-(
- ???
-)
+FORTITUDE: ???
+TEMPERANCE: ???
+PRUDENCE: ???
+JUSTICE: ???
 
-!overview-end 
+PIERCE: resistant
+SLASH: normal
+BLUNT: vulnerable
 
-
-
-
-
-!weapons-start 
-
-title: Lança de Sangue;
-flavor: Arma Única;
-sin: sinless; 
-hit: Proficiência + Destreza;
-dmg: 2d8 + Destreza;
-dmg_type: pierce; 
-img: blood_spear;
-
-coin
+DESCRIPTION (Detalhes Gerais)
 {
+**Idade:** ...
+**Sexo:** Masculino
+**Altura:** ...
+**Aniversário:** ...
+**Personalidade:** ...
+**Especialidade:** ...
+**Adora:** ...
+**Odeia:** ...
 }
 
-!weapons-end
-
-
-
-
-
-!skills-start
-
-title: Desapareça...;
-sin: gluttony; 
-dmg: pierce; 
-mp: 1;
-
-info
+DESCRIPTION (Lore)
 {
- (on_use) Consuma até 50 @Bloodfeast e ganhe 1 @Hardblood para cada 10 @Bloodfeast consumido
- Se @Hardblood estiver em 5 converta essa Skill para ~█████████ Variant Blood Arts 42: Disparaître Le Ver~ (1x por turno)
+Uma pessoa aparentemente sem passado, o que não é incomum dado a vida nessa cidade.
+
+Atualmente faz parte do Moon Office como um Fixer de grau 9.
 }
 
-coin
-{ 
- (on_hit) Aplique 5 @Bleed 
-}
+E-OVERVIEW
 
-coin
-{ 
- (on_hit) Aplique 5 @Bleed 
-}
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-coin
-{ 
- (on_hit) Aplique 5 @Bleed 
-}
+S-WEAPONS
 
-end
+NAME: Lança de Sangue
+SIN: lust
+FLAVOR: Base Weapon
+DMG: 1d10 + Justice [15 feet]
+DMG_TYPE: pierce
+IMG: weapon
+COST: MP: 0
+
+COIN
 {
- (skill_end) Aplique @Bloodied no alvo neste e no próximo turno  
+(on_hit) Aplique 2 @Bleed
+(on_hit) Aplique +1 @Bleed Count
+}
+
+E-WEAPONS
+ 
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+S-SKILLS
+
+NAME: Desapareça!
+SIN: sloth
+MP: 1 
+DMG_TYPE: pierce
+COIN-POWER: +3
+BASE-POWER: 10
+COST: MP: 1
+IMG: s1
+
+INFO
+{
+(on_use) Consuma até 50 @Bloodfeast e ganhe 1 @Hardblood para cada 10 @Bloodfeast consumido
+}
+
+COIN
+{
+(on_hit) Aplique 2 @Bleed
+}
+
+COIN
+{
+(on_hit) Aplique 2 @Bleed
 }
 
 ---
 
-title: █████████ Variant Blood Arts 42: Disparaître Le Ver;
-sin: gluttony; 
-dmg: pierce; 
-mp: 1;
-c_mp: 1-2;
+NAME: Desejo Perdido...
+SIN: wrath
+MP: 2
+DMG_TYPE: pierce
+COIN-POWER: +14
+BASE-POWER: 8
+COST: MP: 2
+IMG: s2
 
-info
+INFO
 {
- Consuma 5 @Hardblood
- Ative @Bleed uma vez para cada @Atk_Weight não utilizado 
- @Atk_Weight atkw(4) c(#d7d713){(~10 feet~)}  
+(on_use) Consuma até 50 @Bloodfeast e ganhe +1 @Hardblood Count para cada 10 @Bloodfeast consumido
 }
 
-coin(u)
-{ 
- (on_hit) Aplique 30 @Bleed
- (on_hit_without_cracking) Aplique 5 @Bleed
-}
-
-end
+COIN (u)
 {
- (skill_end) Aplique @Bloodied no(s) alvo(s) dessa Skill neste e no próximo turno
+@(Unbreakable Coin)
+(on_hit) Aplique +5 @Bleed Count
 }
 
 ---
 
-title: Desejo Sincero;
-sin: wrath; 
-dmg: pierce; 
-mp: 2;
+NAME: A Lança Capaz de Perfurar os Céus
+SIN: lust
+MP: 3
+DMG_TYPE: pierce
+COIN-POWER: +4
+BASE-POWER: 20
+COST: MP: 3
+IMG: s3
 
-info
+INFO
 {
- (on_use) Consuma até 50 @Bloodfeast e ganhe 1 @Hardblood para cada 10 @Bloodfeast consumido
- Se @Hardblood estiver em 5 converta essa Skill para ~█████████ Variant Blood Arts 33: Désir sincère Et Éphémère~ (1x por turno)
+(on_use) Consuma até 50 @Bloodfeast e ganhe 1 @Hardblood para cada 10 @Bloodfeast consumido
+(on_use) Com 10+ @Hardblood você pode converter essa Skill para ~████████ Variant Blood Arts 17: Pièces Séparées~
 }
 
-coin
-{ 
- (on_hit) Aplique +2 @Bleed @Count
-}
-
-coin
-{ 
- (on_hit) Aplique +2 @Bleed @Count
-}
-
-end
+COIN
 {
- (skill_end) Recupere 15 de Vida por moeda acertada (vida excedente é convertida em @Shield que não expira no fim do turno)
+(on_hit) Ganhe 3 @(Hardblood Armor [Viktor Valenhardt])
 }
 
----
-
-title: █████████ Variant Blood Arts 33: Désir sincère Et Éphémère;
-sin: wrath; 
-dmg: pierce; 
-mp: 2;
-c_mp: 2-2;
-
-info
+COIN
 {
- Consuma 5 @Hardblood
+(on_hit) Ative o @Bleed no alvo, então reduza a Count em 1
+}
+
+COIN (u)
+{
+@(Unbreakable Coin)
+(on_hit) Cause dano igual a (@Bleed + @Bleed Count) no alvo
 } 
 
-coin(u)
-{ 
- (on_hit) Aplique +15 @Bleed @Count
+---
+
+NAME: ████████ Variant Blood Arts 17: Pièces Séparées
+FLAVOR: Skill 3-2
+SIN: lust
+MP: 3
+DMG_TYPE: pierce
+COIN-POWER: +7
+BASE-POWER: 4
+COST: MP: 3
+IMG: s3-2
+
+INFO
+{
+(on_use) Se o alvo tiver @Bleed, Final Power +2
 }
 
-end
+COIN (u)
 {
- (skill_end) Recupere 20 de Vida (vida excedente é convertida em @Shield que não expira no fim do turno)
- (skill_end) Ganhe 5 de Stagger
- (skill_end) Ganhe 2 @Hardblood_Armor
+@(Unbreakable Coin)
+(on_hit) Aplique 4 @Bleed
+}
+
+COIN (u)
+{
+@(Unbreakable Coin)
+(on_hit) Aplique +2 @Bleed Count
+}
+
+COIN (u)
+{
+@(Unbreakable Coin)
+(on_hit) Ative o @Bleed no alvo
+}
+
+COIN (u)
+{
+@(Unbreakable Coin)
+(on_hit) Cause dano igual a (@Bleed x @Hardblood) no alvo
+}
+
+END
+{
+(skill_end) Consuma todo o @Hardblood, para cada 2 @Hardblood consumido ganhe 1 @(Hardblood Armor [Viktor Valenhardt]) (arredondado para baixo)
+(skill_end) Se o alvo for derrotado, aplique 5 @Bleed e +1 @Bleed Count em todos os inimigos
+}
+
+
+E-SKILLS
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+S-PASSIVES
+
+PASSIVE (Bloodfiend)
+{
+**Início do Combate:** Ganhe 5 @(Hardblood Armor [Viktor Valenhardt]).\n
+ 
+Durante um combate os seguintes efeitos são ativados:
+- Ao derrotar um inimigo ganhe 2 @Hardblood.
+- Ao acertar um ataque com uma Attack Skill recupere vida igual a @Hardblood.
+- Ao sofrer um ataque unilateral utilize ~ ████████ Variant Blood Arts 17: Pièces Séparées~ (Máx. 1x por cena). 
+- Sofra -20% de dano de @Bleed (arredondado para baixo).
+}
+
+PASSIVE (Memória Quebrada)
+{
+**Início do Combate:** Ganhe @(Returning Bloodlust).\n
+
+Essa unidade não pode ter seus pontos de vida reduzidos para abaixo de 1 por causa de @Bleed.\n
+
+Se algum aliado for colocado no estado Desestabilizado ganhe @Responsibility.\n
+
+Se █████████ estiver em campo perca @(Returning Bloodlust) e ganhe ██████████████. Após o fim desse combate, essa passiva é reescrita.
+}
+
+PASSIVE (Resistência Lendária)
+{
+Ao ter seus pontos de vida reduzidos a 0 os fixe em 1 pela cena, no início da próxima cena recupere 50% da sua vida máxima (arredondado para cima) e ganhe Shield fixo igual a 20% da sua vida máxima (arredondado para cima) também purificando todos os efeitos negativos removiveis em si.
+}
+
+E-PASSIVES
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+S-DEFENSE
+
+NAME: Perdition Silencieuse
+SIN: lust 
+TYPE: counter
+DMG_TYPE: pierce
+COST: MP: 0
+COIN-POWER: +4
+BASE-POWER: 16
+IMG: counter
+
+INFO
+{
+(on_use) Consuma até 50 @Bloodfeast e ganhe 1 @Hardblood para cada 10 @Bloodfeast consumido
+}
+
+COIN
+{
+(on_hit) Aplique 1 @Bleed
+}
+
+COIN
+{
+(on_hit) Aplique +1 @Bleed Count
+}
+
+END
+{
+(skill_end) Ganhe 1 @(Hardblood Armor [Viktor Valenhardt])
+}
+
+E-DEFENSE
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+S-EGO HIDE
+
+NAME: Délire Sanglant
+SIN: lust
+LEVEL: zayin
+DMG_TYPE: pierce
+FLAVOR: E.G.O Awakening
+COIN-POWER: +20
+BASE-POWER: 15
+COST: SP: 15, MP: 3, GLUTTONY: 4, LUST: 4, WRATH: 2
+
+INFO
+{
+Essa Skill tem um alcance de 40 feet
+(on_use) Consuma até 50 @Bloodfeast e ganhe 1 @Hardblood para cada 5 @Bloodfeast consumido
+}
+
+COIN (U)
+{
+@(Unbreakable Coin)
+(on_hit) Aplique 2 @Bloodied
+}
+
+END
+{
+(scene_end) Ganhe 2 @(Blood Rain)
 }
 
 ---
 
-title: A Lança Capaz de Perfurar os Céus;
-sin: lust; 
-dmg: pierce; 
-mp: 3;
-
-info
+PASSIVE(Chevalier Sanguinaire)
 {
- (on_use) Consuma até 50 @Bloodfeast e ganhe 1 @Hardblood para cada 10 @Bloodfeast consumido
- Se @Hardblood estiver em 10 converta essa Skill para ~█████████ Variant Blood Arts 17: Pièces Séparées~ (1x por turno)
+Três vezes por cena ao usar uma Attack Skill ganhe 1 @Hardblood.\n
+
+Uma vez por cena ao acertar um ataque com uma Skill, você pode causar dano no alvo igual a @(Bloodfeast Consumed).\n
+
+Valor máximo de @Hardblood aumentado para 30.
 }
 
-coin
-{ 
- (on_hit) Ative o @Bleed no alvo, então reduza o @Count do @Bleed em 1
- (on_hit) Cause 20 de dano adicional para cada 1 @Hardblood
-}
+E-EGO
 
-coin
-{ 
- (on_hit) Ative o @Bleed no alvo, então reduza o @Count do @Bleed em 1
- (on_hit) Cause 20 de dano adicional para cada 1 @Hardblood
-}
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
-coin
-{ 
- (on_hit) Ative o @Bleed no alvo, então reduza o @Count do @Bleed em 1
- (on_hit) Cause 20 de dano adicional para cada 1 @Hardblood
-}
+S-SANITY
 
----
-
-title: █████████ Variant Blood Arts 17: Pièces Séparées;
-sin: lust; 
-dmg: pierce; 
-mp: 3;
-c_mp: 3-2;
-
-coin(u)
-{ 
- (on_hit) Ative o @Bleed no alvo 3x
- (on_hit) Cause 40 de dano adicional para cada 1 @Hardblood
- (on_hit) Ative @Bleed_Deluge no alvo 
-}
-
-end
+SANITY_EFFECTS
 {
- (skill_end) Consuma 10 @Hardblood   
+**✪ Efeitos de Pânico**
+Todas as suas rolagens são feitas com desvantagem.
 }
 
-!skills-end
-
-
-
-
-
-!passives-start
-
-passive(Bloodfiend - 3ª Kindred)
+SANITY_INCREASE
 {
- - No início do seu turno se você não tiver @Hardblood_Armor ganhe 5 @Hardblood_Armor. 
- - No início de um combate ganhe 5 @Vigor por todo o combate. 
- - Ao acertar um inimigo você pode escolher aplicar @Prey nele.
+- Ao ganhar um Clash +3 SP.
+- Ao acertar um ataque +2 SP.
+- Quando um inimigo é derrotado +10 SP.
 }
 
-passive(Suposto 6º Sentido)
+SANITY_DECREASE
 {
- - Uma vez por turno ao sofrer um ataque unilateral você pode responder a esse ataque com a sua reação de combate, ~Perdição~ (Counter).
- - Uma vez por turno ao sofrer um ataque unilateral você pode responder a esse ataque com a sua reação de combate, ~Sangue Reforçado~ (Defender).
+- Ao perder um Clash -2 SP.
+- Quando um aliado sofre Stagger -5 SP.
+- Quando um aliado é Desestabilizado -20 SP.
 }
 
-passive(Desestabilizar)
-{
- Uma vez por turno ao ativar manualmente o @Bleed do alvo você pode fazer com que esse dano também seja aplicado a Stagger do alvo. 
-}
+E-SANITY
 
-passive(Resistência Lendária)
-{
- Uma vez por combate ao ter seus pontos de Vida reduzidos a 0, você ignora esse dano e fica com 1 de Vida (3x por combate). A primeira vez que esse efeito é ativado o mesmo também recupera todos os seus pontos de Stagger.
-}
-
-passive(Fragmentos...)
-{
- Quando um combate começa ganhe @Returning_Bloodlust.
-}
-
-
-!passives-end
-
-
-
-
-
-!defense-start 
-
-title: Perdição;
-sin: lust; 
-type: counter; 
-dmg_type: pierce;
-
-info
-{
- (on_use) Consuma até 50 @Bloodfeast e ganhe 1 @Hardblood para cada 10 @Bloodfeast consumido
-}
-
-coin
-{
- (on_clash_win) Aplique 1 @Bleed   
- (on_clash_win) Aplique +1 @Bleed @Count
-}
-
----
-
-title: Sangue Reforçado;
-sin: lust; 
-type: defense; 
-dmg_type: pierce;
-
-info
-{
- (on_use) Consuma até 50 @Bloodfeast e ganhe 1 @Hardblood para cada 10 @Bloodfeast consumido
- (on_use) Aumente a redução de dano em @Hardblood (1x por turno)
-}
-
-!defense-end
-
-
-
-
-
-
-!ego-start
-
-title: Briser Le Silence Et La Beauté... Ma █████████;
-sin: lust; 
-hit: +6;
-dmg: 4d10 + Destreza + Nível;
-dmg_type: pierce; 
-flavor: E.G.O Awakening;
-img: Awakening;
-level: zayin;
-
-cost 
-{
- gluttony: 8;    
- wrath: 3;
- lust: 5; 
-}
-
-coin(u)
-{   
- (on_hit) Aplique 2 @Bleed    
- (on_hit) Ative o @Bleed do alvo 2x
- (on_hit_without_cracking) Cause dano adicional equivalente a @Bloodfeast_Consumed
-}
-
-coin(u)
-{   
- (on_hit) Aplique 2 @Bleed   
- (on_hit) Ative o @Bleed do alvo 2x
- (on_hit_without_cracking) Cause dano adicional equivalente a @Bloodfeast_Consumed
-}
-
-coin(u)
-{   
- (on_hit) Aplique 2 @Bleed    
- (on_hit) Ative o @Bleed do alvo 2x
- (on_hit_without_cracking) Cause dano adicional equivalente a @Bloodfeast_Consumed
-}
-
-end
-{
- (skill_end) Invoque 4 Cavaleiros de Sangue   
-}
-
----
-
-title: Briser Le Silence Et La Beauté... Ma █████████;
-sin: lust; 
-hit: +8;
-dmg: 8d10 + Destreza + Nível;
-dmg_type: pierce; 
-flavor: E.G.O Corrosion;
-img: Corrosion;
-level: zayin;
-
-cost 
-{
- gluttony: 2;    
- wrath: 4;
- lust: 14; 
-}
-
-info
-{
- @Atk_Weight atkw(3) c(#d7d713){(~15 feet~)}    
- Para cada @Atk_Weight nao utilizado aplique +2 @Bleed @Count 
-}
-
-coin(u)
-{
- (on_hit) Aplique 10 @Bleed
- (on_hit) Aplique +5 @Bleed @Count
- (on_hit) Cause dano adicional equivalente a @Bloodfeast_Consumed
- (on_hit) Ative @Bleed_Deluge
-}
-
-end
-{
- (skill_end) Invoque 2 Cavaleiros de Sangue   
- (turn_end) Ganhe @Blood_Rain
-}
-
----
-
-passive(Extensão do Meu Ser)
-{
- - Ganhe 2 @Hardblood_Armor.
- - No fim do seu turno você pode consumir até 50 @Bloodfeast (seguindo a mesma regra de conversão das suas Skills).
- - Para cada 10 @Bloodfeast consumido ganhe 5 de Vida (vida excedente é convertida em @Shield que não expira no fim do turno).
-}
-
-!ego-end
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 

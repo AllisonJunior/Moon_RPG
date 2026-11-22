@@ -1,29 +1,24 @@
 <img src="../../res/img/survivor.png" style="float: right;">
 
 # Sobrevivente
-_Alguém que foi moldado pela violência da cidade... mas, continua a viver..._ 
+~Alguém que foi moldado pela violência da cidade... mas, continua a viver...~
 
 ---
 
 #### Vida
-<p style="margin-top: 10px; ">( 26 + Constituição + Nível ) + ( ( Nível + 1 ) x 10 )</p>
+<p style="margin-top: 10px; ">(Fortitude x 3) + (Nível x 5) + 50</p>
 
 #### Stagger
-<p style="margin-top: 10px; ">( Vida / 2 ) + 5</p>
+<p style="margin-top: 10px; ">Vida / 2 (arredondado para baixo)</p>
 
 #### CA
-<p style="margin-top: 10px; ">6</p>
+<p style="margin-top: 10px; ">7</p>
 
 #### Speed
-<p style="margin-top: 10px; ">1d8 + Proficiência + Destreza ou Força</p>
+<p style="margin-top: 10px; ">1d8 + Justice</p>
 
-#### Salvaguardas
-<p style="margin-top: 10px; ">Constituição e um entre Destreza ou Força</p>
-
----
-
-#### Surto de Ação
-<p style="margin-top: 10px; ">Uma vez por turno como ação livre você pode tomar uma ação adicional. Note que o uso dessa habilidade é limitado a uma vez por combate. O uso dessa habilidade aumenta em +1 a cada 10 níveis.</p>
+#### Movimento
+<p style="margin-top: 10px; ">45 feet</p>
 
 ---
 

@@ -1,71 +1,147 @@
-!overview-start 
+S-OVERVIEW
 
-name: Baby;
+NAME: Baby
+HP: 228
+STAGGER: 110
+LEVEL: 40
+CA: 6
+SPEED: 3 ~ 10
 
-life: 210;
-stagger: 75;
-ca: 7;
-speed: 1 ~ 4;
+FORTITUDE: +4
+PRUDENCE: +0
+TEMPERANCE: +1
+JUSTICE: +2
 
-blunt-res: normal;
-slash-res: normal;
-pierce-res: vulnerable;
+PIERCE: vulnerable
+SLASH: normal
+BLUNT: resistant
 
-description
-(
- Membro de menor escalão dentro do Sindicato Dunkelheit, são inimigos que focam no combate corpo a corpo, com o uso de suas luvas reforçadas.
-)
-
-!overview-end
-
-
-
-
-!weapons-start 
-
-title: Luvas Reforçadas;
-flavor: Arma Única;
-sin: sinless; 
-hit: +1;
-dmg: d6 + 1;
-dmg_type: blunt; 
-
-coin
+DESCRIPTION
 {
+Membro de menor escalão do recém formado Sindicato Dunkelheit.\n
+
+Apesar de não se saber muito sobre eles e sobre o seu próprio sindicato, se é importante ressaltar que o seu foco é em combate corpo a corpo com o uso de manoplas de ferro.\n
+
+Estranhamente eles não aparentam sentir dor ou cambalear ao serem atacados, quase como se tivessem uma resistência corporal anormal.
 }
 
-!weapons-end
+E-OVERVIEW
 
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
+S-WEAPONS
 
+NAME: Manopla de Ferro
+SIN: wrath
+FLAVOR: Base Weapon
+DMG: 2d8 + Fortitude
+DMG_TYPE: blunt
+COST: mp: 0
 
-
-!skills-start
-
-title: Socar;
-sin: sinless; 
-dmg: blunt; 
-mp: 1;
-
-coin
+COIN
 {
- (on_hit) Aplique 5 @Bleed   
+(on_hit) Aplique 3 @Bleed
 }
 
-!skills-end
+E-WEAPONS
 
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
+S-SKILLS
 
+NAME: Socar!
+SIN: wrath
+COIN-POWER: +6
+BASE-POWER: 8
+DMG_TYPE: blunt 
+cost: mp: 1
 
-
-!defense-start
-
-title: Bloquear;
-sin: sinless; 
-type: defense; 
-
-coin
+INFO
 {
+(on_use) Se o alvo tiver 5+ @Bleed, Final Power +1
 }
 
-!defense-end
+COIN
+{
+(heads_hit) Aplique 3 @Bleed
+(on_hit) Aplique 3 @Bleed
+}
+
+COIN
+{
+(on_hit) Aplique +3 @Bleed @Count
+(on_hit) Ative @Bleed no alvo 1x, então reduza o @Bleed @Count em 2
+}
+
+END
+{
+(skill_end) Ganhe 3 @Burn
+}
+
+E-SKILLS
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+S-PASSIVES
+
+PASSIVE (Baby)
+{
+- Moon Points máximos 2, recupera 1 no fim da cena. 
+- Ações máximas 2.
+}
+
+PASSIVE (Schutzinstinkt)
+{
+Quando morto, todos os Filhos de Dunkelheit ganham 1 @(Power Up) e 1 @(Damage Up) por essa e próxima cena.
+}
+
+E-PASSIVES
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+S-DEFENSE
+
+NAME: Bloqueio Rápido
+SIN: wrath
+TYPE: guard
+COIN-POWER: +13
+BASE-POWER: 17
+cost: mp: 0
+
+INFO
+{
+(defense_end) Se ainda tiver Shield, ganhe 2 @(Clash Power Up) na próxima cena (Máx. 1x por cena)
+}
+
+E-DEFENSE
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+S-SANITY
+
+NAME: c(#FF0000){Oppression}
+CUSTOM_IMG: oppression
+
+SANITY_EFFECTS
+{
+**✪ Efeitos de Pânico**
+- Uma vez por cena ao usar uma Attack Skill ganhe 4 @Bleed
+- Fim da cena: Ganhe 5 @Fragile
+}
+
+SANITY_INCREASE
+{
+- Ao ganhar um Clash +5 SP.
+- Ao acertar um ataque +5 SP.
+- Ao derrotar um inimigo +10 SP.
+}
+
+SANITY_DECREASE
+{
+- Ao perder um Clash -5 SP.
+- Ao errar um ataque -5 SP.
+}
+
+E-SANITY
+ 
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 

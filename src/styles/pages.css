@@ -11,6 +11,57 @@
 /* ========================= */
 /* BODY */
 /* ========================= */
+html {
+  /* Keep the layout viewport width stable when a page becomes scrollable. */
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(140, 160, 220, 0.65) rgba(255, 255, 255, 0.06);
+}
+
+/* Main document scrollbar — matches the tooltip's subdued blue-violet style. */
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  width: 8px;
+}
+
+html::-webkit-scrollbar-track,
+body::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+html::-webkit-scrollbar-thumb,
+body::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    180deg,
+    rgba(140, 160, 220, 0.75),
+    rgba(115, 135, 195, 0.75)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+}
+
+html::-webkit-scrollbar-thumb:hover,
+body::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(
+    180deg,
+    #d8e6ff,
+    #88a8ff
+  );
+  border-color: #eef4ff;
+}
+
+/* Fallback for browsers that expose the document scrollbar through body. */
+html.is-document-scrollbar-hovered,
+html.is-document-scrollbar-hovered body {
+  scrollbar-color: #a9c0ff rgba(255, 255, 255, 0.06);
+}
+
+html.is-document-scrollbar-hovered::-webkit-scrollbar-thumb,
+html.is-document-scrollbar-hovered body::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #d8e6ff, #88a8ff);
+  border-color: #eef4ff;
+}
+
 body {
   background-color: #330a3f;
   margin: 0;
@@ -20,6 +71,7 @@ body {
   align-items: flex-start;
 
   min-height: 100vh;
+  min-height: 100dvh;
 
   padding: 40px 16px;
   overflow-x: hidden;
@@ -34,6 +86,12 @@ body {
   z-index: 0;
   pointer-events: none;
   overflow: hidden;
+}
+
+/* Keep the animated star field behind every page layer, including SPA routes. */
+body > :not(.stars):not(.tooltip-box) {
+  position: relative;
+  z-index: 1;
 }
 
 /* Estrelas normais */
@@ -73,18 +131,22 @@ body {
 /* CONTAINER PRINCIPAL */
 /* ========================= */
 .page_container {
-  width: min(900px, 100%);
+  /* One shared content width for every regular page. Use viewport width
+     directly instead of a flex percentage so content cannot change it. */
+  width: min(1000px, calc(100vw - 32px));
+  flex: 0 0 min(1000px, calc(100vw - 32px));
   min-height: calc(100vh - 80px);
+  min-height: calc(100dvh - 80px);
 
-  background-color: rgba(209, 208, 208, 0.88);
-  padding: clamp(16px, 3vw, 28px);
+  --page-padding: clamp(16px, 3vw, 28px);
+
+  background-color: #d1d0d0;
+  padding: var(--page-padding);
 
   border-radius: 12px;
-  border: 1px solid rgba(28, 0, 65, 0.2);
+  border: 0;
 
-  box-shadow:
-    0 0 20px rgba(0, 0, 0, 0.6),
-    0 0 15px rgba(138, 43, 226, 0.3);
+  box-shadow: none;
 
   backdrop-filter: blur(4px);
 
@@ -99,10 +161,59 @@ body {
   word-break: break-word;
 
   position: relative;
+  isolation: isolate;
+}
+
+/* Markdown can be rendered directly or injected into .page-dynamic. A new
+   block formatting context makes floated illustrations contribute to the
+   content height, so the panel background always extends to their bottom. */
+.page_container > :is([mkd-content], .page-dynamic) {
+  display: flow-root;
+}
+
+.page_container > [mkd-content].system-content {
+  flex: 0 0 auto;
+  padding-top: 16px;
+  padding-bottom: 24px;
+}
+
+.system-page .system-content.is-content-entering {
+  animation: system-content-enter 220ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes system-content-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Short feedback when a tab replaces only its inner content. */
+.is-content-entering {
+  animation: moon-content-enter 180ms ease-out both;
+}
+
+@keyframes moon-content-enter {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .is-content-entering {
+    animation: none;
+  }
 }
 
 body.chars-page {
-  overflow-y: scroll;
+  overflow-y: auto;
   scrollbar-gutter: stable;
   overflow-anchor: none;
 }
@@ -111,7 +222,9 @@ body.chars-page {
 /* LAYOUT DA TELA DE PERSONAGENS */
 /* ========================= */
 .chars-shell {
-  width: min(1260px, 100%);
+  width: min(1288px, calc(100vw - 32px));
+  flex: 0 0 min(1288px, calc(100vw - 32px));
+  max-width: 100%;
   display: flex;
   align-items: flex-start;
   justify-content: center;
@@ -127,12 +240,23 @@ body.chars-page {
 }
 
 .chars-page .page_container {
-  width: auto;
-  flex: 1 1 0;
+  /* Characters use the same expanded content width as the other pages. */
+  width: min(1000px, calc(100vw - 296px));
+  flex: 0 1 min(1000px, calc(100vw - 296px));
+  max-width: min(1000px, calc(100vw - 296px));
   min-width: 0;
   margin: 0;
   display: flex;
   flex-direction: column;
+  transition: opacity 220ms ease, transform 220ms ease;
+}
+
+/* Keep the intermediate reset state out of view while another character loads. */
+.chars-page .page_container.is-character-loading {
+  /* Keep the previous panel in place while the next character is prepared.
+     A soft fade avoids the empty-panel flash caused by immediate resets. */
+  opacity: 0.72;
+  transform: translateY(4px);
 }
 
 /* When a character is selected, make the page container match the skills panel visual */
@@ -150,9 +274,11 @@ body.chars-page {
   align-items: stretch;
   justify-content: flex-start;
   height: calc(100vh - 80px);
+  height: calc(100dvh - 80px);
   position: sticky;
   top: 40px;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
   z-index: 3;
 }
 
@@ -192,6 +318,59 @@ body.chars-page {
   margin: 0 0 18px;
 }
 
+.chars-page .chars-header-info {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 10px;
+  min-width: 0;
+  width: 100%;
+}
+
+.chars-page .chars-section-badge {
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  z-index: 3;
+  border: 1px solid rgba(132, 174, 214, 0.45);
+  background: linear-gradient(180deg, rgba(28, 54, 82, 0.92), rgba(12, 31, 48, 0.96));
+  box-shadow: inset 0 1px 0 rgba(175, 210, 255, 0.1);
+  width: 22px;
+  height: 22px;
+  min-width: 22px;
+  min-height: 22px;
+  padding: 3px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.chars-page .chars-section-badge:hover {
+  background: linear-gradient(180deg, rgba(38, 74, 110, 0.96), rgba(16, 42, 66, 0.98));
+  border-color: rgba(176, 212, 249, 0.78);
+  transform: translateY(-1px);
+}
+
+.chars-page .chars-section-badge.active {
+  border-color: rgba(255, 230, 128, 0.9);
+  background: linear-gradient(180deg, rgba(78, 62, 12, 0.94), rgba(39, 31, 11, 0.98));
+  box-shadow: inset 0 1px 0 rgba(255, 235, 162, 0.18), 0 0 0 1px rgba(255, 220, 120, 0.32);
+}
+
+.chars-page .chars-section-badge img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  user-select: none;
+  pointer-events: none;
+}
+
 /* Character name styling (large, display font) */
 .chars-page .chars-character-name {
   margin: 0;
@@ -211,6 +390,79 @@ body.chars-page {
 
 .chars-page .chars-character-name::selection {
   background: rgba(255,255,255,0.08);
+}
+
+.chars-page .chars-name-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  width: 100%;
+}
+
+.chars-page .chars-image-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 30px;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 1px solid rgba(132, 174, 214, 0.45);
+  background: linear-gradient(180deg, rgba(28, 54, 82, 0.92), rgba(12, 31, 48, 0.96));
+  color: #e7f2ff;
+  cursor: pointer;
+  box-shadow: inset 0 1px 0 rgba(175, 210, 255, 0.1);
+}
+
+/* `display: inline-flex` above overrides the browser's default [hidden]
+   declaration in some browsers, so explicitly keep unavailable controls out
+   of the layout. */
+.chars-page .chars-image-toggle[hidden] {
+  display: none !important;
+}
+
+.chars-page .chars-image-toggle:hover {
+  border-color: rgba(229, 239, 255, 0.9);
+  background: linear-gradient(180deg, rgba(48, 88, 136, 0.96), rgba(20, 44, 76, 0.98));
+}
+
+.chars-page .chars-image-toggle:focus-visible {
+  outline: 2px solid rgba(167, 212, 255, 0.86);
+  outline-offset: 2px;
+}
+
+.chars-page .chars-image-toggle-icon {
+  position: relative;
+  display: block;
+  width: 16px;
+  height: 10px;
+  border: 2px solid currentColor;
+  border-radius: 75% 15%;
+  transform: rotate(45deg);
+}
+
+.chars-page .chars-image-toggle-icon::after {
+  content: "";
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  top: 50%;
+  left: 50%;
+  border-radius: 50%;
+  background: currentColor;
+  transform: translate(-50%, -50%);
+}
+
+.chars-page .chars-image-toggle.is-hidden .chars-image-toggle-icon::before {
+  content: "";
+  position: absolute;
+  width: 22px;
+  height: 2px;
+  top: 50%;
+  left: 50%;
+  background: currentColor;
+  transform: translate(-50%, -50%) rotate(-45deg);
 }
 
 .chars-page .chars-showcase-wrap {
@@ -233,9 +485,21 @@ body.chars-page {
   display: flex; /* mostrar quando header tiver classe has-showcase (imagem disponível) */
 }
 
+/* Defensive fallback for an image that was removed/hidden while its request
+   was in flight: never leave the showcase column reserving viewport height. */
+.chars-page .chars-header.has-showcase:has(.chars-showcase-image[hidden]) {
+  grid-template-columns: 1fr;
+  gap: 0;
+}
+
+.chars-page .chars-header.has-showcase .chars-showcase-wrap:has(.chars-showcase-image[hidden]) {
+  display: none;
+}
+
 /* Quando não houver showcase, colapsar a coluna esquerda para 0 largura */
 .chars-page .chars-header:not(.has-showcase) {
-  grid-template-columns: 0 1fr;
+  grid-template-columns: 1fr;
+  gap: 0;
 }
 
 .chars-page .chars-showcase-image {
@@ -249,6 +513,12 @@ body.chars-page {
   object-position: center center;
   position: relative;
   z-index: 1;
+  transition: opacity 180ms ease, transform 180ms ease;
+}
+
+.chars-page .chars-showcase-image.is-character-image-changing {
+  opacity: 0.24;
+  transform: scale(0.985);
 }
 
 .chars-page .chars-showcase-image[hidden] {
@@ -330,7 +600,7 @@ body.chars-page {
 
 .chars-page .chars-section-tabs {
   display: none;
-  align-items: center;
+  align-items: stretch;
   justify-content: flex-start;
   gap: 6px;
   padding: 8px 10px;
@@ -346,10 +616,130 @@ body.chars-page {
   width: 100%;
   box-sizing: border-box;
   flex-wrap: wrap;
+  position: relative;
+}
+
+.chars-page .chars-section-badge-wrap {
+  position: absolute;
+  top: -34px;
+  right: 0;
+  z-index: 4;
+  width: auto;
+  min-height: 26px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 4px;
+  margin: 0;
+  flex-wrap: wrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 160ms ease;
+}
+
+.chars-page .chars-section-badge-wrap.has-variants {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.chars-page .chars-section-badge-wrap.has-variants.is-loading {
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.chars-page .chars-section-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 6px;
+  width: 100%;
+  position: relative;
+}
+
+.chars-page .chars-section-badge {
+  position: static;
+  z-index: 1;
+  border: 1px solid rgba(132, 174, 214, 0.45);
+  background: linear-gradient(180deg, rgba(28, 54, 82, 0.92), rgba(12, 31, 48, 0.96));
+  box-shadow: inset 0 1px 0 rgba(175, 210, 255, 0.1);
+  width: 22px;
+  height: 22px;
+  min-width: 22px;
+  min-height: 22px;
+  padding: 3px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.chars-page .chars-section-badge:hover {
+  background: linear-gradient(180deg, rgba(38, 74, 110, 0.96), rgba(16, 42, 66, 0.98));
+  border-color: rgba(176, 212, 249, 0.78);
+  transform: translateY(-1px);
+}
+
+.chars-page .chars-section-badge.active {
+  border-color: rgba(255, 230, 128, 0.9);
+  background: linear-gradient(180deg, rgba(78, 62, 12, 0.94), rgba(39, 31, 11, 0.98));
+  box-shadow: inset 0 1px 0 rgba(255, 235, 162, 0.18), 0 0 0 1px rgba(255, 220, 120, 0.32);
+}
+
+.chars-page .chars-section-badge img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  user-select: none;
+  pointer-events: none;
 }
 
 .chars-page .chars-section-tabs.is-visible {
   display: flex;
+}
+
+/* The `hidden` attribute is controlled by the .skill parser. It must win over
+   `.is-visible`, otherwise an empty tab frame remains on screen. */
+.chars-page .chars-section-tabs[hidden],
+.chars-page .chars-skills-submenu[hidden],
+.chars-page .chars-section-tab[hidden],
+.chars-page .chars-skill-option[hidden] {
+  display: none !important;
+}
+
+.chars-page .chars-section-disabled-field {
+  position: absolute;
+  right: 10px;
+  top: -38px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 6px 12px;
+  min-height: 34px;
+  border: 1px solid rgba(132, 174, 214, 0.25);
+  background: linear-gradient(180deg, rgba(18, 31, 48, 0.7), rgba(9, 19, 30, 0.8));
+  color: rgba(226, 240, 255, 0.58);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  box-shadow: inset 0 1px 0 rgba(175, 210, 255, 0.08);
+  opacity: 0.8;
+  pointer-events: none;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.chars-page .chars-section-disabled-label {
+  color: rgba(226, 240, 255, 0.62);
+}
+
+.chars-page .chars-section-disabled-value {
+  color: rgba(226, 240, 255, 0.42);
 }
 
 /* Posiciona o container de abas como referência para o submenu absoluto */
@@ -382,6 +772,7 @@ body.chars-page {
 
 .chars-page .chars-skills-submenu.is-visible {
   display: flex;
+  animation: chars-section-enter 320ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .chars-page .chars-section-tabs .chars-skill-option {
@@ -395,11 +786,13 @@ body.chars-page {
   line-height: 1;
   padding: 4px 10px;
   min-height: 30px;
+  height: 38px;
+  box-sizing: border-box;
   white-space: nowrap;
   cursor: pointer;
   box-shadow: none;
   transition: background-color 0.12s ease, color 0.12s ease, border-color 0.12s ease;
-  flex: 1;
+  flex: 1 1 0;
   text-align: center;
 }
 
@@ -442,7 +835,7 @@ body.chars-page {
   margin-top: 0;
   position: absolute;
   left: 0;
-  top: calc(100% + 4px);
+  top: calc(100% + 10px);
   z-index: 20;
   background: linear-gradient(180deg, rgba(12, 20, 34, 0.92), rgba(6, 10, 18, 0.96));
   border: 1px solid rgba(132,174,214,0.12);
@@ -455,16 +848,15 @@ body.chars-page {
 
 .chars-page .chars-section-tabs .chars-skills-submenu {
   /* allow the submenu container to size to its contents */
-  width: 100%;
-  max-width: 100%;
-  left: 0;
-  right: 0;
+  width: calc(100% + 20px);
+  max-width: none;
+  left: -10px;
+  right: auto;
   white-space: normal;
 }
 
 .chars-page .chars-section-tabs .chars-skill-option[data-skill-type="defense"] {
   position: relative;
-  margin-right: 8px;
 }
 
 .chars-page .chars-section-tabs .chars-skill-option[data-skill-type="defense"]::after {
@@ -498,6 +890,18 @@ body.chars-page {
   display: grid;
   grid-template-columns: 1fr;
   gap: 12px;
+  animation: chars-section-enter 360ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes chars-section-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .chars-page .overview-group {
@@ -537,6 +941,26 @@ body.chars-page {
   min-height: 24px;
 }
 
+.chars-page .overview-status-separator {
+  display: inline-block;
+  align-self: stretch;
+  width: 1px;
+  min-height: 24px;
+  margin: 0 2px;
+  background: rgba(214, 190, 140, 0.35);
+}
+
+.chars-page .overview-item-level {
+  gap: 4px;
+}
+
+.chars-page .overview-level-prefix {
+  color: #bd7d48;
+  font-size: 15px;
+  font-weight: 900;
+  letter-spacing: -0.06em;
+}
+
 .chars-page .overview-icon {
   width: 20px;
   height: 20px;
@@ -550,6 +974,42 @@ body.chars-page {
   font-size: 20px;
   font-weight: 700;
   line-height: 0.95;
+}
+
+.chars-page .overview-attributes {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.chars-page .overview-attribute-item {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 6px;
+  min-width: 0;
+}
+
+.chars-page .overview-attribute-item + .overview-attribute-item {
+  padding-left: 14px;
+  border-left: 1px solid rgba(214, 190, 140, 0.35);
+}
+
+.chars-page .overview-attribute-icon {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+  object-position: center;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
+}
+
+.chars-page .overview-attribute-value {
+  color: #f3e3c1;
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1;
 }
 
 .chars-page .overview-item-resistance {
@@ -606,23 +1066,6 @@ body.chars-page {
   padding-left: 14px; /* afastar da imagem */
 }
 
-.chars-page .chars-kit[role="button"] {
-  cursor: pointer;
-  user-select: none;
-}
-
-.chars-page .chars-kit[role="button"]:focus-visible {
-  outline: 2px solid rgba(185, 120, 45, 0.95);
-  outline-offset: 4px;
-  border-radius: 8px;
-}
-
-.chars-page .chars-kit[role="button"]:hover .chars-kit-name {
-  text-decoration: underline;
-  text-decoration-thickness: 2px;
-  text-underline-offset: 3px;
-}
-
 .chars-page .chars-kit-separator {
   display: block;
   width: 100%;
@@ -634,13 +1077,36 @@ body.chars-page {
 }
 
 .chars-page .chars-kit-name {
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+  margin: 0;
+  appearance: none;
   color: rgba(255,255,255,0.96);
+  background: transparent;
+  border: 0;
+  text-align: left;
+  cursor: pointer;
+  transition: color 140ms ease;
   font-size: 26px;
   font-weight: 900;
   font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
   letter-spacing: -0.02em;
   padding: 0 0 6px 0;
   line-height: 1;
+}
+
+.chars-page .chars-kit-name:hover {
+  color: #f4c27c;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+
+.chars-page .chars-kit-name:focus-visible {
+  outline: 2px solid rgba(185, 120, 45, 0.95);
+  outline-offset: 3px;
+  border-radius: 3px;
 }
 
 .chars-page .chars-kit-character {
@@ -658,17 +1124,456 @@ body.chars-page {
   .chars-page .chars-kit-name { font-size: 22px; }
 }
 
+.kit-export-dialog {
+  width: min(440px, calc(100vw - 32px));
+  max-width: none;
+  padding: 0;
+  color: #f4ead8;
+  background: #100d0a;
+  border: 1px solid rgba(185, 120, 45, 0.8);
+  border-radius: 12px;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.75), 0 0 28px rgba(185, 120, 45, 0.18);
+}
+
+.kit-export-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.78);
+  backdrop-filter: blur(4px);
+}
+
+.kit-export-dialog-content {
+  padding: 26px;
+}
+
+.kit-export-dialog h2 {
+  margin: 0 0 10px;
+  color: #f4c27c;
+  font: 800 24px 'Playfair Display', Georgia, serif;
+}
+
+.kit-export-dialog p {
+  margin: 0;
+  color: rgba(244, 234, 216, 0.82);
+  line-height: 1.5;
+}
+
+.kit-export-dialog .kit-export-status:not([hidden]) {
+  margin-top: 16px;
+  color: #f4c27c;
+}
+
+.kit-export-dialog .kit-export-status.is-error {
+  color: #ff8585;
+}
+
+.kit-export-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.kit-export-actions button {
+  min-height: 40px;
+  padding: 8px 16px;
+  color: #f4ead8;
+  font: inherit;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 7px;
+  cursor: pointer;
+}
+
+.kit-export-actions .kit-export-confirm {
+  color: #17110b;
+  background: #d7a45e;
+  border-color: #e7b66f;
+}
+
+.kit-export-actions button:disabled {
+  opacity: 0.55;
+  cursor: wait;
+}
+
+.kit-pdf-export {
+  position: absolute !important;
+  left: 0 !important;
+  top: 0 !important;
+  flex: 0 0 1122px !important;
+  z-index: 1 !important;
+  display: block !important;
+  width: 1122px !important;
+  min-width: 1122px !important;
+  max-width: 1122px !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: visible !important;
+  color: #fff !important;
+  background: #000 !important;
+  pointer-events: none !important;
+}
+
+.kit-pdf-export,
+.kit-pdf-export * {
+  box-sizing: border-box !important;
+}
+
+.kit-pdf-export .kit-pdf-page {
+  display: block !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 24px 12px 12px !important;
+  overflow: visible !important;
+  color: #fff !important;
+  background: #000 !important;
+  box-shadow: none !important;
+}
+
+.kit-pdf-export .chars-dynamic {
+  position: static !important;
+  display: block !important;
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  max-height: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: visible !important;
+  opacity: 1 !important;
+  transform: none !important;
+  animation: none !important;
+}
+
+.kit-pdf-export .chars-kit {
+  margin: 0 0 16px !important;
+  padding: 0 12px !important;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.kit-pdf-export .skills-wrapper {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0 !important;
+  width: 100% !important;
+  max-height: none !important;
+  margin: 0 !important;
+  padding: 16px 12px !important;
+  overflow: visible !important;
+  background: #000 !important;
+  box-shadow: none !important;
+}
+
+.kit-pdf-export .skill-card-row {
+  align-items: flex-start !important;
+  max-height: none !important;
+  margin: 20px 0 !important;
+  padding: 14px 12px !important;
+  overflow: visible !important;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.kit-pdf-export .skills-weapons-section .skill-card-row:last-child,
+.kit-pdf-export .skills-section .skill-card-row:first-child,
+.kit-pdf-export .skills-passives-section .skill-card-row:first-child,
+.kit-pdf-export .skills-defense-section .skill-card-row:first-child,
+.kit-pdf-export .skills-ego-section .skill-card-row:first-child {
+  margin-top: 10px !important;
+}
+
+.kit-pdf-export .skills-weapons-section .skill-card-row:last-child,
+.kit-pdf-export .skills-section .skill-card-row:last-child,
+.kit-pdf-export .skills-passives-section .skill-card-row:last-child,
+.kit-pdf-export .skills-defense-section .skill-card-row:last-child,
+.kit-pdf-export .skills-ego-section .skill-card-row:last-child {
+  margin-bottom: 10px !important;
+}
+
+.kit-pdf-export .skills-passives-section > br {
+  display: none !important;
+}
+
+.kit-pdf-export .skills-separator {
+  height: 2px !important;
+  margin: 14px 0 !important;
+}
+
+.kit-pdf-export .skill_description,
+.kit-pdf-export .skill_description .skill-text,
+.kit-pdf-export .skill_description .skill-text p {
+  min-width: 0 !important;
+  max-height: none !important;
+  overflow: visible !important;
+  white-space: normal !important;
+  overflow-wrap: anywhere !important;
+  word-break: normal !important;
+}
+
+.kit-pdf-export .skill_description .skill-text {
+  width: 100% !important;
+  grid-template-columns: minmax(0, auto) minmax(0, 1fr) !important;
+}
+
+.kit-pdf-export .skill-name-wrap {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  gap: 4px !important;
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+.kit-pdf-export .skill-name-wrap .skill-cost-label {
+  position: static !important;
+  align-self: stretch !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  overflow: visible !important;
+  color: #bdbdbd !important;
+  font-family: inherit !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0 !important;
+  line-height: 1.2 !important;
+  text-align: right !important;
+}
+
+.kit-pdf-export .skill-name-wrap .skill-flavor-label {
+  position: static !important;
+  display: block !important;
+  align-self: stretch !important;
+  width: 100% !important;
+  max-width: none !important;
+  flex: 0 0 auto !important;
+  margin: 0 0 8px !important;
+  padding: 0 !important;
+  color: #d8d0c4 !important;
+  font-family: inherit !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0 !important;
+  line-height: 1.4 !important;
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  overflow-wrap: anywhere !important;
+  text-align: right !important;
+}
+
+.kit-pdf-export .skill-name-wrap .skill-name {
+  max-width: 100% !important;
+  overflow-wrap: anywhere !important;
+  background: #21180f !important;
+  border-color: #76502b !important;
+  box-shadow: none !important;
+  clip-path: none !important;
+}
+
+.kit-pdf-export .skill-name::before,
+.kit-pdf-export .skill-name::after {
+  display: none !important;
+}
+
+.kit-pdf-export .skills-section-title,
+.kit-pdf-export .sanity-section-title,
+.kit-pdf-export .sanity-detail-title {
+  break-after: avoid-page;
+  page-break-after: avoid;
+}
+
+.kit-pdf-export .sanity-section-title {
+  margin-top: 40px !important;
+  break-before: page;
+  page-break-before: always;
+}
+
+.kit-pdf-export .skills-separator,
+.kit-pdf-export .skills-divider {
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.kit-pdf-export .skills-sanity-section,
+.kit-pdf-export .sanity-detail-section,
+.kit-pdf-export .sanity-panel,
+.kit-pdf-export .sanity-detail-content {
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+.kit-pdf-export .sanity-detail-section,
+.kit-pdf-export .sanity-panel,
+.kit-pdf-export .kit-print-tooltip {
+  break-inside: avoid;
+  page-break-inside: avoid;
+  orphans: 3;
+  widows: 3;
+}
+
+.kit-pdf-export .kit-print-tooltip-hardblood-armor-new-page {
+  break-before: page;
+  page-break-before: always;
+}
+
+.kit-pdf-export .kit-print-effects {
+  break-before: page;
+  page-break-before: always;
+  margin-top: 24px;
+}
+
+.kit-pdf-export .kit-print-effects-title {
+  margin: 0 0 18px;
+  color: #f4c27c;
+  font: 800 24px 'Playfair Display', Georgia, serif;
+  break-after: avoid-page;
+  page-break-after: avoid;
+}
+
+.kit-pdf-export .kit-print-tooltip {
+  position: static !important;
+  display: block !important;
+  width: auto !important;
+  max-width: none !important;
+  max-height: none !important;
+  margin: 0 0 12px !important;
+  padding: 0 !important;
+  overflow: visible !important;
+  opacity: 1 !important;
+  transform: none !important;
+  animation: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
+.kit-pdf-export .kit-print-tooltip.kit-print-tooltip-hardblood-armor {
+  padding-top: 16mm !important;
+}
+
+.kit-pdf-export .kit-print-tooltip .tooltip-scroll {
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  max-height: none !important;
+  overflow: visible !important;
+  white-space: normal !important;
+  overflow-wrap: anywhere !important;
+  word-break: normal !important;
+}
+
+.kit-pdf-export .kit-print-tooltip .tooltip-content {
+  width: 100% !important;
+  min-width: 0 !important;
+  white-space: normal !important;
+  overflow-wrap: anywhere !important;
+  word-break: normal !important;
+}
+
 .chars-page .overview-description {
   color: #efe1c4;
   font-size: 14px;
   line-height: 1.45;
   margin-top: 2px;
+  padding-right: 18px;
   white-space: pre-line;
   letter-spacing: 0.01em;
   overflow-y: auto;
   overflow-x: hidden;
+  min-height: 0;
   scrollbar-width: thin;
   scrollbar-color: rgba(140, 160, 220, 0.72) rgba(255, 255, 255, 0.06);
+}
+
+.chars-page .overview-description-tabs {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 0;
+  scrollbar-width: none;
+}
+
+/* Dedicated, synchronized scrollbar placed above the description buttons. */
+.chars-page .overview-description-tabs-scroll {
+  height: 12px;
+  margin: 0 0 4px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(207, 157, 79, 0.82) rgba(27, 16, 10, 0.94);
+}
+
+.chars-page .overview-description-tabs-scroll[hidden] {
+  display: none;
+}
+
+.chars-page .overview-description-tabs-scroll-content {
+  height: 1px;
+  min-width: 100%;
+}
+
+.chars-page .overview-description-tabs-scroll::-webkit-scrollbar {
+  height: 8px;
+}
+
+.chars-page .overview-description-tabs-scroll::-webkit-scrollbar-track {
+  background: linear-gradient(180deg, rgba(11, 7, 5, 0.98), rgba(43, 25, 13, 0.92));
+  border: 1px solid rgba(214, 190, 140, 0.24);
+  border-radius: 999px;
+}
+
+.chars-page .overview-description-tabs-scroll::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #f0c36e, #9a5b23);
+  border: 1px solid rgba(255, 231, 176, 0.56);
+  border-radius: 999px;
+  box-shadow: inset 0 1px 0 rgba(255, 244, 211, 0.3);
+}
+
+.chars-page .overview-description-tabs-scroll::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #ffe0a0, #ba712b);
+}
+
+.chars-page .overview-description-tabs-scroll::-webkit-scrollbar-button {
+  display: none;
+}
+
+.chars-page .overview-description-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.chars-page .overview-description-tab {
+  flex: 0 0 auto;
+  border: 1px solid rgba(214, 190, 140, 0.3);
+  border-bottom-color: rgba(214, 190, 140, 0.52);
+  background: rgba(27, 16, 10, 0.7);
+  color: #d6c58d;
+  padding: 5px 10px;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.1;
+  cursor: pointer;
+  transition: background 140ms ease, border-color 140ms ease, color 140ms ease;
+}
+
+.chars-page .overview-description-tab:hover,
+.chars-page .overview-description-tab:focus-visible {
+  border-color: rgba(255, 203, 125, 0.78);
+  color: #ffe0a9;
+  outline: none;
+}
+
+.chars-page .overview-description-tab.active {
+  border-color: rgba(255, 203, 125, 0.88);
+  background: linear-gradient(180deg, rgba(101, 59, 24, 0.7), rgba(47, 26, 13, 0.88));
+  color: #ffcb7d;
+  box-shadow: inset 0 1px 0 rgba(255, 230, 182, 0.16);
 }
 
 .chars-page .overview-description::-webkit-scrollbar {
@@ -746,7 +1651,7 @@ body.chars-page {
   gap: 0;
   border-radius: 16px;
   border: 1px solid rgba(28, 0, 65, 0.2);
-  background-color: rgba(209, 208, 208, 0.88);
+  background-color: #d1d0d0;
   box-sizing: border-box;
   box-shadow:
     0 0 20px rgba(0, 0, 0, 0.6),
@@ -1187,13 +2092,18 @@ body.chars-page {
 
 /* Smooth mount animation for dynamic skill content to reduce layout jump */
 .chars-page .chars-dynamic {
-  transition: opacity 180ms ease, transform 180ms ease;
-  transform: translateY(6px);
+  opacity: 0;
+  transition: opacity 340ms cubic-bezier(0.22, 1, 0.36, 1), transform 340ms cubic-bezier(0.22, 1, 0.36, 1);
+  transform: translateY(8px);
 }
 
 .chars-page .chars-dynamic.is-mounted {
   opacity: 1;
   transform: translateY(0);
+}
+
+.chars-page .chars-dynamic.is-content-entering {
+  animation: chars-section-enter 360ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .chars-page .skills-wrapper .skill-card-row {
@@ -1203,7 +2113,7 @@ body.chars-page {
 /* Place the dynamic skill mount in the normal flow directly below the tabs/submenu */
 .chars-page .chars-header {
   /* allow content inserted after nav to flow beneath the tabs */
-  position: static;
+  position: relative;
 }
 
 .chars-page .chars-header .chars-dynamic {
@@ -1403,6 +2313,7 @@ body.chars-page {
 
   .chars-shell {
     width: min(900px, 100%);
+    flex: 0 0 auto;
     flex-direction: column;
     align-items: stretch;
   }
@@ -1414,6 +2325,7 @@ body.chars-page {
 
   .chars-page .page_container {
     width: 100%;
+    max-width: none;
     flex: 0 0 auto;
   }
 
@@ -1473,7 +2385,7 @@ body.chars-page {
     display: flex;
   }
 
-  .chars-page .chars-showcase-wrap {
+  .chars-page .chars-header.has-showcase .chars-showcase-wrap {
     width: var(--chars-showcase-w);
     height: var(--chars-showcase-h);
     min-height: var(--chars-showcase-h);
@@ -1542,6 +2454,47 @@ body.chars-page {
   gap: 10px;
 }
 
+/* Full-bleed section panel for regular pages. */
+.page_container > .navbar {
+  width: calc(100% + var(--page-padding) + var(--page-padding));
+  margin: calc(-1 * var(--page-padding)) calc(-1 * var(--page-padding)) 0;
+  padding: 10px 8px;
+  border: 0;
+  border-radius: 0;
+  background: #3d1a50;
+  box-shadow: none;
+}
+
+/* The section bar occupies the panel's top edge. Clip it with the panel's
+   radius so the light panel background cannot show in its two upper corners. */
+.page_container:has(> .navbar) {
+  /* This sits behind the clipped navigation bar. Keeping the top strip the
+     same color prevents the panel's light gray from blending into its corners. */
+  background-image: linear-gradient(#3d1a50 0 60px, transparent 60px);
+  overflow: hidden;
+}
+
+/* Restore the menu-style outline across the rounded top edge. The navigation
+   itself is clipped to the panel, so this overlay keeps the two corner strokes
+   visible without reintroducing the light background beneath them. */
+.page_container:has(> .navbar)::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 2;
+  height: 60px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px 12px 0 0;
+  pointer-events: none;
+}
+
+.page_container > .navbar .nav-right {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr));
+  width: 100%;
+  gap: 8px;
+}
+
 /* container botões */
 .nav-right {
   display: flex;
@@ -1575,9 +2528,36 @@ body.chars-page {
   min-width: 120px;
 }
 
+.page_container > .navbar .nav-right button {
+  min-width: 0;
+  min-height: 50px;
+  height: 50px;
+  padding: 6px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 9px 9px 0 0;
+  background: #29103b;
+  color: #ffffff;
+  font: inherit;
+  font-size: clamp(13px, 1.1vw, 16px);
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.1;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: none;
+  transition: background 0.16s ease, color 0.16s ease;
+}
+
 .nav-right button:hover {
   background: white;
   color: black;
+}
+
+.page_container > .navbar .nav-right button:hover:not(.active) {
+  background: #4a1760;
+  color: #ffffff;
 }
 
 .nav-right button.active {
@@ -1586,24 +2566,128 @@ body.chars-page {
   cursor: default;
 }
 
+.page_container > .navbar .nav-right button.active {
+  background: #4a1760;
+  color: #ffffff;
+  box-shadow: none;
+}
+
+.system-page .system-combat-subnav {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  width: calc(100% + var(--page-padding) + var(--page-padding));
+  margin: 0 calc(-1 * var(--page-padding)) 20px;
+  padding: 10px var(--page-padding);
+  background: #3d1a50;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.system-page .system-combat-subnav[hidden] {
+  display: none;
+}
+
+.system-page .system-combat-subnav:not([hidden]) {
+  animation: system-subnav-enter 180ms ease-out both;
+}
+
+@keyframes system-subnav-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.system-page .system-combat-subnav button {
+  min-width: min(120px, 100%);
+  flex: 0 1 200px;
+  min-height: 40px;
+  padding: 8px 18px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 7px;
+  background: #29103b;
+  color: #ffffff;
+  font: inherit;
+  cursor: pointer;
+  transition: background 180ms ease, border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+.system-page .system-combat-subnav button:hover {
+  border-color: rgba(225, 203, 255, 0.7);
+  background: #4a1760;
+  transform: translateY(-1px);
+}
+
+.system-page .system-combat-subnav button[aria-selected="true"] {
+  border-color: rgba(225, 203, 255, 0.58);
+  background: linear-gradient(180deg, #65347c, #4a1760);
+  color: #ffffff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 2px 8px rgba(20, 0, 40, 0.22);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .system-page .system-content.is-content-entering,
+  .system-page .system-combat-subnav:not([hidden]),
+  .chars-page .chars-skills-submenu.is-visible,
+  .chars-page .chars-overview-strip.is-visible,
+  .chars-page .chars-dynamic.is-content-entering {
+    animation: none;
+  }
+
+  .system-page .system-combat-subnav button {
+    transition: none;
+  }
+
+  .chars-page .chars-dynamic {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
 /* ========================= */
 /* BOTÕES INTERNOS */
 /* ========================= */
 .page_container .btn {
   display: block;
   margin: 24px auto 0 auto;
-
-  font-size: 16px;
+  min-width: 132px;
+  min-height: 36px;
+  padding: 7px 18px;
+  border: 1px solid #5c3674;
+  border-radius: 4px;
+  background: #330a3f;
+  color: #ffffff;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 500;
   text-align: center;
-
-  padding: 4px 20px;
-
-  flex: 1 1 140px;
+  cursor: pointer;
+  box-shadow: none;
+  transition: background 0.16s ease;
   max-width: 180px;
 }
 
+/* Keep a page's back button at the panel footer when its content is short.
+   When content exceeds the panel, the auto margin resolves to zero, so the
+   button remains after the content and naturally follows the document scroll. */
+.page_container:has(> .btn) {
+  display: flex;
+  flex-direction: column;
+}
+
+.page_container:has(> .btn) > .btn {
+  flex: 0 0 auto;
+  margin: auto auto 0;
+}
+
 .page_container .btn:hover {
-  text-decoration: underline;
+  background: #4a1760;
 }
 
 /* ========================= */
@@ -1669,6 +2753,7 @@ body.chars-page {
   flex-wrap: wrap;
   gap: 3px;
   margin-top: 12px;
+  margin-bottom: 24px;
 }
 
 .page_container .effects_column {
@@ -1680,6 +2765,7 @@ body.chars-page {
   overflow: hidden;
   background: rgba(18, 23, 36, 0.86);
   border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
   box-shadow: 0 10px 18px rgba(0, 0, 0, 0.14);
 }
 
@@ -1691,6 +2777,14 @@ body.chars-page {
   font-size: 0.96rem;
   font-weight: 600;
   letter-spacing: 0.01em;
+}
+
+.effects-page .effects-content {
+  margin-bottom: 0;
+}
+
+.effects-page .effects-content > .effects_table:last-child {
+  margin-bottom: 24px;
 }
 
 .page_container [mkd-content] ul.effects_list {
@@ -1840,13 +2934,25 @@ body.chars-page {
 }
 
 /* quando houver imagem flutuada na direita, limita a largura útil da tabela */
-.page_container [mkd-content] img[style*="float: right"] {
+.page_container :is([mkd-content], .page-dynamic) img[style*="float: right"] {
   width: clamp(180px, 32%, 280px);
   height: auto;
   margin: 0 0 16px 16px;
 }
 
-.page_container [mkd-content]:has(img[style*="float: right"]) table {
+/* Class illustrations are floated beside the description. Give them a little
+   breathing room below the section bar without moving the text content. */
+.classes-page .page_container :is([mkd-content], .page-dynamic) img[style*="float: right"] {
+  margin-top: 20px;
+}
+
+.page_container :is([mkd-content], .page-dynamic) img[style*="float: left"] {
+  width: clamp(180px, 32%, 280px);
+  height: auto;
+  margin: 0 16px 16px 0;
+}
+
+.page_container :is([mkd-content], .page-dynamic):has(img[style*="float: right"]) table {
   max-width: calc(100% - clamp(180px, 32%, 280px) - 16px);
   margin-right: auto;
 }
@@ -1858,14 +2964,15 @@ body.chars-page {
 }
 
 @media (max-width: 760px) {
-  .page_container [mkd-content] img[style*="float: right"] {
+  .page_container :is([mkd-content], .page-dynamic) img[style*="float: left"],
+  .page_container :is([mkd-content], .page-dynamic) img[style*="float: right"] {
     float: none !important;
     display: block;
     margin: 0 auto 16px;
     width: min(260px, 100%);
   }
 
-  .page_container [mkd-content]:has(img[style*="float: right"]) table {
+  .page_container :is([mkd-content], .page-dynamic):has(img[style*="float: right"]) table {
     max-width: 100%;
   }
 }
@@ -1875,57 +2982,122 @@ body.chars-page {
 /* ========================= */
 .tooltip-box {
   font-family: Arial, Helvetica, sans-serif;
-  text-align: justify;
+  text-align: left;
 
   position: fixed;
   left: 0;
   top: 0;
 
-  background-color: #1e1e2f;
-  border-radius: 5px;
-  border: 2px solid rgba(90, 90, 90, 0.2);
+  background: linear-gradient(145deg, rgba(31, 10, 45, 0.98), rgba(11, 7, 24, 0.99));
+  border-radius: 0;
+  border: 1px solid rgba(47, 28, 70, 0.94);
 
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.72), inset 0 1px 0 rgba(205, 181, 255, 0.09);
   backdrop-filter: blur(4px);
 
-  color: #fff;
-  padding: 8px 12px;
-  font-size: 14px;
+  color: #dfd7f5;
+  font-size: 13px;
+  line-height: 1.3;
 
   pointer-events: none;
   opacity: 0;
-  transition: opacity 0.15s ease;
+  transform: translateY(5px) scale(0.985);
+  transform-origin: top left;
+  transition: opacity 0.15s ease, transform 0.15s ease;
 
   z-index: 6767;
 
-  max-width: 450px;
-  max-height: 200px;
-  overflow-y: auto;
-
-  overscroll-behavior: contain;
-
-  scrollbar-width: thin;
-  scrollbar-color: rgba(140, 160, 220, 0.65) rgba(255, 255, 255, 0.06);
+  max-width: 600px;
+  max-height: 230px;
+  overflow: visible;
+  user-select: text;
 
   word-break: break-word;
 }
 
+/* The scrollable content is separate so the pinned frame stays fixed. */
+.tooltip-scroll {
+  max-width: 600px;
+  max-height: 200px;
+  box-sizing: border-box;
+  overflow-y: auto;
+  padding: 8px 10px;
+  touch-action: pan-y;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(140, 160, 220, 0.65) rgba(255, 255, 255, 0.06);
+}
+
+.tooltip-effect-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: -2px 0 5px;
+  color: #d8cbff;
+  font-size: 17px;
+  font-weight: 900;
+  line-height: 1.05;
+}
+
+.tooltip-effect-icon {
+  display: block;
+  width: 24px;
+  height: 24px;
+  flex: 0 0 auto;
+  object-fit: contain;
+}
+
+.tooltip-content {
+  white-space: normal;
+}
+
 .tooltip-box.is-visible {
   opacity: 1;
+  transform: translateY(0) scale(1);
   pointer-events: auto;
+  animation: tooltip-enter 0.16s ease-out both;
+}
+
+@keyframes tooltip-enter {
+  from {
+    opacity: 0;
+    transform: translateY(5px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.tooltip-box.is-pinned::after {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  z-index: 2;
+  pointer-events: none;
+  background:
+    linear-gradient(#9d8ade, #9d8ade) left top / 11px 2px no-repeat,
+    linear-gradient(#9d8ade, #9d8ade) left top / 2px 11px no-repeat,
+    linear-gradient(#9d8ade, #9d8ade) right top / 11px 2px no-repeat,
+    linear-gradient(#9d8ade, #9d8ade) right top / 2px 11px no-repeat,
+    linear-gradient(#9d8ade, #9d8ade) left bottom / 11px 2px no-repeat,
+    linear-gradient(#9d8ade, #9d8ade) left bottom / 2px 11px no-repeat,
+    linear-gradient(#9d8ade, #9d8ade) right bottom / 11px 2px no-repeat,
+    linear-gradient(#9d8ade, #9d8ade) right bottom / 2px 11px no-repeat;
+  filter: drop-shadow(0 0 3px rgba(157, 138, 222, 0.55));
 }
 
 /* scrollbar */
-.tooltip-box::-webkit-scrollbar {
+.tooltip-scroll::-webkit-scrollbar {
   width: 8px;
 }
 
-.tooltip-box::-webkit-scrollbar-track {
+.tooltip-scroll::-webkit-scrollbar-track {
   background: rgba(255, 255, 255, 0.06);
   border-radius: 999px;
 }
 
-.tooltip-box::-webkit-scrollbar-thumb {
+.tooltip-scroll::-webkit-scrollbar-thumb {
   background: linear-gradient(
     180deg,
     rgba(140, 160, 220, 0.75),
@@ -1935,12 +3107,22 @@ body.chars-page {
   border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
-.tooltip-box::-webkit-scrollbar-thumb:hover {
+.tooltip-scroll::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(
     180deg,
-    rgba(170, 190, 245, 0.9),
-    rgba(130, 150, 210, 0.9)
+    #d8e6ff,
+    #88a8ff
   );
+  border-color: #eef4ff;
+}
+
+.tooltip-scroll.is-scrollbar-hovered {
+  scrollbar-color: #a9c0ff rgba(255, 255, 255, 0.06);
+}
+
+.tooltip-scroll.is-scrollbar-hovered::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #d8e6ff, #88a8ff);
+  border-color: #eef4ff;
 }
 
 /* ========================= */
@@ -2059,6 +3241,10 @@ body.chars-page {
   object-fit: contain;
   -webkit-clip-path: none;
   clip-path: none;
+}
+
+.skill-slot .slot-center-icon.slot-sin-logo {
+  z-index: 4;
 }
 
 .skill-slot .slot-center-icon.slot-defense-icon {
@@ -2277,21 +3463,22 @@ overflow: visible;
 .skill_description .skill-text {
 display: grid;
 grid-template-columns: auto 1fr;
-
-.skill-atkw {
-  color: #d7d713;
-  font-weight: 800;
-  letter-spacing: 0.02em;
-}
 column-gap: 8px;
 row-gap: 6px;
 align-items: center;
 }
 
+.skill-card-row .skill-atkw {
+  color: #d7d713;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
 .skill-card-row.weapon-row .weapon-hit-label,
 .skill-card-row.weapon-row .weapon-dmg-label,
 .skill-card-row.ego-row .weapon-hit-label,
-.skill-card-row.ego-row .weapon-dmg-label {
+.skill-card-row.ego-row .weapon-dmg-label,
+.skill-card-row .skill-dmg-label {
 display: flex;
 align-items: center;
 gap: 8px;
@@ -2321,7 +3508,8 @@ letter-spacing: 0.01em;
 }
 
 .skill-card-row.weapon-row .weapon-dmg-label,
-.skill-card-row.ego-row .weapon-dmg-label {
+.skill-card-row.ego-row .weapon-dmg-label,
+.skill-card-row .skill-dmg-label {
   margin-top: 6px;
 }
 
@@ -2329,7 +3517,7 @@ letter-spacing: 0.01em;
   align-items: flex-start;
 }
 
-.skill-card-row.ego-row .skill-slot-column {
+.skill-slot-column {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -2351,7 +3539,7 @@ letter-spacing: 0.01em;
   object-fit: contain;
 }
 
-.skill-card-row.ego-row .skill-ego-costs {
+.skill-resource-costs {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -2362,7 +3550,7 @@ letter-spacing: 0.01em;
   max-width: 100%;
 }
 
-.skill-card-row.ego-row .skill-ego-cost-item {
+.skill-resource-costs .skill-ego-cost-item {
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -2373,7 +3561,7 @@ letter-spacing: 0.01em;
   white-space: nowrap;
 }
 
-.skill-card-row.ego-row .skill-ego-cost-item img {
+.skill-resource-costs .skill-ego-cost-item img {
   display: block;
   width: 26px;
   height: 26px;
@@ -2470,6 +3658,227 @@ grid-column: 1 / -1;
   opacity: 1;
 }
 
+.chars-page .skills-sanity-section {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.chars-page .sanity-section-title {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 42px;
+  width: calc(100% - 50px);
+  box-sizing: border-box;
+  margin: 0 10px;
+  padding: 0 24px;
+  overflow: hidden;
+  background:
+    repeating-linear-gradient(0deg, rgba(130, 170, 199, 0.06) 0 1px, transparent 1px 4px),
+    linear-gradient(180deg, rgba(19, 33, 43, 0.98), rgba(7, 15, 21, 0.98));
+  box-shadow: inset 0 1px 0 rgba(204, 235, 255, 0.18);
+  clip-path: polygon(
+    0 0,
+    calc(100% - 28px) 0,
+    100% 100%,
+    0 100%
+  );
+}
+
+.chars-page .sanity-section-title::before {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  pointer-events: none;
+}
+
+.chars-page .sanity-section-title::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 34px;
+  height: 100%;
+  background: repeating-linear-gradient(135deg, rgba(132, 174, 214, 0.9) 0 4px, transparent 4px 8px);
+  opacity: 0.78;
+}
+
+.chars-page .sanity-section-title span {
+  position: relative;
+  z-index: 1;
+  color: #b9ddf3;
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 1;
+  text-shadow: 0 1px 0 #07131c, 0 0 8px rgba(99, 171, 215, 0.28);
+}
+
+.chars-page .sanity-detail-section {
+  position: relative;
+  margin: 22px 0 0;
+  min-height: 175px;
+  padding-bottom: 18px;
+}
+
+.chars-page .sanity-panel + .sanity-detail-section {
+  margin-top: 48px;
+}
+
+.chars-page .sanity-detail-section + .sanity-detail-section {
+  margin-top: 2px;
+}
+
+.chars-page .sanity-detail-title {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 38px;
+  width: calc(100% - 50px);
+  box-sizing: border-box;
+  margin: 0 10px;
+  padding: 0 18px;
+  overflow: hidden;
+  background:
+    repeating-linear-gradient(0deg, rgba(130, 170, 199, 0.06) 0 1px, transparent 1px 4px),
+    linear-gradient(180deg, rgba(19, 33, 43, 0.98), rgba(7, 15, 21, 0.98));
+  clip-path: polygon(0 0, calc(100% - 24px) 0, 100% 100%, 0 100%);
+}
+
+.chars-page .sanity-detail-title::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 29px;
+  height: 100%;
+  background: repeating-linear-gradient(135deg, rgba(132, 174, 214, 0.9) 0 4px, transparent 4px 8px);
+  opacity: 0.78;
+}
+
+.chars-page .sanity-detail-title span {
+  position: relative;
+  z-index: 1;
+  color: #b9ddf3;
+  font-size: 21px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.chars-page .sanity-detail-content {
+  margin: 4px 15px 0;
+  padding-right: 170px;
+}
+
+.chars-page .sanity-detail-image {
+  position: absolute;
+  top: 54px;
+  right: 36px;
+  width: 92px;
+  max-height: 106px;
+  object-fit: contain;
+  object-position: center;
+  opacity: 0.42;
+}
+
+.chars-page .sanity-detail-decrease .sanity-detail-title {
+  background:
+    repeating-linear-gradient(0deg, rgba(208, 70, 70, 0.07) 0 1px, transparent 1px 4px),
+    linear-gradient(180deg, rgba(54, 18, 18, 0.98), rgba(24, 8, 8, 0.98));
+}
+
+.chars-page .sanity-detail-decrease .sanity-detail-title span {
+  color: #ff6565;
+}
+
+.chars-page .sanity-detail-decrease .sanity-detail-title::after {
+  background: repeating-linear-gradient(135deg, rgba(220, 72, 72, 0.95) 0 4px, transparent 4px 8px);
+}
+
+.chars-page .sanity-panel {
+  display: flex;
+  align-items: flex-start;
+  gap: 30px;
+  margin: 0 15px;
+}
+
+.chars-page .sanity-section-title + .skills-sanity-section {
+  margin-top: -8px;
+}
+
+.chars-page .sanity-panel-identity {
+  flex: 0 0 150px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 2px;
+  text-align: center;
+}
+
+.chars-page .sanity-panel-image {
+  display: block;
+  width: min(100%, 135px);
+  max-height: 143px;
+  object-fit: contain;
+  object-position: center;
+}
+
+.chars-page .sanity-panel-name {
+  color: #b9ddf3;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.1;
+  overflow-wrap: anywhere;
+}
+
+.chars-page .sanity-panel-effects {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding-top: 4px;
+}
+
+@media (max-width: 640px) {
+  .chars-page .sanity-section-title,
+  .chars-page .sanity-detail-title {
+    width: calc(100% - 20px);
+  }
+
+  .chars-page .sanity-detail-content {
+    padding-right: 0;
+  }
+
+  .chars-page .sanity-detail-section {
+    min-height: 0;
+  }
+
+  .chars-page .sanity-detail-image {
+    position: static;
+    display: block;
+    width: 78px;
+    max-height: 92px;
+    margin: 12px auto 0;
+    transform: none;
+  }
+
+  .chars-page .sanity-panel {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .chars-page .sanity-panel-identity {
+    flex-basis: auto;
+    width: 100%;
+  }
+
+  .chars-page .sanity-panel-name {
+    text-align: left;
+  }
+
+  .chars-page .sanity-panel-effects {
+    width: 100%;
+  }
+}
+
 /* Aperta só o início da seção de Skills, logo após o separador de Armas */
 .chars-page .chars-overview-strip .skills-separator + .skills-section {
   margin-top: 0;
@@ -2504,6 +3913,46 @@ grid-column: 1 / -1;
   margin-bottom: 0;
 }
 
+.skill-slot {
+  position: relative;
+}
+
+.slot-base-power,
+.slot-coin-power {
+  position: absolute;
+  z-index: 15;
+  display: inline-block;
+  color: #ffffff;
+  font-family: "Bahnschrift", "Trebuchet MS", sans-serif;
+  font-size: 40px;
+  font-weight: 950;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  white-space: nowrap;
+  pointer-events: none;
+  text-shadow:
+    2.2px 0 0 #000000,
+    -2.2px 0 0 #000000,
+    0 2.2px 0 #000000,
+    0 -2.2px 0 #000000,
+    2.2px 2.2px 0 #000000,
+    -2.2px 2.2px 0 #000000,
+    2.2px -2.2px 0 #000000,
+    -2.2px -2.2px 0 #000000;
+}
+
+.slot-base-power {
+  left: 8px;
+  bottom: 8px;
+  pointer-events: auto;
+  cursor: help;
+}
+
+.slot-coin-power {
+  top: 8px;
+  right: 8px;
+}
+
 .skill-coins-row {
 display: flex;
 align-items: center;
@@ -2519,6 +3968,7 @@ display: block;
 
 .skill-text-coin {
 display: inline-block;
+align-self: start;
 margin: 0;
 vertical-align: middle;
 }
@@ -2559,6 +4009,15 @@ opacity: 0.9;
 pointer-events: none;
 }
 
+.chars-page .chars-dynamic .skill-card-row[data-mp="1"] .skill-flavor-label,
+.chars-page .chars-dynamic .skill-card-row[data-mp="2"] .skill-flavor-label,
+.chars-page .chars-dynamic .skill-card-row[data-mp="3"] .skill-flavor-label {
+  max-width: calc(100% - var(--skill-flavor-reserve, 12px));
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 /* For passive labels, keep vertical positioning stable regardless of surrounding spacing */
 .skills-passives-section .skill-cost-passive {
   top: -20px; /* explicit for passiva; consistent with other cards */
@@ -2586,12 +4045,12 @@ color: #ffffff;
 background:
 linear-gradient(
     180deg,
-  color-mix(in srgb, var(--skill-main) 34%, #170707) 0%,
-  color-mix(in srgb, var(--skill-main) 18%, #0e0606) 58%,
-  color-mix(in srgb, var(--skill-main) 10%, #070404) 100%
+  color-mix(in srgb, var(--skill-main) 54%, #17110b) 0%,
+  color-mix(in srgb, var(--skill-main) 38%, #0f0b08) 58%,
+  color-mix(in srgb, var(--skill-main) 24%, #080706) 100%
 );
 
-border: 1px solid color-mix(in srgb, var(--skill-main) 22%, #120909);
+border: 1px solid color-mix(in srgb, var(--skill-main) 48%, #120909);
 
 box-shadow:
   inset 0 1px 0 rgba(255, 218, 164, 0.1),
@@ -2622,7 +4081,7 @@ position: absolute;
 inset: 0;
 background:
 linear-gradient(90deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0) 42%),
-linear-gradient(180deg, rgba(255, 223, 190, 0.08), rgba(255, 255, 255, 0) 48%);
+linear-gradient(180deg, rgba(255, 235, 200, 0.09), rgba(255, 255, 255, 0) 48%);
 pointer-events: none;
 }
 
@@ -2636,7 +4095,7 @@ height: 100%;
 background:
 repeating-linear-gradient(
   135deg,
-  color-mix(in srgb, var(--skill-main) 88%, #ffe1a8) 0 4px,
+  color-mix(in srgb, var(--skill-main) 90%, #ffe1a8) 0 4px,
   rgba(0, 0, 0, 0) 4px 8px
 );
 clip-path: polygon(34% 0, 100% 0, 100% 100%, 0 100%);
@@ -2852,3 +4311,423 @@ color: var(--fx-tag-color);
   gap: 14px;
 }
 
+/* ========================= */
+/* ÁRVORE DE PERSONAGENS */
+/* ========================= */
+/* The character browser is a real hierarchy. Keep every level on the same
+   visual language instead of changing to a blue panel for each open group. */
+.chars-page .navbar-title,
+.chars-page .nav-group > .nav-group-toggle,
+.chars-page .nav-group > summary.nav-group-toggle,
+.chars-page .nav-right button:not(.nav-group-toggle) {
+  font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
+}
+
+.chars-page .navbar-title {
+  font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
+}
+
+.chars-page .nav-tree {
+  gap: 8px;
+  padding: 2px 0 10px;
+}
+
+.chars-page .nav-group {
+  overflow: hidden;
+  border: 1px solid rgba(66, 38, 92, 0.2);
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.54);
+  box-shadow: none;
+}
+
+.chars-page .nav-group > .nav-group-toggle,
+.chars-page .nav-group > summary.nav-group-toggle {
+  min-height: 40px;
+  padding: 9px 12px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #28133d !important;
+  box-shadow: none;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.chars-page .nav-group > .nav-group-toggle::after,
+.chars-page .nav-group > summary.nav-group-toggle::after {
+  content: "";
+  width: 7px;
+  height: 7px;
+  margin-left: auto;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  opacity: 0.72;
+  transform: rotate(45deg) translateY(-2px);
+}
+
+.chars-page .nav-group[open] > .nav-group-toggle,
+.chars-page .nav-group[open] > summary.nav-group-toggle,
+.chars-page .nav-group.active-group > .nav-group-toggle {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+  background: linear-gradient(135deg, #44215f, #301342);
+  color: #ffffff !important;
+}
+
+.chars-page .nav-group[open] > .nav-group-toggle::after,
+.chars-page .nav-group[open] > summary.nav-group-toggle::after {
+  border-color: currentColor;
+  opacity: 0.95;
+  transform: rotate(225deg) translateY(-1px);
+}
+
+.chars-page .nav-group > .nav-group-toggle:hover,
+.chars-page .nav-group > summary.nav-group-toggle:hover {
+  background: rgba(68, 33, 95, 0.12);
+  border-color: transparent;
+}
+
+.chars-page .nav-group[open] > .nav-group-toggle:hover,
+.chars-page .nav-group[open] > summary.nav-group-toggle:hover {
+  background: linear-gradient(135deg, #512873, #39184e);
+}
+
+.chars-page .nav-group[open] > .nav-group-content,
+.chars-page .nav-group .nav-group-content {
+  gap: 3px;
+  margin: 0;
+  padding: 5px;
+  border: 0;
+  border-radius: 0;
+  background: rgba(241, 237, 246, 0.84);
+  box-shadow: none;
+}
+
+.chars-page .nav-group[open] > .nav-group-content {
+  margin: 0;
+}
+
+.chars-page .nav-group .nav-group {
+  margin: 3px 0 2px;
+  border-color: rgba(76, 45, 107, 0.16);
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.48);
+}
+
+.chars-page .nav-group .nav-group > .nav-group-toggle,
+.chars-page .nav-group .nav-group > summary.nav-group-toggle {
+  min-height: 36px;
+  padding: 8px 10px 8px 20px;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.chars-page .nav-group .nav-group[open] > .nav-group-content {
+  padding-left: 7px;
+  background: rgba(230, 221, 239, 0.72);
+}
+
+.chars-page .nav-right button:not(.nav-group-toggle) {
+  min-height: 36px;
+  margin: 0 !important;
+  padding: 8px 28px 8px 13px;
+  border: 0;
+  border-radius: 6px !important;
+  background: transparent;
+  color: #32194a !important;
+  box-shadow: none;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.chars-page .nav-right button:not(.nav-group-toggle):hover {
+  background: rgba(92, 48, 128, 0.12);
+  color: #28133d !important;
+}
+
+.chars-page .nav-right button:not(.nav-group-toggle).active {
+  background: linear-gradient(90deg, rgba(86, 43, 125, 0.96), rgba(117, 67, 158, 0.92));
+  color: #ffffff !important;
+  box-shadow: inset 3px 0 0 #d9b7ff;
+}
+
+.chars-page .nav-right button:not(.nav-group-toggle).active::after {
+  color: #ffffff;
+  right: 11px;
+}
+
+/* A standalone character has no parent group, but should still look like an
+   ordinary selectable row rather than a differently styled special case. */
+.chars-page .nav-tree > button:not(.nav-group-toggle) {
+  border: 1px solid rgba(66, 38, 92, 0.2);
+  background: transparent;
+}
+
+.chars-page .nav-tree > button:not(.nav-group-toggle).active {
+  border-color: transparent;
+}
+
+/* All folder levels share the selection colour. Hierarchy is conveyed by
+   nesting and spacing, never by introducing a second folder colour. */
+.chars-page .nav-group > .nav-group-toggle,
+.chars-page .nav-group > summary.nav-group-toggle,
+.chars-page .nav-group[open] > .nav-group-toggle,
+.chars-page .nav-group[open] > summary.nav-group-toggle,
+.chars-page .nav-group.active-group > .nav-group-toggle {
+  background: linear-gradient(90deg, rgba(86, 43, 125, 0.96), rgba(117, 67, 158, 0.92));
+  color: #ffffff !important;
+  font-family: 'Playfair Display', Georgia, 'Times New Roman', serif !important;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.chars-page .nav-group .nav-group[open] > .nav-group-content {
+  background: rgba(241, 237, 246, 0.84);
+}
+
+.chars-page .nav-right button:not(.nav-group-toggle) {
+  font-family: 'Playfair Display', Georgia, 'Times New Roman', serif !important;
+  font-size: 16px;
+  transition: transform 0.2s ease, filter 0.2s ease, background 0.2s ease;
+}
+
+/* Keep the hover language consistent with the back control: a small movement
+   and a brighter finish, rather than a white surface that changes the menu's
+   visual hierarchy. */
+.chars-page .nav-group > .nav-group-toggle:hover,
+.chars-page .nav-group > summary.nav-group-toggle:hover,
+.chars-page .nav-group[open] > .nav-group-toggle:hover,
+.chars-page .nav-group[open] > summary.nav-group-toggle:hover {
+  background: linear-gradient(90deg, rgba(86, 43, 125, 0.96), rgba(117, 67, 158, 0.92));
+  color: #ffffff !important;
+  transform: translateX(-3px) scale(1.015);
+  filter: brightness(1.12);
+}
+
+.chars-page .nav-right button:not(.nav-group-toggle):hover {
+  background: transparent;
+  color: #32194a !important;
+  transform: translateX(-3px) scale(1.015);
+  filter: brightness(0.82);
+}
+
+.chars-page .nav-right button:not(.nav-group-toggle).active:hover {
+  background: linear-gradient(90deg, rgba(86, 43, 125, 0.96), rgba(117, 67, 158, 0.92));
+  color: #ffffff !important;
+  filter: brightness(1.12);
+}
+
+/* Character navigation follows the same compact visual language as the
+   subpage navigation. Folder captions and character rows deliberately share
+   the same type scale, while nesting alone communicates the hierarchy. */
+.chars-page .nav-group > .nav-group-toggle,
+.chars-page .nav-group > summary.nav-group-toggle,
+.chars-page .nav-right button:not(.nav-group-toggle),
+.chars-page .nav-group-empty-label {
+  min-height: 38px;
+  padding: 8px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  background: #29103b;
+  color: #ffffff !important;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.2;
+  box-shadow: none;
+  transform: none;
+  filter: none;
+}
+
+.chars-page .nav-group > .nav-group-toggle:hover,
+.chars-page .nav-group > summary.nav-group-toggle:hover,
+.chars-page .nav-right button:not(.nav-group-toggle):hover {
+  background: #4a1760;
+  color: #ffffff !important;
+  transform: none;
+  filter: none;
+}
+
+.chars-page .nav-group[open] > .nav-group-toggle,
+.chars-page .nav-group[open] > summary.nav-group-toggle,
+.chars-page .nav-group.active-group > .nav-group-toggle,
+.chars-page .nav-right button:not(.nav-group-toggle).active {
+  background: #4a1760;
+  color: #ffffff !important;
+  box-shadow: none;
+}
+
+.chars-page .nav-group .nav-group > .nav-group-toggle,
+.chars-page .nav-group .nav-group > summary.nav-group-toggle {
+  min-height: 38px;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+/* Empty folders are labels, not controls: no disclosure affordance, hover,
+   focus, or click behaviour. */
+.chars-page .nav-group-empty {
+  margin: 3px 0 2px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  overflow: visible;
+}
+
+.chars-page .nav-group-empty-label {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  opacity: 0.55;
+  cursor: default;
+  user-select: none;
+}
+
+/* Keep the character-page footer control identical to the subpage "Voltar"
+   button and use the same compact type scale. */
+.chars-page .chars-back-btn {
+  all: unset;
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: 36px;
+  padding: 7px 18px;
+  border: 1px solid #5c3674;
+  border-radius: 10px;
+  background: #330a3f;
+  color: #ffffff;
+  font: inherit;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: 0;
+  text-align: center;
+  text-transform: none;
+  cursor: pointer;
+  box-sizing: border-box;
+  transition: background 0.16s ease;
+}
+
+.chars-page .chars-back-btn:hover {
+  background: #4a1760;
+}
+
+.chars-page .chars-back-btn:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+}
+
+/* Character entries remain visually distinct from their folder captions. */
+.chars-page .nav-right button:not(.nav-group-toggle):not(.active) {
+  background: #ffffff;
+  border-color: rgba(66, 38, 92, 0.24);
+  color: #28133d !important;
+  font-weight: 700;
+}
+
+.chars-page .nav-right button:not(.nav-group-toggle).active {
+  font-weight: 700;
+}
+
+.chars-page .nav-group > .nav-group-toggle:hover,
+.chars-page .nav-group > summary.nav-group-toggle:hover,
+.chars-page .nav-right button:not(.nav-group-toggle):hover {
+  font-size: 14px;
+  transform: none;
+  filter: none;
+  box-shadow: none;
+}
+
+.chars-page .nav-right button:not(.nav-group-toggle):not(.active):hover {
+  background: #ffffff;
+  color: #28133d !important;
+}
+
+/* Legacy open-group rules used a blue gradient for nested folders. Folders
+   now have one fixed purple treatment at every depth. */
+.chars-page .nav-group > .nav-group-toggle,
+.chars-page .nav-group > summary.nav-group-toggle,
+.chars-page .nav-group[open] > .nav-group-toggle,
+.chars-page .nav-group[open] > summary.nav-group-toggle,
+.chars-page .nav-group.active-group > .nav-group-toggle {
+  background: #4a1760 !important;
+}
+
+/* Every navigation label is intentionally bold. */
+.chars-page .nav-group > .nav-group-toggle,
+.chars-page .nav-group > summary.nav-group-toggle,
+.chars-page .nav-right button:not(.nav-group-toggle),
+.chars-page .nav-group-empty-label {
+  font-weight: 700 !important;
+}
+
+/* Navigation hover is intentionally static. Remove every legacy movement,
+   scaling, brightness, and timed transition from groups and character rows. */
+.chars-page .nav-group > .nav-group-toggle,
+.chars-page .nav-group > summary.nav-group-toggle,
+.chars-page .nav-right button:not(.nav-group-toggle),
+.chars-page .nav-group-content,
+.chars-page .nav-character-label {
+  animation: none !important;
+  transition: none !important;
+  transform: none !important;
+  filter: none !important;
+}
+
+.chars-page .nav-group > .nav-group-toggle:hover,
+.chars-page .nav-group > summary.nav-group-toggle:hover,
+.chars-page .nav-right button:not(.nav-group-toggle):hover {
+  font-size: 14px !important;
+}
+
+/* Keep exactly the same type size in every folder state. Older rules for
+   [open] and .active-group were more specific and enlarged these labels. */
+.chars-page .nav-group > .nav-group-toggle,
+.chars-page .nav-group > summary.nav-group-toggle,
+.chars-page .nav-group[open] > .nav-group-toggle,
+.chars-page .nav-group[open] > summary.nav-group-toggle,
+.chars-page .nav-group.active-group > .nav-group-toggle,
+.chars-page .nav-group .nav-group > .nav-group-toggle,
+.chars-page .nav-group .nav-group > summary.nav-group-toggle,
+.chars-page .nav-right button:not(.nav-group-toggle) {
+  font-size: 14px !important;
+}
+
+.chars-page .nav-right button:not(.nav-group-toggle):not(.active):hover .nav-character-label {
+  text-decoration: underline;
+  text-underline-offset: 0.14em;
+  text-decoration-thickness: 1px;
+}
+
+/* Use the exact type family of the "Personagens" title throughout the
+   character tree, independently of nesting level or selected/open state. */
+.chars-page .nav-group > .nav-group-toggle,
+.chars-page .nav-group > summary.nav-group-toggle,
+.chars-page .nav-right button:not(.nav-group-toggle),
+.chars-page .nav-group-empty-label {
+  font-family: 'Playfair Display', Georgia, 'Times New Roman', serif !important;
+}
+
+/* A selected character uses a light accent so it cannot be confused with
+   the solid-purple group headers. */
+.chars-page .nav-right button:not(.nav-group-toggle).active {
+  background: linear-gradient(90deg, #f1e7fc, #ddc9f0) !important;
+  border-color: #aa85c7 !important;
+  color: #301243 !important;
+  box-shadow: inset 4px 0 0 #74449a !important;
+}
+
+.chars-page .nav-right button:not(.nav-group-toggle).active::after {
+  color: #5b2b78 !important;
+}
+
+.chars-page .nav-right button:not(.nav-group-toggle).active:hover {
+  background: linear-gradient(90deg, #f1e7fc, #ddc9f0) !important;
+  color: #5268a5 !important;
+}

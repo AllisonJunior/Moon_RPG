@@ -1,0 +1,38 @@
+{
+  "fortitude": {
+    "desc": "Resistência e vigor físico do personagem.",
+    "type": "neutral"
+  },
+  "prudence": {
+    "desc": "Percepção, raciocínio e capacidade mental do personagem.",
+    "type": "neutral"
+  },
+  "temperance": {
+    "desc": "Equilíbrio emocional e força de vontade do personagem.",
+    "type": "neutral"
+  },
+  "justice": {
+    "desc": "Agilidade, reflexos e capacidade de ação do personagem.",
+    "type": "neutral"
+  },
+  "attribute_fortitude": {
+    "desc": "**Fortitude**\\nResist\u00eancia e vigor f\u00edsico do personagem.",
+    "type": "neutral"
+  },
+  "attribute_prudence": {
+    "desc": "**Prudence**\\nPercep\u00e7\u00e3o, racioc\u00ednio e capacidade mental do personagem.",
+    "type": "neutral"
+  },
+  "attribute_temperance": {
+    "desc": "**Temperance**\\nEquil\u00edbrio emocional e for\u00e7a de vontade do personagem.",
+    "type": "neutral"
+  },
+  "attribute_justice": {
+    "desc": "**Justice**\\nAgilidade, reflexos e capacidade de a\u00e7\u00e3o do personagem.",
+    "type": "neutral"
+  },
+  "level": {
+    "desc": "**N\u00edvel**\\nN\u00edvel do personagem.",
+    "type": "neutral"
+  }
+}
