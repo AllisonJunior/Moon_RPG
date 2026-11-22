@@ -513,7 +513,7 @@ body.chars-page {
   object-position: center center;
   position: relative;
   z-index: 1;
-  transition: opacity 180ms ease, transform 180ms ease;
+  transition: opacity 140ms ease, transform 140ms ease;
 }
 
 .chars-page .chars-showcase-image.is-character-image-changing {

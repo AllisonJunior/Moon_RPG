@@ -1760,7 +1760,7 @@ function applyCharacterImage(imageElement, src, altText, token, pageContainer) {
             updateCharacterImageToggle(false);
             syncCharacterSkillViewport();
             syncCharacterOverviewViewport();
-        }, 180);
+        }, 140);
     };
 
     if (!src) {
@@ -1806,7 +1806,7 @@ function applyCharacterImage(imageElement, src, altText, token, pageContainer) {
                         }
                     });
                 });
-            }, 120);
+            }, 90);
         };
 
         nextImage.addEventListener("load", showPreloadedImage, { once: true });

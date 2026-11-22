@@ -104,7 +104,6 @@ No fim da cena ganhe 1 @(Defense Power Up) para cada ataque sofrido (Máx. 3).
 Uma vez por cena ao perder um clash, ganhe 1 @Protection e recupere 3 de sanidade.
 
 ### Orgulho de Cavaleiro
-
 Uma vez por cena se você estiver com 45 de sanidade, remova um efeito negativo em si (quando possível). Após o uso, essa habilidade fica desativada por três cenas (incluindo a de ativação).
 
 ---
