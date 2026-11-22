@@ -4975,6 +4975,7 @@ function parseSkill(text, sourcePath = "", charFolder = "", characterName = "") 
     // Extract character name from sourcePath (e.g., "/bd/chars/moon_office/axel.skill" -> "axel")
     const characterMatch = sourcePath.match(/\/bd\/chars\/(?:[^/]+\/)*([^/]+)\.skill$/);
     const character = characterMatch ? characterMatch[1] : null;
+    const characterAssetFolder = resolveCharacterFolderName(characterName);
 
     function formatEffects(text) {
 
@@ -5091,9 +5092,9 @@ function parseSkill(text, sourcePath = "", charFolder = "", characterName = "") 
 
     // Prioriza:
     // bd/chars/<grupo>/<personagem>/<imagem>
-    if (charFolder && characterName) {
+    if (charFolder && characterAssetFolder) {
 
-        return `../../bd/chars/${charFolder}/${characterName}/${finalFile}`;
+        return `../../bd/chars/${charFolder}/${characterAssetFolder}/${finalFile}`;
     }
 
     // Fallback:
@@ -5121,8 +5122,8 @@ function parseSkill(text, sourcePath = "", charFolder = "", characterName = "") 
             return `../../bd/chars/${candidate}`;
         }
 
-        if (charFolder && characterName) {
-            return `../../bd/chars/${charFolder}/${characterName}/${candidate}`;
+        if (charFolder && characterAssetFolder) {
+            return `../../bd/chars/${charFolder}/${characterAssetFolder}/${candidate}`;
         }
 
         if (charFolder) {
