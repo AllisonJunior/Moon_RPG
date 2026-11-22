@@ -101,7 +101,7 @@ No início de cenas ímpares ganhe 1 @(Damage Up) e em cenas pares ganhe 1 @(Pro
 No fim da cena ganhe 1 @(Defense Power Up) para cada ataque sofrido (Máx. 3).
 
 ### Pequeno Copo de Líquor
-Uma vez por cena ao perder um clash, ganhe 1 @Protection e recupere 3 de sanidade.
+Uma vez por cena ao perder um clash, ganhe 1 @Protection e recupere +3 de sanidade.
 
 ### Orgulho de Cavaleiro
 Uma vez por cena se você estiver com 45 de sanidade, remova um efeito negativo em si (quando possível). Após o uso, essa habilidade fica desativada por três cenas (incluindo a de ativação).
