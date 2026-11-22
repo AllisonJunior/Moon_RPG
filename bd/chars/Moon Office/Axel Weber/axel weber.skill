@@ -306,7 +306,7 @@ COIN (u)
 END
 {
 (attack_end) Entre os aliados que podem agir, escolha um e então ative @Command no mesmo
-(skill_end) Se Moon Office Fixer - Saya estiver em campo, puder agir e tiver alcance, a mesma usa ~Separar~ no alvo desse ataque
+(skill_end) Se c(#FFA500){Moon Office Fixer - Saya} estiver em campo, puder agir e tiver alcance, a mesma usa ~Separar~ no alvo desse ataque
 (skill_end) Ganhe @(Sinergy [Axel Weber])
 }
 

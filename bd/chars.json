@@ -1,6 +1,37 @@
 [
   {
     "type": "group",
+    "label": "Moon Office",
+    "children": [
+      {
+        "label": "Axel Weber",
+        "target": "axel weber.skill"
+      },
+      {
+        "label": "Wuhan Xia",
+        "target": "wuhan xia.skill"
+      },
+      {
+        "label": "Viktor Valenhardt",
+        "target": "viktor valenhardt.skill"
+      },
+      {
+        "label": "Leonard Boss",
+        "target": "leonard boss.skill"
+      },
+      {
+        "label": "Hana",
+        "target": "hana.skill"
+      },
+      {
+        "label": "Saya",
+        "target": "saya.skill"
+      }
+    ],
+    "folder": "Moon Office"
+  },
+  {
+    "type": "group",
     "label": "Wings",
     "children": [
       {
@@ -94,37 +125,6 @@
       }
     ],
     "folder": "Sindicatos"
-  },
-  {
-    "type": "group",
-    "label": "Moon Office",
-    "children": [
-      {
-        "label": "Axel Weber",
-        "target": "axel weber.skill"
-      },
-      {
-        "label": "Wuhan Xia",
-        "target": "wuhan xia.skill"
-      },
-      {
-        "label": "Viktor Valenhardt",
-        "target": "viktor valenhardt.skill"
-      },
-      {
-        "label": "Leonard Boss",
-        "target": "leonard boss.skill"
-      },
-      {
-        "label": "Hana",
-        "target": "hana.skill"
-      },
-      {
-        "label": "Saya",
-        "target": "saya.skill"
-      }
-    ],
-    "folder": "Moon Office"
   },
   {
     "type": "group",
