@@ -2964,19 +2964,13 @@ async function initMarkdownButtons() {
             if (!path) return;
 
             const activeCharacter = document.querySelector(".chars-page .nav-right button.active");
-            if (activeCharacter && activeCharacter !== button) {
-                const prefersReducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
-                window.scrollTo({
-                    top: 0,
-                    behavior: prefersReducedMotion ? "auto" : "smooth"
-                });
-            }
+            const shouldScrollToTop = activeCharacter && activeCharacter !== button;
         
             // Limpa/reseta ANTES de carregar o conteúdo
             setActiveButton(button, { openAncestors: true });
         
             // Agora carrega o .skill corretamente
-            changeContent(path, kind);
+            const contentLoad = changeContent(path, kind);
             
             // Reset section tabs to "Overview" (first tab) when character is selected
             const sectionTabs = document.querySelectorAll(".chars-page .chars-section-tab");
@@ -2989,6 +2983,21 @@ async function initMarkdownButtons() {
                     else {
                         tab.classList.remove("active");
                     }
+                });
+            }
+
+            if (shouldScrollToTop) {
+                const pageContainer = document.querySelector(".chars-page .page_container");
+                const characterToken = pageContainer?.dataset.characterImageToken;
+                const prefersReducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+
+                Promise.resolve(contentLoad).then(() => {
+                    if (pageContainer?.dataset.characterImageToken !== characterToken) return;
+
+                    document.querySelector(".chars-page .chars-shell")?.scrollIntoView({
+                        behavior: prefersReducedMotion ? "auto" : "smooth",
+                        block: "start"
+                    });
                 });
             }
         });
