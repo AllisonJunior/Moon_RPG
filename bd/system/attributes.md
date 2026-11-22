@@ -5,28 +5,28 @@ Existem um total de quatro atributos principais, que estão presentes em todas a
 <br>
 
 
-<img src="../../res/att/fortitude.png" style="float:left; width:48px; height:auto; margin-top: 20px; margin-right: 10px;">
+<img src="../../res/att/Fortitude.png" style="float:left; width:48px; height:auto; margin-top: 20px; margin-right: 10px;">
 
 ### Fortitude
 A vitalidade, resistência e força física.
 
 <br>
 
-<img src="../../res/att/prudence.png" style="float:left; width:50px; height:auto; margin-top: 30px; margin-right: 10px;">
+<img src="../../res/att/Prudence.png" style="float:left; width:50px; height:auto; margin-top: 30px; margin-right: 10px;">
 
 ### Prudência
 O intelecto, sabedoria e resistência mental.
 
 <br>
 
-<img src="../../res/att/temperance.png" style="float:left; width:48px; height:auto; margin-top: 25px; margin-right: 10px;">
+<img src="../../res/att/Temperance.png" style="float:left; width:48px; height:auto; margin-top: 25px; margin-right: 10px;">
 
 ### Temperância
 A percepção, sociabilidade e instintos.
 
 <br>
 
-<img src="../../res/att/justice.png" style="float:left; width:50px; height:auto; margin-top: 30px; margin-right: 10px;">
+<img src="../../res/att/Justice.png" style="float:left; width:50px; height:auto; margin-top: 30px; margin-right: 10px;">
 
 ### Justiça
 A destreza, reação e velocidade.

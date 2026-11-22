@@ -8,7 +8,7 @@ No sistema Moon vida excedente é classificada como Shield (_também conhecido c
 Quando um ataque seja ele um comum ou provindo de uma [**<u>skill</u>**]{skills} rola um valor máximo no seu acerto (_ou seja um 10 no dado_) o mesmo causa dano máximo.
 
 # Moon Points
-Cada jogador possui um recurso único conhecido como **Pontos Moon** <img src="../../res/effects/Moon.png"> que é utilizado para ativar as ações especiais das [**<u>skills</u>**]{skills}. 
+Cada jogador possui um recurso único conhecido como **Pontos Moon** <img src="../../res/effects/Moon_Point.png"> que é utilizado para ativar as ações especiais das [**<u>skills</u>**]{skills}. 
 
 Seu funcionamento é simples, cada jogador possui um máximo de três pontos (_esse valor é aumentado com base em níveis_) que como mencionado anteriormente podem ser usados para utilizar uma das ações especiais provindas das [**<u>skills</u>**]{skills}, cada uma tendo um custo único que é descontado dos seus pontos.
 

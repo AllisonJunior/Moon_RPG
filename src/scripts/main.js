@@ -402,6 +402,19 @@ function renderEffectsMarkdown(text) {
 // LOAD MARKDOWN
 // =========================
 
+function resolveAppRootImagePaths(markup) {
+    const template = document.createElement("template");
+    template.innerHTML = String(markup || "");
+
+    template.content.querySelectorAll("img[src]").forEach(image => {
+        const source = image.getAttribute("src") || "";
+        if (!/^\.\.\/\.\.\/(?:res|bd)\//i.test(source)) return;
+        image.setAttribute("src", resolveScriptAssetPath(source));
+    });
+
+    return template.innerHTML;
+}
+
 const markdownRenderVersions = new WeakMap();
 
 function loadMarkdown(path, element) {
@@ -441,7 +454,7 @@ function loadMarkdown(path, element) {
             // Finally, convert any [texto]{key} occurrences into tooltip markup
             const parsed = parseCustomTooltips(effectsFormatted);
 
-            const html = marked.parse(parsed);
+            const html = resolveAppRootImagePaths(marked.parse(parsed));
 
             element.innerHTML = html;
             playMoonTransition(element);
@@ -504,7 +517,9 @@ function loadSkill(path, element, kind = "") {
                 const pageContainer = document.querySelector('.chars-page .page_container');
                 const charFolder = pageContainer?.dataset.charFolder || "";
                 const characterName = pageContainer?.dataset.characterName || "";
-                const html = parseSkill(text, normalizedPath, charFolder, characterName);
+                const html = resolveAppRootImagePaths(
+                    parseSkill(text, normalizedPath, charFolder, characterName)
+                );
                 const hasKitContent = /skill-card-row|skills-passives-section|skills-defense-section|skills-weapons-section|skills-ego-section|skills-ego-passives-section|skills-sanity-section/.test(html);
                 const hasWeaponsContent = /skill-card-row\s+weapon-row|skills-weapons-section/.test(html);
                 const isSilentLoad = String(kind).toLowerCase().includes("silent");
@@ -1272,21 +1287,21 @@ function resolveCharacterSkillPath(folder, fileName, characterFolder = "") {
         const normalizedCharacterFolder = String(characterFolder || "").trim();
 
         if (normalizedFolder.length && normalizedCharacterFolder.length) {
-            return `../../bd/chars/${normalizedFolder}/${normalizedCharacterFolder}/${normalizedFileName}`;
+            return resolveScriptAssetPath(`../../bd/chars/${normalizedFolder}/${normalizedCharacterFolder}/${normalizedFileName}`);
         }
 
         if (normalizedFolder.length) {
-            return `../../bd/chars/${normalizedFolder}/${cleanName}/${normalizedFileName}`;
+            return resolveScriptAssetPath(`../../bd/chars/${normalizedFolder}/${cleanName}/${normalizedFileName}`);
         }
 
         if (normalizedCharacterFolder.length) {
-            return `../../bd/chars/${normalizedCharacterFolder}/${normalizedFileName}`;
+            return resolveScriptAssetPath(`../../bd/chars/${normalizedCharacterFolder}/${normalizedFileName}`);
         }
 
-        return `../../bd/chars/${cleanName}/${normalizedFileName}`;
+        return resolveScriptAssetPath(`../../bd/chars/${cleanName}/${normalizedFileName}`);
     }
 
-    return normalizedFileName;
+    return looksLikeUrl ? normalizedFileName : resolveScriptAssetPath(normalizedFileName);
 }
 
 function normalizeSkillVariantName(fileName) {
@@ -1442,7 +1457,7 @@ async function syncCharacterSkillVariantBadge() {
         button.title = `Versão ${tierNumber}`;
 
         const img = document.createElement("img");
-        img.src = `../../res/uptie/T${Math.min(tierNumber, 6)}.png`;
+        img.src = resolveScriptAssetPath(`../../res/uptie/T${Math.min(tierNumber, 6)}.png`);
         img.alt = `T${tierNumber}`;
         button.appendChild(img);
 
@@ -1957,7 +1972,7 @@ async function initCharsNavigation() {
     if (!mount) return;
 
     try {
-        const response = await fetch("../../bd/chars.json");
+        const response = await fetch(resolveScriptAssetPath("../../bd/chars.json"));
         const data = await response.json();
 
         const nodes = Array.isArray(data)
@@ -2707,7 +2722,7 @@ function setCharacterOverviewData(data) {
         return;
     }
 
-    overviewElement.innerHTML = finalHtml;
+    overviewElement.innerHTML = resolveAppRootImagePaths(finalHtml);
 
     // Older markup used a native `title` for the level. Upgrade it to the
     // shared tooltip after rendering so it behaves like the other overview
@@ -4551,11 +4566,13 @@ async function generateCharacterKitPdf(kitElement, printWindow) {
         }
 
         const source = await response.text();
-        skillsSource.innerHTML = parseSkill(
-            source,
-            skillPath.replace(/\\/g, "/"),
-            charFolder,
-            parseCharacterName
+        skillsSource.innerHTML = resolveAppRootImagePaths(
+            parseSkill(
+                source,
+                skillPath.replace(/\\/g, "/"),
+                charFolder,
+                parseCharacterName
+            )
         );
         const skillsWrapper = skillsSource.querySelector(".skills-wrapper");
         if (!skillsWrapper) {
