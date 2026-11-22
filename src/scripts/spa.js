@@ -28,6 +28,8 @@
         return new URL(appBasePath(), window.location.origin);
     }
 
+    window.__moonAppBaseUrl = appBaseUrl().href;
+
     function currentRoute() {
         // Query routes work on any static web server, including Live Server,
         // which cannot serve a virtual /index.html/Personagens path on reload.
@@ -89,8 +91,8 @@
     }
 
     function normalizePaths(container, pageUrl) {
-        container.querySelectorAll("[src], [href], [data-md], [data-target]").forEach((element) => {
-            ["src", "href", "data-md", "data-target"].forEach((attribute) => {
+        container.querySelectorAll("[src], [href], [data-md], [data-target], [mkd-content]").forEach((element) => {
+            ["src", "href", "data-md", "data-target", "mkd-content"].forEach((attribute) => {
                 if (element.hasAttribute(attribute)) element.setAttribute(attribute, absolutize(element.getAttribute(attribute), pageUrl));
             });
         });

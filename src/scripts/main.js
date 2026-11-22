@@ -422,7 +422,7 @@ function loadMarkdown(path, element) {
     const renderVersion = (markdownRenderVersions.get(element) || 0) + 1;
     markdownRenderVersions.set(element, renderVersion);
 
-    return fetch(path)
+    return fetch(path, { cache: "no-cache" })
         .then(response => response.text())
         .then(text => {
 
@@ -1972,7 +1972,7 @@ async function initCharsNavigation() {
     if (!mount) return;
 
     try {
-        const response = await fetch(resolveScriptAssetPath("../../bd/chars.json"));
+        const response = await fetch(resolveScriptAssetPath("../../bd/chars.json"), { cache: "no-cache" });
         const data = await response.json();
 
         const nodes = Array.isArray(data)
@@ -3864,8 +3864,8 @@ let tooltipData = {};
 let tooltipLookup = {};
 
 const SCRIPT_BASE_URL = new URL(
-    ".",
-    document.currentScript?.src || window.location.href
+    window.__moonAppBaseUrl ? "src/scripts/" : ".",
+    window.__moonAppBaseUrl || document.currentScript?.src || window.location.href
 );
 
 function resolveScriptAssetPath(path) {
