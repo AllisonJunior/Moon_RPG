@@ -61,7 +61,7 @@ NAME: E.G.O::Solemn Lament
 IMG: solemn_lament
 SIN: gloom
 FLAVOR: E.G.O Weapon
-DMG: 2d12 + Prudence [65 feet]
+DMG: 2d12 + Prudência [65 feet]
 DMG_TYPE: pierce
 COIN-POWER: +3
 BASE-POWER: 6
@@ -89,7 +89,7 @@ E-WEAPONS
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
-S-SKILLS
+S-SKILLS SHOWCASE(S3)
 
 NAME: Sequência de Ataques
 IMG: s1
@@ -254,9 +254,9 @@ BASE-POWER: 17
 INFO
 {
 (on_use) Ganhe 2 @Poise
-(before_attack) Para cada efeito negativo no alvo cause +1 de dano adicional
-(before_attack) Para cada @(Sinergy [Axel Weber]) cause +2 de dano adicional
-(before_attack) Para cada @Commander cause +3 de dano adicional
+(on_use) Para cada efeito negativo no alvo cause +1 de dano adicional
+(on_use) Para cada @(Sinergy [Axel Weber]) cause +2 de dano adicional
+(on_use) Para cada @Commander cause +3 de dano adicional
 (before_attack) Aplique 1 @Fragile
 (before_attack) Aplique 1 @Bristle
 }
@@ -277,7 +277,7 @@ END
 ---
 
 NAME: Fim
-IMG: s3_3
+IMG: s3_2
 FLAVOR: Skill 3-2
 SIN: pride
 DMG_TYPE: pierce
@@ -310,6 +310,51 @@ END
 (skill_end) Ganhe @(Sinergy [Axel Weber])
 }
 
+---
+
+NAME: Execução
+IMG: s3_3
+FLAVOR: Skill 3-2
+SIN: pride
+DMG_TYPE: pierce
+MP: 3
+COST: mp: 3
+COIN-POWER: +5
+BASE-POWER: 25
+
+INFO
+{
+(on_use) Essa Skill causa +100% de dano adicional
+(on_use) Essa Skill causa +400% de dano em um ataque unilateral
+(on_use) Ganhe 5 @Poise e +2 @Poise Count (Máx. 1x por cena)
+}
+
+COIN (u)
+{
+(on_hit) Aplique 3 @Sinking
+}
+
+COIN (u)
+{
+(on_hit) Aplique 2 @Bristle
+}
+
+COIN (u)
+{
+(on_hit) Ative o @Sinking no alvo
+(on_hit) Ative o @Bristle no alvo
+}
+
+COIN (u)
+{
+(on_hit) Cause (@Poise x @Poise Count) de dano
+}
+
+END
+{
+(on_kill) Ganhe um uso adicional gratuito dessa Skill na próxima cena
+}
+
 E-SKILLS
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -320,12 +365,16 @@ PASSIVE (E.G.O::Solemn Lament)
 {
 **Início do Combate:** Ganhe 8 @The_Living_&_The_Departed e 3 de sanidade.\n
 
-Como uma ação livre única por cena essa unidade pode utilizar @(Reload [Solemn Lament]), usos adicionais requerem o gasto de uma ação.
+Como uma ação livre única por cena essa unidade pode utilizar @(Reload [Solemn Lament]), usos adicionais requerem o gasto de uma ação.\n
+
+Ao ganhar um clash com uma Attack Skill, aplique 1 @Butterfly.\n
+
+Uma vez por cena ao acertar um ataque utilizando uma Attack Skill, aplique 1 @Butterfly.
 }
 
 PASSIVE (Remanescente)
 {
-**Início do Combate:** Ganhe +4 @Poise @Count, 1 @Commander e 1 @Protection.\n
+**Início do Combate:** Ganhe +4 @Poise Count, 1 @Commander e 1 @Protection.\n
 
 Durante um combate os seguintes benefícios são ativados: 
 - No início da cena ganhe Shield igual a 10% da sua vida máxima.
@@ -336,7 +385,11 @@ Durante um combate os seguintes benefícios são ativados:
 
 PASSIVE (Indiferença)
 {
-Efeitos externos não podem reduzir sua sanidade, mas efeitos como @Sinking ainda causam dano, em adição, ao entrar em pânico pela primeira vez em um combate volte sua sanidade para 0 (a ativação deste efeito conta como se essa unidade não tivesse entrado em pânico).
+Sua sanidade não pode ser reduzida por efeitos negativos como @Sinking, por isso esses efeitos agora somente causam dano.\n
+
+Caso essa unidade seja a única aliada em campo: 
+- Ganhe acesso a Attack Skill ~Execução~. 
+- O custo do MP de todas as Attack Skills é reduzido em 1. Se c(#FFA500){Moon Office Fixer - Saya} ou c(#FFA500){Moon Office Fixer - Hana} entrarem no estado Desestabilizado esse efeito ativa independente da condicional inicial.
 }
 
 PASSIVE (Sinergia de Monstros)

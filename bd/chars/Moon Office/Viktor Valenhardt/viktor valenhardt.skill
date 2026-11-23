@@ -44,7 +44,7 @@ S-WEAPONS
 NAME: Lança de Sangue
 SIN: lust
 FLAVOR: Base Weapon
-DMG: 1d10 + Justice [15 feet]
+DMG: 1d10 + Justiça [15 feet]
 DMG_TYPE: pierce
 IMG: weapon
 COST: MP: 0
@@ -149,7 +149,7 @@ MP: 3
 DMG_TYPE: pierce
 COIN-POWER: +7
 BASE-POWER: 4
-COST: MP: 3
+COST: MP: 0
 IMG: s3-2
 
 INFO

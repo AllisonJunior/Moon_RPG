@@ -4975,6 +4975,8 @@ function parseSkill(text, sourcePath = "", charFolder = "", characterName = "") 
         "(on_hit_without_cracking)": `<color ="#FFFF00">[Em um Acerto - Sem a Moeda Quebrar]</color>`,
         "(heads_hit)": `<color ="#b5b503">[Em um Acerto - Cara]</color>`,
         "(tails_hit)": `<color ="#ad94b2">[Em um Acerto - Coroa]</color>`,
+        "(on_kill)": `<color ="#ff0000">[Ao Matar]</color>`,
+
 
         "(before_attack)": `<color ="#caca6c">**[Antes do Ataque]**</color>`,
         "(on_nohit)": `<color ="#d42727">[Ao Errar]</color>`,
