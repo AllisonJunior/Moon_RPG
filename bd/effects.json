@@ -1,4 +1,9 @@
 {
+  "Nails": {
+    "desc": "- Início do turno: Ganhe 1 Bleed e aumente o Bleed Count com base na Stack.\\n\n- Fim do turno: Reduza a Stack pela metade (arredondado para baixo).",
+    "type": "negative",
+    "noUnderline": false
+  },
   "Base Power Up": {
     "desc": "Por essa cena: Todas as Skills aumentam seu Base Power com base na Stack.",
     "type": "positive",

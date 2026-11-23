@@ -6,7 +6,7 @@
 ---
 
 #### Vida
-<p style="margin-top: 10px; ">120 + (Nível x 4)</p>
+<p style="margin-top: 10px; ">140 + (Nível x 4)</p>
 
 #### Stagger
 <p style="margin-top: 10px; ">Vida - (Vida / 5) (arredondado para cima)</p>

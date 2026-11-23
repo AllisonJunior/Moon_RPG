@@ -20,10 +20,10 @@ Seu movimento máximo é aumentado em +30 feet.
 No início de um combate ganhe 3 @(E.G.O Resource Amp).
 
 ### Evasão Definitiva
-Ao ativar Evade o mesmo é reusado pela cena enquanto você não for acertado.
+A reação de Evade é reusado pela cena enquanto você não for acertado.
 
 ### Descarga Cinética
-Uma vez por cena ao acertar um ataque você pode aumentar o dano desse ataque em +1 para cada 20 feet movimentado no seu turno.
+Uma vez por cena ao acertar um ataque, cause +1 de dano adicional para cada 20 feet movimentado no seu turno.
 
 ### Deteriorar Sanidade
 Uma vez por cena ao acertar um ataque reduza a sanidade do alvo em 5, se o alvo não tiver sanidade cause (5 x Prudência) de dano.
@@ -105,5 +105,17 @@ Uma vez por cena ao perder um clash, ganhe 1 @Protection e recupere +3 de sanida
 
 ### Orgulho de Cavaleiro
 Uma vez por cena se você estiver com 45 de sanidade, remova um efeito negativo em si (quando possível). Após o uso, essa habilidade fica desativada por três cenas (incluindo a de ativação).
+
+### Luar Perfeito
+Quando um combate começa ao invés de começar com todos os seus MP você começa com metade deles (arredondado para cima), mas em troca você passa a recuperar 2 MP no fim da cena.
+
+### Perpetuador da Dor
+Uma vez por cena ao acertar um ataque você pode ativar um efeito negativo no alvo (quando possível).
+
+### Nagel Und Hammer
+Uma vez por cena ao acertar um ataque aplique 1 @Nails no alvo.
+
+### Bolsa de Sangue
+Uma vez por cena ao ganhar um clash usando uma Attack Skill, ative o @Bleed no alvo.
 
 ---
