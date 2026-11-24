@@ -211,7 +211,9 @@ PASSIVE (Memória Quebrada)
 
 Essa unidade não pode ter seus pontos de vida reduzidos para abaixo de 1 por causa de @Bleed.\n
 
-Se algum aliado for colocado no estado Desestabilizado ganhe @Responsibility.\n
+Se algum aliado for colocado em Stagger ou no estado Desestabilizado ganhe @Responsibility.\n
+
+Uma vez por cena desde que essa unidade tenha alcance, a mesma pode realizar um ataque base com prioridade sobre qualquer ação do turno como uma ação livre.\n 
 
 Se █████████ estiver em campo perca @(Returning Bloodlust) e ganhe ██████████████. Após o fim desse combate, essa passiva é reescrita.
 }
