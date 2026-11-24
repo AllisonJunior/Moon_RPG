@@ -109,13 +109,10 @@ Uma vez por cena se você estiver com 45 de sanidade, remova um efeito negativo 
 ### Luar Perfeito
 Quando um combate começa ao invés de começar com todos os seus MP você começa com metade deles (arredondado para cima), mas em troca você passa a recuperar 2 MP no fim da cena.
 
-### Perpetuador da Dor
-Uma vez por cena ao acertar um ataque você pode ativar um efeito negativo no alvo (quando possível).
-
 ### Nagel Und Hammer
-Uma vez por cena ao acertar um ataque aplique 1 @Nails no alvo.
+Ao acertar um ataque aplique 1 @Nails no alvo.
 
 ### Bolsa de Sangue
-Uma vez por cena ao ganhar um clash usando uma Attack Skill, ative o @Bleed no alvo.
+Uma vez por cena ao ganhar um clash utilizando uma Attack Skill, ative o @Bleed no alvo e então reduza a Count em 1.
 
 ---
